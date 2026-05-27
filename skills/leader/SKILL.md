@@ -42,16 +42,20 @@ allowed-tools: Read, Grep, Glob, Agent, Skill, mcp__codex__codex, mcp__codex__co
 - 调 MCP、调 API
 - 编辑文件（PIPELINE_STATE.json 和 MANIFEST.md 除外）
 
-### Agent 失败怎么办
+### Agent 阻塞怎么办
 
-Agent 因权限不足无法完成任务 → **停下来，列出缺失权限，让用户补。** 不绕过、不替代、不自己干。
+遵循 `skills/shared-references/executor-blocked-protocol.md`。
+
+**Executor 自行处理阻塞**（尝试2种绕过 → 全失败写 `BLOCKED_REPORT.md`）。
+**Leader 收到报告后只做三步：** 读报告 → 转述用户 → 等确认后重新派发。
 
 ```
-⚠️ Agent 因权限不足无法完成 [具体任务]。
-需要在 settings.local.json 补充以下权限：
-- [具体缺失项]
-补完后告诉我，我重新派发 Agent 继续。
+⚠️ Executor 报告阻塞（见 BLOCKED_REPORT.md）：
+[转述报告中的"需要人工操作"部分]
+完成后告诉我，我重新派发 Agent 继续。
 ```
+
+**Leader 绝对不做：** 自己尝试绕过、自己执行命令、自己修配置。
 
 - 通过 mcp__codex__codex 调用 GPT-5.5 做独立审查。
 - 维护 `PIPELINE_STATE.json`，每个 stage 完成后更新。
@@ -131,6 +135,7 @@ Agent:
   prompt: |
     你是 Executor。读 refine-logs/EXPERIMENT_PLAN.md 实现代码。
     遵循项目 CLAUDE.md 默认模式（TDD、caveman）。
+    遵循 skills/shared-references/executor-blocked-protocol.md：遇到阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止。
     规则：不走自审、偏离计划写 IMPLEMENTATION_DEVIATIONS.json、无偏离写 no-deviation 声明。
     只写代码不部署。完成后列出所有文件路径。
 ```
@@ -151,6 +156,7 @@ Agent:
   prompt: |
     读 CLAUDE.md 获取服务器信息。将代码同步到服务器，运行 sanity 实验。
     遵循项目 CLAUDE.md 默认模式（TDD、caveman）。
+    遵循 skills/shared-references/executor-blocked-protocol.md：遇到阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止。
     检查：训练正常跑、eval 正常跑、delta assertion 成立（实验组≠对照组）。
     结果写 refine-logs/SANITY_RESULTS.md。delta assertion 失败立即报告。
 ```
@@ -166,6 +172,7 @@ Agent:
   prompt: |
     读 EXPERIMENT_PLAN.md，按 run order 部署所有 MUST-RUN block。
     遵循项目 CLAUDE.md 默认模式（TDD、caveman）。
+    遵循 skills/shared-references/executor-blocked-protocol.md：遇到阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止。
     监控运行，收集结果到 refine-logs/EXPERIMENT_RESULTS/。
     更新 EXPERIMENT_TRACKER.md。完成后列出所有结果文件路径。
 ```
