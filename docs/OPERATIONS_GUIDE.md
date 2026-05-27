@@ -50,15 +50,15 @@ git:
   branch: "main"
 
 servers:
-  - name: "4090x4"
-    host: "4090x4-ai-original-22"
+  - name: "gpu-server-1"
+    host: "gpu-server-1"              # ~/.ssh/config 中的别名
     path: "/data/zhangsan/aris/my-detection"
     conda_env: "aris"
     gpus: [0, 2]
 
 framework:
   path: "/opt/aris-framework"
-  repo: "https://github.com/orangmood22-lgtm/Auto-research-in-sleep.git"
+  repo: "https://github.com/your-org/aris-framework.git"
 
 sync_exclude:
   - "outputs/"
@@ -76,7 +76,7 @@ sync_exclude:
 ### 创建项目
 
 ```
-/init-research my-project --direction "研究方向" --server 4090x4
+/init-research my-project --direction "研究方向" --server gpu-server-1
 ```
 
 参数：
@@ -95,7 +95,7 @@ sync_exclude:
 /sync push --message "完成 backbone 实现"
 
 # 部署到 GPU 服务器
-/sync deploy --server 4090x4
+/sync deploy --server gpu-server-1
 
 # 拉取最新（多人协作时）
 /sync pull
@@ -236,14 +236,14 @@ AI 驱动的创新点发现。读取领域文献，找 gap，生成可验证的 
 远程执行实验。读 `project.yaml` 的 servers 配置。
 
 ```
-/run-experiment --server 4090x4 --script code/train.py
+/run-experiment --server gpu-server-1 --script code/train.py
 ```
 
 #### `/monitor-experiment`
 监控正在运行的实验。
 
 ```
-/monitor-experiment --server 4090x4
+/monitor-experiment --server gpu-server-1
 ```
 
 ### 论文类
@@ -333,7 +333,7 @@ assurance 级别：`draft` / `submission`（submission 强制跑审计）
 
 ```
 /sync deploy                    # 部署到所有配置的服务器
-/sync deploy --server 4090x4   # 只部署到指定服务器
+/sync deploy --server gpu-server-1   # 只部署到指定服务器
 ```
 
 通过 rsync 同步，自动排除 `sync_exclude` 中的文件。
@@ -351,7 +351,7 @@ assurance 级别：`draft` / `submission`（submission 强制跑审计）
 ```bash
 bash tools/sync.sh push --message "msg"
 bash tools/sync.sh pull
-bash tools/sync.sh deploy --server 4090x4
+bash tools/sync.sh deploy --server gpu-server-1
 bash tools/sync.sh status
 ```
 
@@ -365,16 +365,16 @@ bash tools/sync.sh status
 
 ```yaml
 servers:
-  - name: "4090x4"
-    host: "4090x4-ai-original-22"   # ~/.ssh/config 中的别名
+  - name: "gpu-server-1"
+    host: "gpu-server-1"             # ~/.ssh/config 中的别名
     path: "/data/user/aris/project"
     conda_env: "aris"
     gpus: [0, 2]
 
-  - name: "4090x8"
-    host: "4090x8-root"
+  - name: "gpu-server-2"
+    host: "gpu-server-2"
     path: "/workspace/user/aris/project"
-    conda_env: "yolo11"
+    conda_env: "torch"
     gpus: [2]
 ```
 
@@ -383,9 +383,9 @@ servers:
 确保 `~/.ssh/config` 有对应条目：
 
 ```
-Host 4090x4-ai-original-22
-    HostName 192.168.1.200
-    User ai_worker
+Host gpu-server-1
+    HostName 192.168.1.200        # 替换为实际 IP
+    User your_username             # 替换为实际用户名
     Port 22
     IdentityFile ~/.ssh/id_ed25519
 ```
@@ -397,13 +397,13 @@ Host 4090x4-ai-original-22
 /sync push
 
 # 2. 部署到服务器
-/sync deploy --server 4090x4
+/sync deploy --server gpu-server-1
 
 # 3. 远程执行
-/run-experiment --server 4090x4 --script code/train.py
+/run-experiment --server gpu-server-1 --script code/train.py
 
 # 4. 监控
-/monitor-experiment --server 4090x4
+/monitor-experiment --server gpu-server-1
 
 # 5. 结果拉回
 # （结果文件通过 rsync 或手动 scp）
@@ -652,7 +652,7 @@ bash tools/install_aris_codex.sh /path/to/project --aris-repo /path/to/framework
 每人 fork 框架仓库，独立开发：
 
 ```
-upstream (orangmood22-lgtm/Auto-research-in-sleep)
+upstream (your-org/aris-framework)
   ├── fork-zhangsan
   ├── fork-lisi
   └── fork-wangwu
@@ -754,4 +754,4 @@ Gitea (http://gitea:3000)
 
 → 见 [docs/SKILL_CATALOG.md](SKILL_CATALOG.md)（英文）| [docs/SKILL_CATALOG_CN.md](SKILL_CATALOG_CN.md)（中文）
 
-共 78 个 skill，11 个分类。自动生成，运行 `python3 tools/generate_skill_catalog.py` 更新。
+共 90 个 skill，12 个分类。自动生成，运行 `python3 tools/generate_skill_catalog.py` 更新。
