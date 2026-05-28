@@ -3,6 +3,7 @@ name: init-research
 description: "一键创建新科研项目。自动: mkdir → git init → install skills → CLAUDE.md → project.yaml → push to git remote。"
 argument-hint: "项目名 [--size full|small] [--server SSH别名] [--remote GIT_URL] [--direction 研究方向]"
 allowed-tools: Bash(*), Read, Write, Edit, Agent
+caller: leader
 ---
 
 # /init-research — 创建新科研项目

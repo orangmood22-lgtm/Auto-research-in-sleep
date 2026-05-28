@@ -3,6 +3,7 @@ name: deepxiv
 description: Search and progressively read open-access academic papers through DeepXiv. Use when the user wants layered paper access, section-level reading, trending papers, or DeepXiv-backed literature retrieval.
 argument-hint: [query-or-paper-id]
 allowed-tools: Bash(*), Read, Write
+caller: any
 ---
 
 # DeepXiv Paper Search & Progressive Reading

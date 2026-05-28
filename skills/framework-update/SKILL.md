@@ -3,6 +3,7 @@ name: framework-update
 description: "一键更新 ARIS 框架：git pull + 重建 symlinks。用户不需要懂 git。"
 argument-hint: "[--force] [--dry-run]"
 allowed-tools: Bash(*), Read
+caller: leader
 ---
 
 # /framework-update — 更新 ARIS 框架

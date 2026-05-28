@@ -3,6 +3,7 @@ name: ablation-planner
 description: Use when main results pass result-to-claim (claim_supported=yes or partial) and ablation studies are needed for paper submission. Codex designs ablations from a reviewer's perspective, CC reviews feasibility and implements.
 argument-hint: [method-description-or-claim]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, mcp__codex__codex, mcp__codex__codex-reply
+caller: executor
 ---
 
 # Ablation Planner

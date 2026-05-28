@@ -3,6 +3,7 @@ name: leader
 description: "三边架构总编排：自动用 Agent 工具派生 Executor、Codex MCP 调 Reviewer。一个窗口全流程。"
 argument-hint: [research-direction-or-plan-path]
 allowed-tools: Read, Grep, Glob, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply, WebSearch, WebFetch
+caller: leader
 ---
 
 # Leader: 三边架构总编排
@@ -133,11 +134,24 @@ Agent:
   model: "sonnet"
   description: "Implement experiment code"
   prompt: |
-    你是 Executor。读 refine-logs/EXPERIMENT_PLAN.md 实现代码。
-    遵循项目 CLAUDE.md 默认模式（TDD、caveman）。
-    遵循 skills/shared-references/executor-blocked-protocol.md：遇到阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止。
-    规则：不走自审、偏离计划写 IMPLEMENTATION_DEVIATIONS.json、无偏离写 no-deviation 声明。
-    只写代码不部署。完成后列出所有文件路径。
+    你是 Executor。
+    
+    ## 首先
+    Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
+    
+    ## 任务
+    读 refine-logs/EXPERIMENT_PLAN.md 实现代码。
+    
+    ## 推荐 Skills
+    本任务必用：/tdd（先写测试再实现）
+    本任务可选：/diagnose（遇 bug 时）
+    参考：.claude/skills/shared-references/executor-skill-routing.md
+    
+    ## 约束
+    - caveman 模式开启
+    - 遵循 executor-blocked-protocol：遇阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止
+    - 不走自审、偏离计划写 IMPLEMENTATION_DEVIATIONS.json、无偏离写 no-deviation 声明
+    - 只写代码不部署。完成后列出所有文件路径
 ```
 
 Executor 完成后，**送 Reviewer 审查代码：** 详见 `.claude/skills/shared-references/leader-review-prompts.md` §2。
@@ -154,11 +168,23 @@ Agent:
   model: "sonnet"
   description: "Deploy sanity experiment"
   prompt: |
+    你是 Executor。
+    
+    ## 首先
+    Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
+    
+    ## 任务
     读 CLAUDE.md 获取服务器信息。将代码同步到服务器，运行 sanity 实验。
-    遵循项目 CLAUDE.md 默认模式（TDD、caveman）。
-    遵循 skills/shared-references/executor-blocked-protocol.md：遇到阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止。
     检查：训练正常跑、eval 正常跑、delta assertion 成立（实验组≠对照组）。
     结果写 refine-logs/SANITY_RESULTS.md。delta assertion 失败立即报告。
+    
+    ## 推荐 Skills
+    本任务必用：/run-experiment, /monitor-experiment
+    本任务可选：/sync deploy, /diagnose（出问题时）
+    
+    ## 约束
+    - caveman 模式开启
+    - 遵循 executor-blocked-protocol
 ```
 
 Sanity delta assertion 失败 → 诊断任务（Agent），累加 consecutive_failures。超过阈值 → Phase X。
@@ -170,11 +196,24 @@ Agent:
   description: "Deploy full experiments"
   run_in_background: true
   prompt: |
+    你是 Executor。
+    
+    ## 首先
+    Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
+    
+    ## 任务
     读 EXPERIMENT_PLAN.md，按 run order 部署所有 MUST-RUN block。
-    遵循项目 CLAUDE.md 默认模式（TDD、caveman）。
-    遵循 skills/shared-references/executor-blocked-protocol.md：遇到阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止。
     监控运行，收集结果到 refine-logs/EXPERIMENT_RESULTS/。
     更新 EXPERIMENT_TRACKER.md。完成后列出所有结果文件路径。
+    
+    ## 推荐 Skills
+    本任务必用：/run-experiment, /monitor-experiment
+    本任务可选：/experiment-queue（批量时）, /training-check（WandB）, /diagnose
+    
+    ## 约束
+    - caveman 模式开启
+    - 遵循 executor-blocked-protocol
+    - 禁止 tail 轮询
 ```
 
 ---

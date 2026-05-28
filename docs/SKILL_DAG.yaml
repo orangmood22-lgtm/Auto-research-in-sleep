@@ -1,0 +1,375 @@
+version: 1
+generated_by: tools/generate_skill_dag.py
+stats:
+  total_skills: 90
+  total_edges: 149
+  caller_distribution:
+    executor: 38
+    any: 27
+    leader: 25
+  has_cycles: true
+nodes:
+- name: ablation-planner
+  caller: executor
+- name: alphaxiv
+  caller: any
+  invokes:
+  - arxiv
+  - deepxiv
+  - novelty-check
+  - research-lit
+- name: analyze-results
+  caller: executor
+- name: arxiv
+  caller: any
+  invokes:
+  - novelty-check
+  - research-lit
+- name: auto-paper-improvement-loop
+  caller: leader
+  invokes:
+  - kill-argument
+- name: auto-review-loop
+  caller: leader
+- name: auto-review-loop-llm
+  caller: leader
+- name: auto-review-loop-minimax
+  caller: leader
+- name: caveman
+  caller: any
+- name: citation-audit
+  caller: leader
+- name: claims-drafting
+  caller: executor
+- name: comm-lit-review
+  caller: any
+- name: deepxiv
+  caller: any
+- name: diagnose
+  caller: executor
+- name: dse-loop
+  caller: leader
+- name: embodiment-description
+  caller: executor
+- name: exa-search
+  caller: any
+  invokes:
+  - arxiv
+- name: experiment-audit
+  caller: leader
+  invokes:
+  - auto-review-loop
+  - experiment-bridge
+  - paper-write
+  - research-pipeline
+  - result-to-claim
+- name: experiment-bridge
+  caller: executor
+  invokes:
+  - auto-review-loop
+  - experiment-queue
+  - idea-discovery
+  - paper-writing
+  - research-pipeline
+  - run-experiment
+- name: experiment-plan
+  caller: leader
+  invokes:
+  - auto-review-loop
+  - research-refine
+  - research-refine-pipeline
+  - run-experiment
+- name: experiment-queue
+  caller: executor
+- name: feishu-notify
+  caller: any
+- name: figure-description
+  caller: executor
+- name: figure-spec
+  caller: executor
+- name: formula-derivation
+  caller: executor
+- name: framework-update
+  caller: leader
+- name: gemini-search
+  caller: any
+  invokes:
+  - arxiv
+  - novelty-check
+  - research-lit
+  - semantic-scholar
+- name: git-guardrails
+  caller: any
+- name: grant-proposal
+  caller: executor
+  invokes:
+  - auto-review-loop
+  - experiment-bridge
+  - idea-discovery
+  - novelty-check
+  - paper-illustration
+  - paper-writing
+  - research-lit
+  - research-refine
+  - research-review
+- name: grill-me
+  caller: any
+- name: grill-with-docs
+  caller: any
+- name: handoff
+  caller: any
+- name: idea-creator
+  caller: any
+  invokes:
+  - auto-review-loop
+  - novelty-check
+  - research-review
+  - research-wiki
+  - run-experiment
+- name: idea-discovery
+  caller: leader
+  invokes:
+  - arxiv
+  - auto-review-loop
+  - experiment-bridge
+  - idea-creator
+  - novelty-check
+  - research-lit
+  - research-pipeline
+  - research-refine
+  - research-refine-pipeline
+  - research-review
+  - run-experiment
+- name: idea-discovery-robot
+  caller: leader
+  invokes:
+  - auto-review-loop
+  - idea-creator
+  - novelty-check
+  - research-lit
+  - research-review
+  - run-experiment
+- name: init-research
+  caller: leader
+  invokes:
+  - leader
+- name: invention-structuring
+  caller: executor
+- name: jurisdiction-format
+  caller: executor
+- name: kill-argument
+  caller: leader
+  invokes:
+  - auto-paper-improvement-loop
+- name: leader
+  caller: leader
+  invokes:
+  - diagnose
+  - experiment-queue
+  - monitor-experiment
+  - paper-writing
+  - run-experiment
+  - sync
+  - tdd
+  - training-check
+- name: mermaid-diagram
+  caller: executor
+- name: meta-optimize
+  caller: leader
+  invokes:
+  - arxiv
+  - auto-review-loop
+- name: monitor-experiment
+  caller: executor
+- name: novelty-check
+  caller: any
+- name: openalex
+  caller: any
+  invokes:
+  - arxiv
+  - novelty-check
+  - research-lit
+  - semantic-scholar
+- name: overleaf-sync
+  caller: executor
+- name: paper-claim-audit
+  caller: leader
+- name: paper-compile
+  caller: executor
+- name: paper-figure
+  caller: executor
+- name: paper-illustration
+  caller: executor
+- name: paper-illustration-image2
+  caller: executor
+- name: paper-plan
+  caller: executor
+  invokes:
+  - paper-compile
+  - paper-figure
+  - paper-write
+- name: paper-poster
+  caller: executor
+- name: paper-slides
+  caller: executor
+  invokes:
+  - slides-polish
+- name: paper-talk
+  caller: leader
+  invokes:
+  - citation-audit
+  - paper-claim-audit
+  - paper-slides
+  - slides-polish
+- name: paper-write
+  caller: executor
+- name: paper-writing
+  caller: leader
+  invokes:
+  - auto-paper-improvement-loop
+  - auto-review-loop
+  - citation-audit
+  - figure-spec
+  - idea-discovery
+  - kill-argument
+  - mermaid-diagram
+  - paper-claim-audit
+  - paper-compile
+  - paper-figure
+  - paper-illustration
+  - paper-illustration-image2
+  - paper-plan
+  - paper-write
+  - proof-checker
+  - research-pipeline
+  - run-experiment
+- name: patent-novelty-check
+  caller: executor
+- name: patent-pipeline
+  caller: leader
+  invokes:
+  - auto-review-loop
+  - claims-drafting
+  - embodiment-description
+  - experiment-bridge
+  - figure-description
+  - grant-proposal
+  - idea-discovery
+  - invention-structuring
+  - jurisdiction-format
+  - paper-writing
+  - patent-novelty-check
+  - patent-review
+  - prior-art-search
+  - research-refine
+  - specification-writing
+- name: patent-review
+  caller: executor
+- name: pixel-art
+  caller: any
+- name: prior-art-search
+  caller: any
+- name: proof-checker
+  caller: executor
+- name: proof-writer
+  caller: executor
+- name: qzcli
+  caller: any
+- name: rebuttal
+  caller: leader
+  invokes:
+  - experiment-bridge
+- name: research-lit
+  caller: any
+- name: research-pipeline
+  caller: leader
+  invokes:
+  - auto-paper-improvement-loop
+  - auto-review-loop
+  - experiment-queue
+  - idea-discovery
+  - monitor-experiment
+  - paper-compile
+  - paper-figure
+  - paper-write
+  - paper-writing
+  - run-experiment
+- name: research-refine
+  caller: leader
+  invokes:
+  - auto-review-loop
+  - experiment-plan
+  - idea-creator
+  - research-refine-pipeline
+  - run-experiment
+- name: research-refine-pipeline
+  caller: leader
+  invokes:
+  - experiment-plan
+  - research-refine
+  - run-experiment
+- name: research-review
+  caller: any
+- name: research-wiki
+  caller: any
+  invokes:
+  - idea-creator
+- name: resubmit-pipeline
+  caller: leader
+  invokes:
+  - auto-paper-improvement-loop
+  - overleaf-sync
+  - paper-claim-audit
+  - paper-compile
+  - proof-checker
+- name: result-to-claim
+  caller: leader
+  invokes:
+  - idea-creator
+- name: review
+  caller: any
+- name: run-experiment
+  caller: executor
+- name: semantic-scholar
+  caller: any
+  invokes:
+  - arxiv
+  - novelty-check
+  - research-lit
+- name: serverless-modal
+  caller: executor
+  invokes:
+  - run-experiment
+- name: slides-polish
+  caller: executor
+- name: specification-writing
+  caller: executor
+  invokes:
+  - embodiment-description
+  - figure-description
+- name: sync
+  caller: executor
+  invokes:
+  - init-research
+- name: system-profile
+  caller: executor
+- name: tdd
+  caller: executor
+- name: to-issues
+  caller: any
+- name: to-prd
+  caller: any
+- name: training-check
+  caller: executor
+- name: vast-gpu
+  caller: executor
+  invokes:
+  - run-experiment
+- name: write-a-skill
+  caller: any
+- name: writing-systems-papers
+  caller: executor
+  invokes:
+  - paper-write
+- name: zoom-out
+  caller: any

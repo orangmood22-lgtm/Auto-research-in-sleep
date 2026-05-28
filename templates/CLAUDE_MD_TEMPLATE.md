@@ -9,22 +9,12 @@
 
 ## Agent 约束
 
-### 禁止 tail 轮询
+**完整约束和 skill 用法见 `.claude/skills/shared-references/agent-guide.md`。Executor Agent 启动后必须首先 Read 该文件。**
 
-**严禁**用 `Bash(tail -f ...)` 或重复 `Bash(tail ...)` 轮询实验进度。代价：800+ 次无意义 API 调用。
-
-正确做法：
-- 远程长时间实验 → `ssh server "screen -dmS exp_name bash -c 'cmd > log.txt 2>&1'"` 启动，用 `/monitor-experiment` 一次性收集结果
-- 本地长时间实验 → `Bash(run_in_background: true)` 启动，等 task-notification 自动回调
-- 需要等完成 → `Monitor` 工具（每行 stdout 一个事件），**不要循环 tail**
-- 检查是否跑完 → 单次 `ssh server "tail -20 log.txt"` 或 `ssh server "screen -ls"`，**不要循环**
-
-### Executor 阻塞协议
-
-遵循 `skills/shared-references/executor-blocked-protocol.md`：
-- Agent 遇阻塞自行尝试 2 种绕过
-- 全失败写 `BLOCKED_REPORT.md`，不卡死不越权
-- Leader 只转述报告给用户，不自己执行
+- 禁止 `tail -f` 或循环 `tail` 轮询实验 → 用 `/monitor-experiment` 或 `run_in_background`
+- Executor 遇阻塞遵循 `executor-blocked-protocol.md`：自救 2 次，失败写 `BLOCKED_REPORT.md`
+- Leader 不写代码/不跑命令，Executor 不自审，Reviewer 只看原始文件
+- Skill 分层：编排层(leader) / 执行层(executor) / 工具层(any) / 检索层(any)，不要越层调用
 
 ## Pipeline Status
 

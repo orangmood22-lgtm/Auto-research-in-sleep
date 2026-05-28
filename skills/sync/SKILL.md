@@ -3,6 +3,7 @@ name: sync
 description: "一键同步科研项目：封装 git add/commit/push/pull + 远程部署。用户不需要懂 git。"
 argument-hint: "[push|pull|deploy|status] [--server NAME] [--message 'commit msg']"
 allowed-tools: Bash(*), Read, Write, Edit
+caller: executor
 ---
 
 # /sync — 科研项目同步

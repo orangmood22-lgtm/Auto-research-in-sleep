@@ -3,6 +3,7 @@ name: alphaxiv
 description: Quick single-paper lookup via AlphaXiv LLM-optimized summaries with tiered source fallback. Use when user says "explain this paper", "summarize paper", pastes an arXiv/AlphaXiv URL, or provides a bare arXiv ID for quick understanding - not for broad literature search.
 argument-hint: [arxiv-id-or-url]
 allowed-tools: Bash(*), Read, Write, WebFetch, Glob
+caller: any
 ---
 
 # AlphaXiv Paper Lookup

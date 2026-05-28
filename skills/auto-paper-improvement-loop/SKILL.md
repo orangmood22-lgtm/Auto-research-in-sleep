@@ -3,6 +3,7 @@ name: auto-paper-improvement-loop
 description: "Autonomously improve a generated paper via GPT-5.4 xhigh review → implement fixes → recompile, for 2 rounds. Use when user says \"改论文\", \"improve paper\", \"论文润色循环\", \"auto improve\", or wants to iteratively polish a generated paper."
 argument-hint: "[paper-directory] [— style-ref: <source>] [— edit-whitelist <path>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply
+caller: leader
 ---
 
 # Auto Paper Improvement Loop: Review → Fix → Recompile
