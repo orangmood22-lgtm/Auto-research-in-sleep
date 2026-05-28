@@ -75,18 +75,81 @@ sync_exclude:
 
 ### 创建项目
 
+#### Step 1: 建目录 + 安装 ARIS
+
+`install_aris.sh` 是创建项目的**唯一入口**。先装框架，才有 `/` 命令可用。
+
+```bash
+# 新项目
+mkdir -p ~/projects/my-research
+cd ~/projects/my-research
+git init
+bash ~/aris-framework/tools/install_aris.sh . --aris-repo ~/aris-framework
+
+# 已有项目加装 ARIS（不动已有文件）
+cd /path/to/existing-project
+bash ~/aris-framework/tools/install_aris.sh . --aris-repo ~/aris-framework
+```
+
+安装完成后项目结构：
+
+```
+my-research/
+├── CLAUDE.md              ← AI 上下文（需编辑：填研究方向、服务器等）
+├── .claude/skills/        ← 90+ symlinks → 框架 skills
+├── .aris/
+│   ├── installed-skills.txt  ← manifest（记录安装了哪些 skill）
+│   └── tools              ← symlink → 框架 tools/
+└── (你的代码/数据/论文)
+```
+
+#### Step 2: 编辑 CLAUDE.md
+
+安装器生成的 CLAUDE.md 是模板，需要填写：
+
+```bash
+vim CLAUDE.md
+```
+
+必填项：
+- 项目名和研究方向
+- 服务器 SSH 别名、路径、conda 环境、可用 GPU
+
+可选项：
+- Pipeline Status（使用三边架构时）
+- Experiment Chain Contract（使用实验 skill 时）
+
+#### Step 3: 进入 Claude Code 开始工作
+
+```bash
+cd ~/projects/my-research
+claude
+```
+
+进入后可用 `/init-research` 补充生成 `project.yaml`、标准目录结构等（可选，不是必须）：
+
 ```
 /init-research my-project --direction "研究方向" --server gpu-server-1
 ```
 
-参数：
-- 第一个词：项目名（英文，用中划线连接）
-- `--direction`：研究方向描述（中文 OK）
-- `--size full|small`：full = 完整目录结构，small = 精简
-- `--server NAME`：SSH 别名，可多次指定
-- `--remote URL`：Git remote URL
+#### 项目放哪？
 
-执行后自动：mkdir → git init → install skills → 生成 CLAUDE.md + project.yaml → 首次 commit
+框架不限制位置。推荐：
+
+```
+~/projects/                    # 或 /workspace/user/
+├── aris-framework/            # 框架本体（git clone 一次）
+├── exp-detection/             # 科研项目 1
+├── exp-segmentation/          # 科研项目 2
+└── paper-rebuttal/            # 科研项目 3
+```
+
+**关键点：**
+
+- 框架只需一份，所有项目通过 symlink 共享
+- 项目之间完全独立（各自 git repo、各自 CLAUDE.md）
+- 框架 `git pull` 后，所有项目的 skill 内容自动更新（symlink）
+- 新增 skill 需重跑 `install_aris.sh --reconcile` 补链接
 
 ### 日常开发
 
@@ -157,6 +220,37 @@ codex
 **Reviewer 做：**
 - 独立审查代码/实验/claim
 - 只看原始文件，不看 Executor 的总结
+
+### Agent 约束
+
+#### 禁止 tail 轮询
+
+**严禁**用 `Bash(tail -f ...)` 或重复 `Bash(tail ...)` 轮询实验进度。代价：800+ 次无意义 API 调用。
+
+正确做法：
+- 远程实验 → `ssh server "screen -dmS exp bash -c 'cmd > log.txt 2>&1'"` 启动，用 `/monitor-experiment` 一次性收集
+- 本地实验 → `Bash(run_in_background: true)` 启动，等 task-notification 回调
+- 检查是否跑完 → 单次 `ssh server "tail -20 log.txt"` 或 `screen -ls`，**不要循环**
+
+#### Executor 阻塞协议
+
+详见 `skills/shared-references/executor-blocked-protocol.md`。
+
+Agent 遇到权限/网络/资源阻塞时：
+1. 尝试绕过方案 1（换等价命令/工具）
+2. 尝试绕过方案 2（降级执行/替代路径）
+3. 两次都失败 → 写 `BLOCKED_REPORT.md`（含可复制粘贴的人工操作命令）
+4. 累计 ≥3 个不同阻塞全失败 → 整个任务停止
+
+**Leader 收到报告后：** 读报告 → 转述用户 → 等确认 → 重新派发。Leader 绝不自己执行。
+
+#### 模型分层
+
+| 角色 | 模型 | 原因 |
+|------|------|------|
+| Leader | Opus | 决策质量优先 |
+| Executor | Sonnet | 量大省 70% |
+| Reviewer | GPT-5.5 | 跨模型独立性 |
 - 输出审查报告（pass/fail + 具体问题）
 
 ### 文件协作

@@ -10,7 +10,7 @@
 
 ## 方式一：个人使用
 
-### 1. 克隆框架
+### 1. 克隆框架（只需一次）
 
 ```bash
 git clone https://github.com/orangmood22-lgtm/Auto-research-in-sleep.git ~/aris-framework
@@ -19,34 +19,57 @@ git clone https://github.com/orangmood22-lgtm/Auto-research-in-sleep.git ~/aris-
 ### 2. 创建科研项目
 
 ```bash
-mkdir ~/my-research && cd ~/my-research
+mkdir -p ~/projects/my-research && cd ~/projects/my-research
 git init
+bash ~/aris-framework/tools/install_aris.sh . --aris-repo ~/aris-framework
 ```
 
-### 3. 安装 ARIS Skills
+安装完成后出现：
+- `.claude/skills/` — 90+ symlinks → 框架 skills
+- `.aris/installed-skills.txt` — manifest
+- `CLAUDE.md` — AI 上下文模板（**需编辑**）
+
+### 3. 编辑 CLAUDE.md
 
 ```bash
-bash ~/aris-framework/tools/install_aris.sh ~/my-research --aris-repo ~/aris-framework
+vim CLAUDE.md
 ```
 
-安装完成后，项目目录下出现 `.claude/skills/`（symlink 到框架 skill）。
+填入：研究方向、服务器 SSH 别名/路径/GPU、项目约束等。这是 Agent 每次 session 的上下文来源。
 
 ### 4. 启动 Claude Code
 
 ```bash
-cd ~/my-research
+cd ~/projects/my-research
 claude
 ```
+
+进入后所有 `/` 命令可用。可选运行 `/init-research` 补充生成 project.yaml 和标准目录结构。
 
 ### 5. 开始研究
 
 ```
-# 在 Claude Code 中输入：
-/init-research my-project --direction "你的研究方向"
-
-# 或直接启动全自动 pipeline：
-/research-pipeline "你的研究方向"
+/leader "你的研究方向"          # 三边架构全自动
+/research-pipeline "你的研究方向"  # 单窗口全流程
+/experiment-plan                  # 只做实验计划
 ```
+
+### 多项目管理
+
+框架只需一份，项目随便放：
+
+```
+~/
+├── aris-framework/            # 框架（git clone 一次）
+└── projects/
+    ├── exp-detection/         # 科研项目 1
+    ├── exp-segmentation/      # 科研项目 2
+    └── paper-rebuttal/        # 科研项目 3
+```
+
+- 框架 `git pull` → 所有项目 skill 内容自动更新（symlink）
+- 新增 skill → 项目内重跑 `install_aris.sh --reconcile`
+- 已有代码目录加装 → 同样 `install_aris.sh .`，不动已有文件
 
 ---
 
@@ -114,6 +137,18 @@ claude
 | `/experiment-plan` | 制定实验计划 |
 | `/paper-writing` | 启动论文撰写 |
 | `/research-wiki init` | 初始化研究知识库 |
+
+## Agent 约束（重要）
+
+以下规则写入每个项目的 `CLAUDE.md`，Agent 每次 session 自动遵守：
+
+| 规则 | 说明 |
+|------|------|
+| **禁止 tail 轮询** | 不用 `tail -f` 或循环 `tail` 监控实验。用 `/monitor-experiment` 或 `run_in_background` |
+| **Executor 阻塞协议** | Agent 遇阻塞自行尝试 2 种绕过，全失败写 `BLOCKED_REPORT.md`，不卡死不越权 |
+| **模型分层** | Leader=Opus, Executor=Sonnet(省70%), Reviewer=GPT-5.5 |
+
+详见 `docs/OPERATIONS_GUIDE.md` → 三边架构使用 → Agent 约束。
 
 ## 项目结构（创建后）
 
