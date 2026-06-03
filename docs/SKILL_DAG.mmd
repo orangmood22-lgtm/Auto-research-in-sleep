@@ -6,6 +6,8 @@ graph TD
     arxiv --> novelty-check
     arxiv --> research-lit
     auto-paper-improvement-loop --> kill-argument
+    coder --> tdd
+    deployer --> monitor-experiment
     exa-search --> arxiv
     experiment-audit --> auto-review-loop
     experiment-audit --> experiment-bridge
@@ -152,6 +154,6 @@ graph TD
     classDef leader fill:#ff9999,stroke:#cc0000
     class auto-paper-improvement-loop,auto-review-loop,auto-review-loop-llm,auto-review-loop-minimax,citation-audit,dse-loop,experiment-audit,experiment-plan,framework-update,idea-discovery,idea-discovery-robot,init-research,kill-argument,leader,meta-optimize,paper-claim-audit,paper-talk,paper-writing,patent-pipeline,rebuttal leader
     classDef executor fill:#99ccff,stroke:#0066cc
-    class ablation-planner,analyze-results,claims-drafting,diagnose,embodiment-description,experiment-bridge,experiment-queue,figure-description,figure-spec,formula-derivation,grant-proposal,invention-structuring,jurisdiction-format,mermaid-diagram,monitor-experiment,overleaf-sync,paper-compile,paper-figure,paper-illustration,paper-illustration-image2 executor
+    class ablation-planner,analyze-results,claims-drafting,coder,deployer,diagnose,embodiment-description,experiment-bridge,experiment-queue,figure-description,figure-spec,formula-derivation,grant-proposal,invention-structuring,jurisdiction-format,mermaid-diagram,monitor-experiment,overleaf-sync,paper-compile,paper-figure executor
     classDef any fill:#99ff99,stroke:#009900
     class alphaxiv,arxiv,caveman,comm-lit-review,deepxiv,exa-search,feishu-notify,gemini-search,git-guardrails,grill-me,grill-with-docs,handoff,idea-creator,novelty-check,openalex,pixel-art,prior-art-search,qzcli,research-lit,research-review any

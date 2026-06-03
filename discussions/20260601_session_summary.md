@@ -71,13 +71,13 @@
    ln -s /workspace/shared/datasets/VOCdevkit VOCdevkit
    ```
 
-### 🟡 框架优化（优先级排序）
+### 🟡 框架优化（已完成）
 
-| # | 方向 | 优先级 | 描述 |
-|---|------|--------|------|
-| 1 | Executor 拆分 | 高 | Coder/Deployer/Writer 三个专用 SKILL.md + 更新 Leader 派发 prompt |
-| 2 | 上下文记忆本地化 | 中 | Agent 启动自动读状态文件，长流程不丢上下文 |
-| 3 | blocked-protocol 完善 | 中 | 绕过策略表 + 累计阈值机制标准化 |
+| # | 方向 | 状态 | 描述 |
+|---|------|------|------|
+| 1 | Executor 拆分 | ✅ 已完成 | Coder/Deployer/Writer 三个专用 SKILL.md + 更新 Leader 派发 prompt |
+| 2 | 上下文记忆本地化 | ⏳ 待做 | Agent 启动自动读状态文件，长流程不丢上下文 |
+| 3 | blocked-protocol 完善 | ⏳ 待做 | 绕过策略表 + 累计阈值机制标准化 |
 
 ### 🟢 导师任务
 

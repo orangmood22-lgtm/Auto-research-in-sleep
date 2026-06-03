@@ -14,12 +14,21 @@ caller: any
    - Does it need executable scripts or just instructions?
    - Any reference materials to include?
 
-2. **Draft the skill** - create:
+2. **DAG dependency check** - BEFORE drafting:
+   - Run `python3 tools/generate_skill_dag.py --check-only` to load current DAG
+   - If **modifying** existing skill: check `docs/SKILL_DAG.yaml` for downstream dependents
+     - `invoked_by` lists skills that call this one → changes may break them
+     - `invokes` lists skills this one depends on → renaming breaks callers
+   - If **creating** new skill: ask what skills it will invoke → fill `invokes` field
+   - If **removing** skill: warn about all downstream dependents, list them
+   - Run `python3 tools/generate_skill_dag.py --mermaid --html` after changes to update DAG
+
+3. **Draft the skill** - create:
    - SKILL.md with concise instructions
    - Additional reference files if content exceeds 500 lines
    - Utility scripts if deterministic operations needed
 
-3. **Review with user** - present draft and ask:
+4. **Review with user** - present draft and ask:
    - Does this cover your use cases?
    - Anything missing or unclear?
    - Should any section be more/less detailed?
@@ -41,6 +50,14 @@ skill-name/
 ---
 name: skill-name
 description: Brief description of capability. Use when [specific triggers].
+caller: leader | executor | any  # Who can invoke this skill
+invokes:  # (optional) List of skills this one calls
+  - skill-a
+  - skill-b
+produces:  # (optional) Artifacts this skill creates
+  - path/to/artifact.md
+consumes:  # (optional) Artifacts this skill reads
+  - path/to/input.md
 ---
 
 # Skill Name
@@ -116,3 +133,7 @@ After drafting, verify:
 - [ ] Consistent terminology
 - [ ] Concrete examples included
 - [ ] References one level deep
+- [ ] `caller` field set (leader/executor/any)
+- [ ] `invokes` field lists all skill invocations (if any)
+- [ ] `produces`/`consumes` fields declare artifacts (if any)
+- [ ] DAG regenerated: `python3 tools/generate_skill_dag.py --mermaid --html`

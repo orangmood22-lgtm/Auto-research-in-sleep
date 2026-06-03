@@ -1,11 +1,11 @@
 version: 1
 generated_by: tools/generate_skill_dag.py
 stats:
-  total_skills: 90
-  total_edges: 149
+  total_skills: 94
+  total_edges: 151
   caller_distribution:
-    executor: 38
-    any: 27
+    executor: 41
+    any: 28
     leader: 25
   has_cycles: true
 nodes:
@@ -41,10 +41,18 @@ nodes:
   caller: leader
 - name: claims-drafting
   caller: executor
+- name: coder
+  caller: executor
+  invokes:
+  - tdd
 - name: comm-lit-review
   caller: any
 - name: deepxiv
   caller: any
+- name: deployer
+  caller: executor
+  invokes:
+  - monitor-experiment
 - name: diagnose
   caller: executor
 - name: dse-loop
@@ -340,6 +348,8 @@ nodes:
   caller: executor
   invokes:
   - run-experiment
+- name: skill-dag-check
+  caller: any
 - name: slides-polish
   caller: executor
 - name: specification-writing
@@ -367,6 +377,8 @@ nodes:
   - run-experiment
 - name: write-a-skill
   caller: any
+- name: writer
+  caller: executor
 - name: writing-systems-papers
   caller: executor
   invokes:
