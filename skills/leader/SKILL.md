@@ -128,25 +128,26 @@ FAIL → 修改重审（最多 2 轮）。PASS/WARN → Gate 1 通过。
 
 ## Phase 2: 代码实现
 
-**分发 Executor 子任务：**
+**分发 Coder 子任务：**
 ```
 Agent:
   model: "sonnet"
-  description: "Implement experiment code"
+  description: "Implement experiment code (Coder)"
   prompt: |
-    你是 Executor。
-    
+    你是 Coder，只负责写代码。
+
     ## 首先
     Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
-    
+    Read .claude/skills/coder/SKILL.md 了解 Coder 职责边界。
+
     ## 任务
     读 refine-logs/EXPERIMENT_PLAN.md 实现代码。
-    
+
     ## 推荐 Skills
     本任务必用：/tdd（先写测试再实现）
     本任务可选：/diagnose（遇 bug 时）
     参考：.claude/skills/shared-references/executor-skill-routing.md
-    
+
     ## 约束
     - caveman 模式开启
     - 遵循 executor-blocked-protocol：遇阻塞先自行尝试 2 种绕过，全失败写 BLOCKED_REPORT.md 后停止
@@ -154,9 +155,9 @@ Agent:
     - 只写代码不部署。完成后列出所有文件路径
 ```
 
-Executor 完成后，**送 Reviewer 审查代码：** 详见 `.claude/skills/shared-references/leader-review-prompts.md` §2。
+Coder 完成后，**送 Reviewer 审查代码：** 详见 `.claude/skills/shared-references/leader-review-prompts.md` §2。
 
-FAIL → 分发修复任务（Agent，最多 2 轮）。PASS/WARN → Gate 2 通过。
+FAIL → 分发修复任务（Coder，最多 2 轮）。PASS/WARN → Gate 2 通过。
 
 ---
 
@@ -166,50 +167,53 @@ FAIL → 分发修复任务（Agent，最多 2 轮）。PASS/WARN → Gate 2 通
 ```
 Agent:
   model: "sonnet"
-  description: "Deploy sanity experiment"
+  description: "Deploy sanity experiment (Deployer)"
   prompt: |
-    你是 Executor。
-    
+    你是 Deployer，只负责部署和监控。
+
     ## 首先
     Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
-    
+    Read .claude/skills/deployer/SKILL.md 了解 Deployer 职责边界。
+
     ## 任务
     读 CLAUDE.md 获取服务器信息。将代码同步到服务器，运行 sanity 实验。
     检查：训练正常跑、eval 正常跑、delta assertion 成立（实验组≠对照组）。
     结果写 refine-logs/SANITY_RESULTS.md。delta assertion 失败立即报告。
-    
+
     ## 推荐 Skills
     本任务必用：/run-experiment, /monitor-experiment
     本任务可选：/sync deploy, /diagnose（出问题时）
-    
+
     ## 约束
     - caveman 模式开启
     - 遵循 executor-blocked-protocol
+    - 禁止 tail -f 轮询，用 Monitor 或 run_in_background
 ```
 
-Sanity delta assertion 失败 → 诊断任务（Agent），累加 consecutive_failures。超过阈值 → Phase X。
+Sanity delta assertion 失败 → 诊断任务（Coder 修代码 + Deployer 重跑），累加 consecutive_failures。超过阈值 → Phase X。
 
 **3.2 全规模：**
 ```
 Agent:
   model: "sonnet"
-  description: "Deploy full experiments"
+  description: "Deploy full experiments (Deployer)"
   run_in_background: true
   prompt: |
-    你是 Executor。
-    
+    你是 Deployer，只负责部署和监控。
+
     ## 首先
     Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
-    
+    Read .claude/skills/deployer/SKILL.md 了解 Deployer 职责边界。
+
     ## 任务
     读 EXPERIMENT_PLAN.md，按 run order 部署所有 MUST-RUN block。
     监控运行，收集结果到 refine-logs/EXPERIMENT_RESULTS/。
     更新 EXPERIMENT_TRACKER.md。完成后列出所有结果文件路径。
-    
+
     ## 推荐 Skills
     本任务必用：/run-experiment, /monitor-experiment
     本任务可选：/experiment-queue（批量时）, /training-check（WandB）, /diagnose
-    
+
     ## 约束
     - caveman 模式开启
     - 遵循 executor-blocked-protocol
@@ -241,7 +245,27 @@ Leader 做 Gate 4 决策：
 
 ## Phase 6: 论文写作（可选）
 
-Executor 用 /paper-writing 生成论文 → Reviewer 审查 → 迭代修改（最多 4 轮）。
+用 Writer 角色生成论文 → Reviewer 审查 → 迭代修改（最多 4 轮）。
+
+```
+Agent:
+  model: "sonnet"
+  description: "Write paper (Writer)"
+  prompt: |
+    你是 Writer，只负责写作。
+
+    ##首先
+    Read .claude/skills/shared-references/agent-guide.md 了解可用 skills 和约束。
+    Read .claude/skills/writer/SKILL.md 了解 Writer 职责边界。
+
+    ## 任务
+    读实验结果（refine-logs/EXPERIMENT_RESULTS/）和实验计划（refine-logs/EXPERIMENT_PLAN.md）。
+    用 /paper-writing 或直接写论文。
+
+    ## 约束
+    - 学术严谨：claim 必须有实验结果支撑，不夸大
+    - 数据一致：论文中的数字必须与实验结果文件一致
+```
 
 ---
 
@@ -253,7 +277,7 @@ Executor 用 /paper-writing 生成论文 → Reviewer 审查 → 迭代修改（
 
 **Trigger: Delta Assertion 失败**
 
-分发诊断任务给 Executor → 修代码 / 重设计 / Pivot。
+分发诊断任务给 Coder → 修代码 / 重设计 / Pivot。
 
 ---
 

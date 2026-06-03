@@ -32,3 +32,8 @@
 | 2026-05-13 00:00 | /manual | tests/test_queue_manager_state.py | implementation | Expanded queue manager regression coverage to assert resumability metadata initialization |
 | 2026-05-13 00:00 | /manual | skills/shared-references/experiment-integrity.md | implementation | Clarified that declared evaluation types must stay aligned with plan expectations and implementation deviation receipts before audit/claim gating |
 | 2026-05-13 00:00 | /manual | discussions/ARIS_NON_PROGRAMMER_READING_GUIDE_20260513.md | implementation | Wrote a non-programmer navigation guide explaining reading order, file roles, skip-first-pass areas, and key questions for understanding the experiment chain |
+| 2026-06-01 12:00 | /manual | discussions/20260601_session_summary.md | implementation | 3090x2 deployment + framework bug fix (symlink→real dirs) + exp0603 created |
+| 2026-06-01 12:00 | /manual | PIPELINE_STATE.json | implementation | Framework optimization pipeline state |
+| 2026-06-01 12:00 | /manual | /tmp/aris-handoff-20260601.md | implementation | Handoff document for next session |
+
+## Git Commits (local, unpushed)

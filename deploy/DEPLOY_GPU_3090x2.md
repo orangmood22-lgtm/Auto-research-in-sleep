@@ -4,14 +4,14 @@
 
 ## 前置条件
 
-| 项目 | 要求 | 当前状态 |
-|------|------|---------|
-| GPU | NVIDIA 3090 x2 | ✅ |
-| Driver | 580+ | ✅ 580.159.03 |
-| Docker | 24.0+ | ✅ 29.2.1 |
-| nvidia runtime | docker 能看到 GPU | ✅ |
-| 代理 | clash 运行中 | 需手动开启 |
-| 磁盘 | >20GB 可用 | ✅ 860GB |
+| 项目           | 要求              | 当前状态     |
+| -------------- | ----------------- | ------------ |
+| GPU            | NVIDIA 3090 x2    | ✅            |
+| Driver         | 580+              | ✅ 580.159.03 |
+| Docker         | 24.0+             | ✅ 29.2.1     |
+| nvidia runtime | docker 能看到 GPU | ✅            |
+| 代理           | clash 运行中      | 需手动开启   |
+| 磁盘           | >20GB 可用        | ✅ 860GB      |
 
 ## Step 0: SSH 进服务器 + 开代理
 
@@ -107,8 +107,8 @@ docker run -d \
   -e ANTHROPIC_API_KEY="$(grep ANTHROPIC_API_KEY deploy/.env | cut -d= -f2)" \
   -e ANTHROPIC_BASE_URL="$(grep ANTHROPIC_BASE_URL deploy/.env | cut -d= -f2)" \
   -e OPENAI_API_KEY="$(grep OPENAI_API_KEY deploy/.env | cut -d= -f2)" \
-  -e HTTP_PROXY=http://127.0.0.1:7890 \
-  -e HTTPS_PROXY=http://127.0.0.1:7890 \
+  -e HTTP_PROXY=http://127.0.0.1:7897 \
+  -e HTTPS_PROXY=http://127.0.0.1:7897 \
   -it aris-gpu
 ```
 
@@ -228,11 +228,11 @@ bash /aris/framework/tools/install_aris.sh . --aris-repo /aris/framework --recon
 
 ## 故障排查
 
-| 问题 | 解决 |
-|------|------|
-| `docker build` apt 报错 | 确认 `proxyon` 已执行、clash 在跑 |
-| GPU 容器内看不到 | 检查 `--gpus all`，宿主机跑 `nvidia-smi` 确认驱动正常 |
-| Claude Code 报 401/403 | 检查 `ANTHROPIC_API_KEY` 是否正确传入，容器内 `echo $ANTHROPIC_API_KEY` |
-| PyTorch 报 CUDA not available | 驱动版本和 CUDA 镜像版本不兼容，降级 Dockerfile 中的 CUDA 版本 |
-| `install_aris.sh` 报错 | 确认 `/aris/framework/skills/` 存在且非空 |
-| 容器内网络不通 | `--network host` 应该继承宿主机网络，检查 clash 是否在跑 |
+| 问题                          | 解决                                                                    |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `docker build` apt 报错       | 确认 `proxyon` 已执行、clash 在跑                                       |
+| GPU 容器内看不到              | 检查 `--gpus all`，宿主机跑 `nvidia-smi` 确认驱动正常                   |
+| Claude Code 报 401/403        | 检查 `ANTHROPIC_API_KEY` 是否正确传入，容器内 `echo $ANTHROPIC_API_KEY` |
+| PyTorch 报 CUDA not available | 驱动版本和 CUDA 镜像版本不兼容，降级 Dockerfile 中的 CUDA 版本          |
+| `install_aris.sh` 报错        | 确认 `/aris/framework/skills/` 存在且非空                               |
+| 容器内网络不通                | `--network host` 应该继承宿主机网络，检查 clash 是否在跑                |

@@ -1,0 +1,31 @@
+{
+  "pipeline_id": "framework-optimization-v1",
+  "task": "框架优化：自动化、低人参与方向",
+  "current_stage": "experiment_plan",
+  "stages_completed": [],
+  "gates_passed": [],
+  "consecutive_failures": 0,
+  "executor_tasks": [],
+  "reviewer_verdicts": [],
+  "timestamp": "2026-06-01T18:45:00Z",
+  "optimization_tasks": [
+    {
+      "id": "opt-1",
+      "name": "Executor角色拆分（Coder/Deployer/Writer）",
+      "priority": 1,
+      "goal": "分离代码执行与部署权限，分离论文写作"
+    },
+    {
+      "id": "opt-2",
+      "name": "上下文记忆本地化",
+      "priority": 2,
+      "goal": "Agent启动时自动读取状态，长流程不丢上下文"
+    },
+    {
+      "id": "opt-3",
+      "name": "executor-blocked-protocol完善",
+      "priority": 3,
+      "goal": "增加绕过策略表、累计阈值机制"
+    }
+  ]
+}
