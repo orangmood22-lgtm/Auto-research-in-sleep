@@ -261,6 +261,7 @@ def generate_html(nodes: dict, dag_data: dict) -> str:
 <title>ARIS Skill DAG</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.28/dist/cytoscape.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dagre@0.8/dist/dagre.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5/dist/cytoscape-dagre.min.js"></script>
 <style>
 :root {{
@@ -378,6 +379,12 @@ body {{ font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; backgro
 <script>
 const DAG_NODES = {nodes_json_str};
 const DAG_EDGES = {edges_json_str};
+
+// Register dagre extension manually
+if (typeof cytoscape !== 'undefined' && typeof cytoscapeDagre !== 'undefined') {{
+  cytoscape.use(cytoscapeDagre);
+}}
+
 const nodeMap = {{}};
 DAG_NODES.forEach(n => nodeMap[n.name] = n);
 
@@ -415,9 +422,9 @@ const cy = cytoscape({{
   style: [
     {{ selector: 'node', style: {{
       'label': 'data(label)', 'text-valign': 'center', 'text-halign': 'center',
-      'font-size': 10, 'font-family': 'Inter, sans-serif', 'font-weight': 500,
-      'color': '#1d1d1f', 'text-wrap': 'wrap', 'text-max-width': 80,
-      'width': 28, 'height': 28, 'shape': 'round-rectangle',
+      'font-size': 9, 'font-family': 'Inter, sans-serif', 'font-weight': 500,
+      'color': '#1d1d1f', 'text-wrap': 'wrap', 'text-max-width': 70,
+      'width': 50, 'height': 30, 'shape': 'round-rectangle',
       'corner-radius': 6, 'border-width': 2, 'border-opacity': 0.8,
       'background-color': 'mapData(layer, "orchestration", 0, "tools", 1, #8e8e93)',
       'border-color': '#d2d2d7', 'padding': 4,
