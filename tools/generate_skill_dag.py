@@ -82,6 +82,7 @@ def build_graph(skills_dir: Path) -> dict:
         node = {
             "name": d.name,
             "caller": fm.get("caller", "unknown"),
+            "description": fm.get("description", ""),
         }
         if invoked:
             node["invokes"] = sorted(set(invoked))
@@ -89,6 +90,8 @@ def build_graph(skills_dir: Path) -> dict:
             node["produces"] = fm["produces"] if isinstance(fm["produces"], list) else [fm["produces"]]
         if fm.get("consumes"):
             node["consumes"] = fm["consumes"] if isinstance(fm["consumes"], list) else [fm["consumes"]]
+        if fm.get("examples"):
+            node["examples"] = fm["examples"] if isinstance(fm["examples"], list) else [fm["examples"]]
 
         nodes[d.name] = node
 
@@ -214,25 +217,30 @@ def compute_impact(nodes: dict, skill_name: str) -> dict:
 
 
 def generate_html(nodes: dict, dag_data: dict) -> str:
-    """Generate self-contained HTML visualization page using Cytoscape.js."""
+    """Generate self-contained HTML visualization page using D3.js force layout."""
     invoked_by = compute_invoked_by(nodes)
 
     # Classify executor sub-roles
-    EXECUTOR_CODER = {"tdd", "diagnose", "git-guardrails", "experiment-bridge"}
+    EXECUTOR_CODER = {"tdd", "diagnose", "git-guardrails", "experiment-bridge", "ablation-planner"}
     EXECUTOR_DEPLOYER = {"run-experiment", "monitor-experiment", "sync", "framework-update", "system-profile", "vast-gpu", "serverless-modal", "experiment-queue", "training-check"}
-    EXECUTOR_WRITER = {"paper-write", "paper-compile", "paper-figure", "paper-illustration", "paper-illustration-image2", "paper-slides", "paper-poster", "paper-talk", "rebuttal", "claims-drafting", "formula-derivation", "figure-spec", "figure-description", "mermaid-diagram", "pixel-art", "slides-polish", "proof-writer", "proof-checker", "patent-pipeline", "patent-novelty-check", "patent-review", "grant-proposal", "invention-structuring", "specification-writing", "embodiment-description", "jurisdiction-format", "prior-art-search", "writing-systems-papers"}
+    EXECUTOR_WRITER = {"paper-write", "paper-compile", "paper-figure", "paper-illustration", "paper-illustration-image2", "paper-slides", "paper-poster", "paper-talk", "rebuttal", "claims-drafting", "formula-derivation", "figure-spec", "figure-description", "mermaid-diagram", "pixel-art", "slides-polish", "proof-writer", "patent-pipeline", "grant-proposal", "invention-structuring", "specification-writing", "embodiment-description", "jurisdiction-format", "writing-systems-papers", "overleaf-sync", "paper-plan"}
+    # Meta skills (role definitions, not tools)
+    EXECUTOR_META = {"coder", "deployer", "writer"}
 
     # Build enriched nodes
     nodes_json = []
     for name in sorted(nodes.keys()):
         node = dict(nodes[name])
         node["invoked_by"] = invoked_by.get(name, [])
-        # Determine layer
         caller = node.get("caller", "any")
         if caller == "leader":
             node["layer"] = "orchestration"
+        elif caller == "reviewer":
+            node["layer"] = "reviewer"
         elif caller == "executor":
-            if name in EXECUTOR_CODER:
+            if name in EXECUTOR_META:
+                node["layer"] = "executor-meta"
+            elif name in EXECUTOR_CODER:
                 node["layer"] = "executor-coder"
             elif name in EXECUTOR_DEPLOYER:
                 node["layer"] = "executor-deployer"
@@ -260,17 +268,14 @@ def generate_html(nodes: dict, dag_data: dict) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARIS Skill DAG</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.28/dist/cytoscape.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dagre@0.8/dist/dagre.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5/dist/cytoscape-dagre.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
 :root {{
   --bg: #fafafa; --surface: #ffffff; --surface2: #f5f5f7; --border: #d2d2d7;
   --text: #1d1d1f; --text2: #6e6e73; --text3: #86868b; --accent: #0071e3;
-  --accent2: #2997ff; --danger: #ff3b30; --success: #34c759; --warning: #ff9500;
-  --orchestration: #bf5af2; --exec-coder: #0071e3; --exec-deployer: #30d158;
-  --exec-writer: #ff9500; --exec-other: #64d2ff; --tools: #8e8e93;
-  --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.04); --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+  --orchestration: #bf5af2; --reviewer: #ff6b6b; --exec-coder: #0071e3; --exec-deployer: #30d158;
+  --exec-writer: #ff9500; --exec-meta: #8b5cf6; --exec-other: #64d2ff; --tools: #8e8e93;
+  --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.04);
 }}
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 body {{ font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }}
@@ -290,17 +295,19 @@ body {{ font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; backgro
 .btn-group .btn:first-child {{ border-radius:20px 0 0 20px; }}
 .btn-group .btn:last-child {{ border-radius:0 20px 20px 0; }}
 #main {{ display:flex; height:calc(100vh - 98px); }}
-#cy {{ flex:1; background:var(--surface); position:relative; }}
-#cy canvas {{ left:0; }}
+#graph {{ flex:1; background:var(--surface); position:relative; overflow:hidden; }}
+#graph svg {{ width:100%; height:100%; }}
 #sidebar {{ width:340px; background:var(--surface); border-left:1px solid var(--border); overflow-y:auto; transition:width .3s; }}
 #sidebar.collapsed {{ width:0; overflow:hidden; }}
 .detail-header {{ padding:20px 20px 12px; border-bottom:1px solid var(--border); }}
 .detail-header h2 {{ font-size:16px; font-weight:600; letter-spacing:-0.01em; margin-bottom:6px; }}
 .badge {{ display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:600; margin-right:6px; }}
 .badge-orchestration {{ background:#f0e6ff; color:#7c3aed; }}
+.badge-reviewer {{ background:#ffe6e6; color:#dc2626; }}
 .badge-executor-coder {{ background:#e6f0ff; color:#0071e3; }}
 .badge-executor-deployer {{ background:#e6ffe6; color:#16a34a; }}
 .badge-executor-writer {{ background:#fff5e6; color:#b45309; }}
+.badge-executor-meta {{ background:#f0e6ff; color:#7c3aed; }}
 .badge-executor {{ background:#e6f9ff; color:#0891b2; }}
 .badge-tools {{ background:#f0f0f0; color:#6b7280; }}
 .impact-card {{ margin:16px 20px; background:var(--surface2); border-radius:var(--radius); padding:14px; }}
@@ -322,7 +329,13 @@ body {{ font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; backgro
 #legend h4 {{ font-weight:600; margin-bottom:6px; font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:0.05em; }}
 .legend-item {{ display:flex; align-items:center; gap:6px; margin:3px 0; }}
 .legend-dot {{ width:10px; height:10px; border-radius:3px; }}
-#layout-toggle {{ position:absolute; top:16px; right:16px; z-index:10; }}
+.link {{ stroke:#d2d2d7; stroke-width:1.2; fill:none; opacity:0.5; }}
+.link.highlighted {{ stroke:var(--accent); stroke-width:2.5; opacity:1; }}
+.link.dimmed {{ opacity:0.05; }}
+.node-rect {{ rx:6; ry:6; stroke-width:2; cursor:pointer; transition:opacity .15s; }}
+.node-rect.highlighted {{ stroke-width:3; }}
+.node-rect.dimmed {{ opacity:0.15; }}
+.node-label {{ font-size:8px; font-family:'Inter',sans-serif; font-weight:500; fill:#1d1d1f; pointer-events:none; text-anchor:middle; dominant-baseline:central; }}
 </style>
 </head>
 <body>
@@ -332,43 +345,42 @@ body {{ font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; backgro
     <span><b>{len(nodes)}</b> skills</span>
     <span><b>{dag_data["stats"]["total_edges"]}</b> edges</span>
     <span><b>{dag_data["stats"]["caller_distribution"].get("leader", 0)}</b> leader</span>
+    <span><b>{dag_data["stats"]["caller_distribution"].get("reviewer", 0)}</b> reviewer</span>
     <span><b>{dag_data["stats"]["caller_distribution"].get("executor", 0)}</b> executor</span>
     <span><b>{dag_data["stats"]["caller_distribution"].get("any", 0)}</b> any</span>
   </div>
 </div>
 <div id="toolbar">
   <input type="text" id="search" placeholder="Search skills..." />
+  <button class="btn" id="lang-toggle" data-lang="en">中/EN</button>
   <div class="btn-group">
     <button class="btn active" data-filter="all">All</button>
     <button class="btn" data-filter="orchestration">Orchestration</button>
+    <button class="btn" data-filter="reviewer">Reviewer</button>
     <button class="btn" data-filter="executor-coder">Coder</button>
     <button class="btn" data-filter="executor-deployer">Deployer</button>
     <button class="btn" data-filter="executor-writer">Writer</button>
     <button class="btn" data-filter="tools">Tools</button>
   </div>
   <button class="btn" id="impact-btn" data-filter="impact">⚡ Impact</button>
-  <div class="btn-group" id="layout-btns">
-    <button class="btn active" data-layout="dagre-tb">↓ TB</button>
-    <button class="btn" data-layout="dagre-lr">→ LR</button>
-    <button class="btn" data-layout="breadthfirst">◎ BFS</button>
-    <button class="btn" data-layout="concentric">◉ Circle</button>
-  </div>
 </div>
 <div id="main">
-  <div id="cy">
+  <div id="graph">
     <div id="legend">
       <h4>Layers</h4>
       <div class="legend-item"><div class="legend-dot" style="background:var(--orchestration)"></div>Orchestration</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--reviewer)"></div>Reviewer</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--exec-coder)"></div>Executor · Coder</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--exec-deployer)"></div>Executor · Deployer</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--exec-writer)"></div>Executor · Writer</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--exec-meta)"></div>Executor · Meta</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--exec-other)"></div>Executor · Other</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--tools)"></div>Tools / Search</div>
     </div>
     <div id="zoom-bar">
-      <button onclick="cy.zoom(cy.zoom()*1.3);cy.center()">+</button>
-      <button onclick="cy.zoom(cy.zoom()/1.3);cy.center()">−</button>
-      <button onclick="cy.fit(undefined,50)">⊡</button>
+      <button id="zoom-in">+</button>
+      <button id="zoom-out">−</button>
+      <button id="zoom-fit">⊡</button>
     </div>
   </div>
   <div id="sidebar">
@@ -380,102 +392,176 @@ body {{ font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; backgro
 const DAG_NODES = {nodes_json_str};
 const DAG_EDGES = {edges_json_str};
 
-// Register dagre extension manually
-if (typeof cytoscape !== 'undefined' && typeof cytoscapeDagre !== 'undefined') {{
-  cytoscape.use(cytoscapeDagre);
-}}
-
 const nodeMap = {{}};
 DAG_NODES.forEach(n => nodeMap[n.name] = n);
+
+const LAYER_FILL = {{
+  'orchestration': '#f0e6ff', 'reviewer': '#ffe6e6', 'executor-coder': '#e6f0ff', 'executor-deployer': '#e6ffe6',
+  'executor-writer': '#fff5e6', 'executor-meta': '#f0e6ff', 'executor': '#e6f9ff', 'tools': '#f0f0f0'
+}};
+const LAYER_STROKE = {{
+  'orchestration': '#bf5af2', 'reviewer': '#dc2626', 'executor-coder': '#0071e3', 'executor-deployer': '#30d158',
+  'executor-writer': '#ff9500', 'executor-meta': '#8b5cf6', 'executor': '#64d2ff', 'tools': '#8e8e93'
+}};
 
 let currentFilter = 'all';
 let impactMode = false;
 let selectedSkill = null;
-let currentLayout = 'dagre-tb';
+let currentLang = 'en';
 
-const LAYER_COLORS = {{
-  'orchestration': '#bf5af2', 'executor-coder': '#0071e3', 'executor-deployer': '#30d158',
-  'executor-writer': '#ff9500', 'executor': '#64d2ff', 'tools': '#8e8e93'
-}};
-const LAYER_BG = {{
-  'orchestration': '#f0e6ff', 'executor-coder': '#e6f0ff', 'executor-deployer': '#e6ffe6',
-  'executor-writer': '#fff5e6', 'executor': '#e6f9ff', 'tools': '#f0f0f0'
-}};
-
-const cyElements = [];
-DAG_NODES.forEach(n => {{
-  cyElements.push({{
-    data: {{
-      id: n.name, label: n.name, caller: n.caller, layer: n.layer,
-      invokes: n.invokes || [], invoked_by: n.invoked_by || [],
-      produces: n.produces || [], consumes: n.consumes || []
-    }}
-  }});
-}});
-DAG_EDGES.forEach(e => {{
-  cyElements.push({{ data: {{ source: e.source, target: e.target }} }});
-}});
-
-const cy = cytoscape({{
-  container: document.getElementById('cy'),
-  elements: cyElements,
-  style: [
-    {{ selector: 'node', style: {{
-      'label': 'data(label)', 'text-valign': 'center', 'text-halign': 'center',
-      'font-size': 9, 'font-family': 'Inter, sans-serif', 'font-weight': 500,
-      'color': '#1d1d1f', 'text-wrap': 'wrap', 'text-max-width': 70,
-      'width': 50, 'height': 30, 'shape': 'round-rectangle',
-      'corner-radius': 6, 'border-width': 2, 'border-opacity': 0.8,
-      'background-color': 'mapData(layer, "orchestration", 0, "tools", 1, #8e8e93)',
-      'border-color': '#d2d2d7', 'padding': 4,
-      'transition-property': 'border-color, border-width, opacity',
-      'transition-duration': '0.15s'
-    }}}},
-    {{ selector: 'node[layer="orchestration"]', style: {{ 'background-color': '#f0e6ff', 'border-color': '#bf5af2' }} }},
-    {{ selector: 'node[layer="executor-coder"]', style: {{ 'background-color': '#e6f0ff', 'border-color': '#0071e3' }} }},
-    {{ selector: 'node[layer="executor-deployer"]', style: {{ 'background-color': '#e6ffe6', 'border-color': '#30d158' }} }},
-    {{ selector: 'node[layer="executor-writer"]', style: {{ 'background-color': '#fff5e6', 'border-color': '#ff9500' }} }},
-    {{ selector: 'node[layer="executor"]', style: {{ 'background-color': '#e6f9ff', 'border-color': '#64d2ff' }} }},
-    {{ selector: 'node[layer="tools"]', style: {{ 'background-color': '#f0f0f0', 'border-color': '#8e8e93' }} }},
-    {{ selector: 'node:active', style: {{ 'border-width': 3, 'overlay-opacity': 0 }} }},
-    {{ selector: 'node.selected', style: {{ 'border-width': 3, 'border-color': '#0071e3', 'font-weight': 700 }} }},
-    {{ selector: 'node.dimmed', style: {{ 'opacity': 0.2 }} }},
-    {{ selector: 'node.highlighted', style: {{ 'opacity': 1, 'border-width': 3 }} }},
-    {{ selector: 'edge', style: {{
-      'width': 1.2, 'line-color': '#d2d2d7', 'curve-style': 'bezier',
-      'target-arrow-shape': 'triangle', 'target-arrow-color': '#d2d2d7',
-      'arrow-scale': 0.6, 'opacity': 0.6
-    }}}},
-    {{ selector: 'edge.highlighted', style: {{ 'line-color': '#0071e3', 'target-arrow-color': '#0071e3', 'width': 2, 'opacity': 1 }} }},
-    {{ selector: 'edge.dimmed', style: {{ 'opacity': 0.08 }} }}
-  ],
-  layout: {{ name: 'dagre', rankDir: 'TB', spacingFactor: 1.2, padding: 50 }},
-  minZoom: 0.3, maxZoom: 4, wheelSensitivity: 0.3
-}});
-
-// Click handler
-cy.on('tap', 'node', evt => {{
-  const node = evt.target;
-  onNodeClick(node.id());
-}});
-
-cy.on('tap', evt => {{
-  if (evt.target === cy) {{
-    cy.elements().removeClass('selected dimmed highlighted');
-    document.getElementById('detail').style.display = 'none';
-    document.getElementById('placeholder').style.display = 'block';
-    selectedSkill = null;
+// Bilingual translations
+const I18N = {{
+  en: {{
+    title: 'ARIS Skill DAG',
+    skills: 'skills', edges: 'edges', leader: 'leader', reviewer: 'reviewer', executor: 'executor', any: 'any',
+    searchPlaceholder: 'Search skills...',
+    all: 'All', orchestration: 'Orchestration', coder: 'Coder', deployer: 'Deployer', writer: 'Writer', tools: 'Tools',
+    impact: '⚡ Impact',
+    layers: 'Layers',
+    selectSkill: 'Select a skill', clickNode: 'Click a node to see details & impact',
+    impactAnalysis: 'Impact Analysis',
+    directDownstream: 'Direct downstream', transitiveDownstream: 'Transitive downstream',
+    directUpstream: 'Direct upstream', transitiveUpstream: 'Transitive upstream',
+    invokes: 'Invokes', invokedBy: 'Invoked by', produces: 'Produces', consumes: 'Consumes'
+  }},
+  zh: {{
+    title: 'ARIS 技能依赖图',
+    skills: '技能', edges: '边', leader: '编排', reviewer: '审查', executor: '执行', any: '通用',
+    searchPlaceholder: '搜索技能...',
+    all: '全部', orchestration: '编排层', coder: '编码', deployer: '部署', writer: '写作', tools: '工具',
+    impact: '⚡ 影响分析',
+    layers: '层级',
+    selectSkill: '选择技能', clickNode: '点击节点查看详情和影响范围',
+    impactAnalysis: '影响分析',
+    directDownstream: '直接下游', transitiveDownstream: '传递下游',
+    directUpstream: '直接上游', transitiveUpstream: '传递上游',
+    invokes: '调用', invokedBy: '被调用', produces: '产出', consumes: '消费'
   }}
+}};
+
+function updateLang(lang) {{
+  currentLang = lang;
+  const t = I18N[lang];
+  document.querySelector('#nav h1').innerHTML = `ARIS <span>${{t.title.split(' ').slice(1).join(' ')}}</span>`;
+  document.querySelector('#search').placeholder = t.searchPlaceholder;
+  document.querySelectorAll('.btn-group .btn')[0].textContent = t.all;
+  document.querySelector('#legend h4').textContent = t.layers;
+  document.querySelector('#placeholder h3').textContent = t.selectSkill;
+  document.querySelector('#placeholder p').textContent = t.clickNode;
+  document.getElementById('lang-toggle').textContent = lang === 'en' ? '中/EN' : 'EN/中';
+}}
+
+document.getElementById('lang-toggle').onclick = () => {{
+  updateLang(currentLang === 'en' ? 'zh' : 'en');
+}};
+
+// SVG setup
+const container = document.getElementById('graph');
+const width = container.clientWidth;
+const height = container.clientHeight;
+
+const svg = d3.select('#graph').append('svg')
+  .attr('width', width).attr('height', height);
+
+const g = svg.append('g');
+
+// Zoom
+const zoom = d3.zoom().scaleExtent([0.2, 5]).on('zoom', (event) => {{
+  g.attr('transform', event.transform);
+}});
+svg.call(zoom);
+
+document.getElementById('zoom-in').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.4);
+document.getElementById('zoom-out').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.7);
+document.getElementById('zoom-fit').onclick = () => {{
+  const bounds = g.node().getBBox();
+  if (bounds.width === 0) return;
+  const scale = 0.9 / Math.max(bounds.width / width, bounds.height / height);
+  const tx = width / 2 - scale * (bounds.x + bounds.width / 2);
+  const ty = height / 2 - scale * (bounds.y + bounds.height / 2);
+  svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+}};
+
+// Arrow marker
+svg.append('defs').append('marker')
+  .attr('id', 'arrowhead').attr('viewBox', '0 -5 10 10')
+  .attr('refX', 28).attr('refY', 0).attr('markerWidth', 6).attr('markerHeight', 6)
+  .attr('orient', 'auto')
+  .append('path').attr('d', 'M0,-5L10,0L0,5').attr('fill', '#d2d2d7');
+
+// Prepare data
+const simNodes = DAG_NODES.map(n => ({{...n, id: n.name}}));
+const nameToIdx = {{}};
+simNodes.forEach((n, i) => nameToIdx[n.name] = i);
+const simLinks = DAG_EDGES.filter(e => nameToIdx[e.source] !== undefined && nameToIdx[e.target] !== undefined)
+  .map(e => ({{source: e.source, target: e.target}}));
+
+// Force simulation
+const simulation = d3.forceSimulation(simNodes)
+  .force('link', d3.forceLink(simLinks).id(d => d.id).distance(60).strength(0.3))
+  .force('charge', d3.forceManyBody().strength(-200))
+  .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('collision', d3.forceCollide().radius(40));
+
+// Draw links
+const link = g.append('g').selectAll('line')
+  .data(simLinks).join('line')
+  .attr('class', 'link')
+  .attr('marker-end', 'url(#arrowhead)');
+
+// Draw nodes
+const node = g.append('g').selectAll('g')
+  .data(simNodes).join('g')
+  .attr('class', 'node-group')
+  .call(d3.drag()
+    .on('start', (event, d) => {{ if(!event.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; }})
+    .on('drag', (event, d) => {{ d.fx=event.x; d.fy=event.y; }})
+    .on('end', (event, d) => {{ if(!event.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; }})
+  );
+
+node.append('rect')
+  .attr('class', 'node-rect')
+  .attr('width', 70).attr('height', 24)
+  .attr('x', -35).attr('y', -12)
+  .attr('fill', d => LAYER_FILL[d.layer] || '#f0f0f0')
+  .attr('stroke', d => LAYER_STROKE[d.layer] || '#8e8e93');
+
+node.append('text')
+  .attr('class', 'node-label')
+  .attr('y', 1)
+  .text(d => d.name);
+
+// Tick
+simulation.on('tick', () => {{
+  link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+  node.attr('transform', d => `translate(${{d.x}},${{d.y}})`);
+}});
+
+// Click
+node.on('click', (event, d) => {{
+  event.stopPropagation();
+  onNodeClick(d.id);
+}});
+
+svg.on('click', () => {{
+  d3.selectAll('.node-rect').classed('highlighted dimmed', false).attr('stroke-width', 2);
+  d3.selectAll('.link').classed('highlighted dimmed', false);
+  document.getElementById('detail').style.display = 'none';
+  document.getElementById('placeholder').style.display = 'block';
+  selectedSkill = null;
 }});
 
 function onNodeClick(name) {{
   selectedSkill = name;
   const n = nodeMap[name];
-  cy.elements().removeClass('selected dimmed highlighted');
-  cy.$('#'+name).addClass('selected');
+  if (!n) return;
+
+  // Reset styles
+  d3.selectAll('.node-rect').classed('highlighted', false).classed('dimmed', false).attr('stroke-width', 2);
+  d3.selectAll('.link').classed('highlighted', false).classed('dimmed', false);
 
   if (impactMode) {{
-    // Highlight impact chain
     const downIds = new Set([name]);
     const upIds = new Set([name]);
     let q = [name];
@@ -483,17 +569,16 @@ function onNodeClick(name) {{
     q = [name];
     while(q.length) {{ let c=q.shift(); (nodeMap[c]?.invokes||[]).forEach(d => {{ if(!upIds.has(d)){{upIds.add(d);q.push(d);}} }}); }}
     const impactIds = new Set([...downIds, ...upIds]);
-    cy.nodes().forEach(nd => {{
-      if (impactIds.has(nd.id())) nd.addClass('highlighted');
-      else nd.addClass('dimmed');
-    }});
-    cy.edges().forEach(ed => {{
-      if (impactIds.has(ed.source().id()) && impactIds.has(ed.target().id())) ed.addClass('highlighted');
-      else ed.addClass('dimmed');
-    }});
+
+    d3.selectAll('.node-rect').classed('dimmed', d => !impactIds.has(d.id));
+    d3.selectAll('.node-rect').classed('highlighted', d => impactIds.has(d.id));
+    d3.selectAll('.link').classed('dimmed', d => !(impactIds.has(d.source.id) && impactIds.has(d.target.id)));
+    d3.selectAll('.link').classed('highlighted', d => impactIds.has(d.source.id) && impactIds.has(d.target.id));
+  }} else {{
+    d3.selectAll('.node-rect').classed('highlighted', d => d.id === name).attr('stroke-width', d => d.id === name ? 3 : 2);
   }}
 
-  // Sidebar detail
+  // Sidebar
   const placeholder = document.getElementById('placeholder');
   const detail = document.getElementById('detail');
   placeholder.style.display = 'none';
@@ -516,6 +601,10 @@ function onNodeClick(name) {{
       <h2>${{name}}</h2>
       ${{layerBadge}} ${{callerBadge}}
     </div>
+    <div class="desc-section" style="padding:12px 20px;border-bottom:1px solid var(--border);">
+      <p style="font-size:13px;color:var(--text2);line-height:1.5;">${{n.description || 'No description'}}</p>
+    </div>
+    ${{n.examples && n.examples.length ? '<div class="dep-section"><h3>Examples</h3><ul class="dep-list">' + n.examples.map(e => '<li style="font-size:12px;color:var(--text2);">' + e + '</li>').join('') + '</ul></div>' : ''}}
     <div class="impact-card">
       <h4>Impact Analysis</h4>
       <div class="impact-row"><span>Direct downstream</span><span class="num">${{downstream.length}}</span></div>
@@ -531,14 +620,13 @@ function onNodeClick(name) {{
     ${{consumes.length?'<div class="dep-section"><h3>Consumes</h3><ul class="dep-list">'+consumes.map(s=>'<li>'+s+'</li>').join('')+'</ul></div>':''}}
   `;
 }}
+window.onNodeClick = onNodeClick;
 
 // Search
 document.getElementById('search').addEventListener('input', e => {{
   const term = e.target.value.toLowerCase();
-  cy.nodes().forEach(n => {{
-    if (!term || n.id().includes(term)) n.style('opacity', 1);
-    else n.style('opacity', 0.15);
-  }});
+  d3.selectAll('.node-rect').attr('opacity', d => !term || d.id.includes(term) ? 1 : 0.15);
+  d3.selectAll('.node-label').attr('opacity', d => !term || d.id.includes(term) ? 1 : 0.15);
 }});
 
 // Filter
@@ -549,27 +637,16 @@ document.querySelectorAll('#toolbar .btn[data-filter]').forEach(btn => {{
     const f = btn.dataset.filter;
     impactMode = f === 'impact';
     currentFilter = impactMode ? 'all' : f;
-    cy.elements().removeClass('selected dimmed highlighted');
-    cy.nodes().forEach(n => {{
-      if (currentFilter === 'all' || n.data('layer') === currentFilter || (!impactMode && n.data('caller') === currentFilter))
-        n.style('opacity', 1);
-      else n.style('opacity', 0.1);
-    }});
+    d3.selectAll('.node-rect').classed('highlighted dimmed', false);
+    d3.selectAll('.link').classed('highlighted dimmed', false);
+    d3.selectAll('.node-rect').attr('opacity', d => currentFilter === 'all' || d.layer === currentFilter ? 1 : 0.1);
+    d3.selectAll('.node-label').attr('opacity', d => currentFilter === 'all' || d.layer === currentFilter ? 1 : 0.1);
   }});
 }});
 
-// Layout switch
-document.querySelectorAll('#layout-btns .btn').forEach(btn => {{
-  btn.addEventListener('click', () => {{
-    document.querySelectorAll('#layout-btns .btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const l = btn.dataset.layout;
-    let layoutOpts = {{ name: 'dagre', rankDir: 'TB', spacingFactor: 1.2, padding: 50 }};
-    if (l === 'dagre-lr') layoutOpts = {{ name: 'dagre', rankDir: 'LR', spacingFactor: 1.2, padding: 50 }};
-    else if (l === 'breadthfirst') layoutOpts = {{ name: 'breadthfirst', spacingFactor: 1.5, padding: 50 }};
-    else if (l === 'concentric') layoutOpts = {{ name: 'concentric', spacingFactor: 1.2, padding: 50 }};
-    cy.layout(layoutOpts).run();
-  }});
+// Auto-fit after simulation settles
+simulation.on('end', () => {{
+  setTimeout(() => document.getElementById('zoom-fit').click(), 100);
 }});
 </script>
 </body>
