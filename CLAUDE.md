@@ -24,24 +24,24 @@
 
 ## Pipeline Status
 
-| Stage | Status | Artifact |
-|-------|--------|----------|
-| Idea Discovery | NOT STARTED | — |
-| Experiment Plan | NOT STARTED | — |
-| Experiment Bridge | NOT STARTED | — |
-| Experiment Audit | NOT STARTED | — |
-| Result-to-Claim | NOT STARTED | — |
-| Paper Writing | NOT STARTED | — |
+| Stage             | Status      | Artifact |
+| ----------------- | ----------- | -------- |
+| Idea Discovery    | NOT STARTED | —        |
+| Experiment Plan   | NOT STARTED | —        |
+| Experiment Bridge | NOT STARTED | —        |
+| Experiment Audit  | NOT STARTED | —        |
+| Result-to-Claim   | NOT STARTED | —        |
+| Paper Writing     | NOT STARTED | —        |
 
 ## Three-Party Architecture
 
 本项目采用三边架构，三个独立窗口分别承担不同角色：
 
-| Role | Model | Window | Responsibility |
-|------|-------|--------|---------------|
-| **Leader** | Claude Opus 4.6 | 窗口 1 | 研究规划、gate 决策、止损判断、分发任务 |
-| **Executor** | Claude Opus 4.6 | 窗口 2 | 代码实现、实验部署、论文撰写 |
-| **Reviewer** | GPT-5.5 via Codex | 窗口 3 | 独立代码审查、实验审计、claim 判定 |
+| Role         | Model             | Window | Responsibility                          |
+| ------------ | ----------------- | ------ | --------------------------------------- |
+| **Leader**   | Claude Opus 4.6   | 窗口 1 | 研究规划、gate 决策、止损判断、分发任务 |
+| **Executor** | Claude Opus 4.6   | 窗口 2 | 代码实现、实验部署、论文撰写            |
+| **Reviewer** | GPT-5.5 via Codex | 窗口 3 | 独立代码审查、实验审计、claim 判定      |
 
 ### 角色边界（严格遵守）
 
@@ -63,7 +63,7 @@
 ## Compute Resources
 
 ### Server 1: V100 x4
-- SSH: `ssh v100-ai`
+- SSH: `ssh 4090x4--ai`
 - Experiment dir: `/home/ai_worker/exps/exp0516`
 - Env: `conda activate aris`
 - Python 3.10, PyTorch 2.6.0+cu118

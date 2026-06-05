@@ -4,6 +4,10 @@ description: "Persistent research knowledge base that accumulates papers, ideas,
 argument-hint: [subcommand: init|ingest|sync|query|update|lint|stats]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__codex__codex, mcp__codex__codex-reply
 caller: any
+examples:
+  - "/research-wiki query prototype learning"
+  - "知识库 add this paper"
+  - "research-wiki ingest papers/"
 ---
 
 # Research Wiki: Persistent Research Knowledge Base

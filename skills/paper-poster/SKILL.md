@@ -4,6 +4,10 @@ description: "Generate a conference poster (article + tcbposter LaTeX → A0/A1 
 argument-hint: "[paper-directory-or-venue] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/paper-poster papers/main"
+  - "做海报 for conference"
+  - "generate A0 poster from paper"
 ---
 
 # Paper Poster: From Paper to Conference Poster

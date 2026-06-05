@@ -4,6 +4,10 @@ description: Use when experiments complete to judge what claims the results supp
 argument-hint: [experiment-description-or-wandb-run]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/result-to-claim exp01 results"
+  - "what claims do these results support"
+  - "judge if experiments validate the method"
 ---
 
 # Result-to-Claim Gate

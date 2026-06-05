@@ -4,6 +4,10 @@ description: Get a deep critical review of research from GPT via Codex MCP. Use 
 argument-hint: [topic-or-scope]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: reviewer
+examples:
+  - "/research-review my method section"
+  - "review my research idea"
+  - "get external review of the paper"
 ---
 
 # Research Review via Codex MCP (xhigh reasoning)

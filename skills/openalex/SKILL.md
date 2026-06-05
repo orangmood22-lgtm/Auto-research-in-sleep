@@ -4,6 +4,10 @@ description: Search academic papers via OpenAlex API for open citation data, ins
 argument-hint: [search-query]
 allowed-tools: Bash(*), Read, Write
 caller: any
+examples:
+  - "/openalex transformer architecture"
+  - "search openalex for citations"
+  - "find papers with funding info"
 ---
 
 # OpenAlex Academic Search

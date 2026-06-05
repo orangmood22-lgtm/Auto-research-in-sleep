@@ -4,6 +4,10 @@ description: Autonomous multi-round research review loop using MiniMax API. Use 
 argument-hint: [topic-or-scope]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, Skill
 caller: leader
+examples:
+  - "/auto-review-loop-minimax my paper"
+  - "minimax review the draft"
+  - "auto review with MiniMax backend"
 ---
 
 # Auto Review Loop (MiniMax Version): Autonomous Research Improvement

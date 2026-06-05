@@ -2,6 +2,10 @@
 name: tdd
 description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
 caller: executor
+examples:
+  - "/tdd implement user authentication"
+  - "use TDD to build the API endpoint"
+  - "red-green-refactor the payment module"
 ---
 
 # Test-Driven Development

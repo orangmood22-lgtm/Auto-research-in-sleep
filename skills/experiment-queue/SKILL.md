@@ -4,6 +4,10 @@ description: SSH job queue for multi-seed/multi-config ML experiments with OOM-a
 argument-hint: [manifest-or-grid-spec]
 allowed-tools: Bash(*), Read, Grep, Glob, Edit, Write, Agent, Skill(run-experiment), Skill(monitor-experiment)
 caller: executor
+examples:
+  - "/experiment-queue seeds=5 configs=base,large"
+  - "batch experiments for sweep"
+  - "队列实验 run all seeds"
 ---
 
 # Experiment Queue

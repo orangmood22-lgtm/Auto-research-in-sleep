@@ -3,6 +3,10 @@ name: experiment-plan
 description: 'Turn a refined research proposal or method idea into a detailed, claim-driven experiment roadmap. Use after `research-refine`, or when the user asks for a detailed experiment plan, ablation matrix, evaluation protocol, run order, compute budget, or paper-ready validation that supports the core problem, novelty, simplicity, and any LLM / VLM / Diffusion / RL-based contribution.'
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Agent
 caller: leader
+examples:
+  - "/experiment-plan from the refined method"
+  - "create experiment roadmap"
+  - "plan ablation studies"
 ---
 
 # Experiment Plan: Claim-Driven, Paper-Oriented Validation

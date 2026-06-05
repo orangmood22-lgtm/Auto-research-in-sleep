@@ -4,6 +4,10 @@ description: "Process user-provided patent figures and generate formal drawing d
 argument-hint: [figure-directory-or-figure-list]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch
 caller: executor
+examples:
+  - "/figure-description patents/figs/"
+  - "附图处理 for patent figures"
+  - "describe the patent drawings"
 ---
 
 # Figure Description for Patents

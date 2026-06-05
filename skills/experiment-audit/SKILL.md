@@ -4,6 +4,10 @@ description: "Audit experiment integrity before claiming results. Uses cross-mod
 argument-hint: [experiment-dir-or-results-path]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: reviewer
+examples:
+  - "/experiment-audit results/exp01"
+  - "审计实验 integrity"
+  - "check if results are legitimate"
 ---
 
 # Experiment Audit: Cross-Model Integrity Verification

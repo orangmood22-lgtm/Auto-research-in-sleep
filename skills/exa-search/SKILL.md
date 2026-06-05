@@ -4,6 +4,10 @@ description: AI-powered web search via Exa with content extraction. Use when use
 argument-hint: [search-query-or-url]
 allowed-tools: Bash(*), Read, Write
 caller: any
+examples:
+  - "/exa-search latest AI breakthroughs"
+  - "find similar pages to this URL"
+  - "web search for implementation guides"
 ---
 
 # Exa AI-Powered Web Search

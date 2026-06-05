@@ -4,6 +4,10 @@ description: "Two-thread adversarial review: a fresh reviewer constructs the str
 argument-hint: [paper-directory]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, mcp__codex__codex
 caller: leader
+examples:
+  - "/kill-argument papers/main"
+  - "adversarial review this paper"
+  - "simulate hostile reviewer"
 ---
 
 # Kill Argument Exercise: Adversarial Attack-Defense Review

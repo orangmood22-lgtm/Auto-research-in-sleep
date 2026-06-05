@@ -4,6 +4,10 @@ description: Use when main results pass result-to-claim (claim_supported=yes or 
 argument-hint: [method-description-or-claim]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/ablation-planner freq-domain prototype network"
+  - "design ablation studies for the attention module"
+  - "what ablations do we need for submission"
 ---
 
 # Ablation Planner

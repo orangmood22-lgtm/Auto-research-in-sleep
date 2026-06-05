@@ -15,6 +15,10 @@ nodes:
   description: Use when main results pass result-to-claim (claim_supported=yes or
     partial) and ablation studies are needed for paper submission. Codex designs ablations
     from a reviewer's perspective, CC reviews feasibility and implements.
+  examples:
+  - /ablation-planner freq-domain prototype network
+  - design ablation studies for the attention module
+  - what ablations do we need for submission
 - name: alphaxiv
   caller: any
   description: Quick single-paper lookup via AlphaXiv LLM-optimized summaries with
@@ -26,11 +30,19 @@ nodes:
   - deepxiv
   - novelty-check
   - research-lit
+  examples:
+  - /alphaxiv 2301.12345
+  - explain this paper from arxiv
+  - summarize the attention paper
 - name: analyze-results
   caller: reviewer
   description: Analyze ML experiment results, compute statistics, generate comparison
     tables and insights. Use when user says "analyze results", "compare", or needs
     to interpret experimental data.
+  examples:
+  - /analyze-results figures/exp01/*.json
+  - analyze the experiment results
+  - compare baseline vs modified
 - name: arxiv
   caller: any
   description: Search, download, and summarize academic papers from arXiv. Use when
@@ -39,6 +51,10 @@ nodes:
   invokes:
   - novelty-check
   - research-lit
+  examples:
+  - /arxiv attention mechanism
+  - search arxiv for transformer
+  - /arxiv 2301.12345
 - name: auto-paper-improvement-loop
   caller: leader
   description: Autonomously improve a generated paper via GPT-5.4 xhigh review → implement
@@ -46,22 +62,38 @@ nodes:
     "auto improve", or wants to iteratively polish a generated paper.
   invokes:
   - kill-argument
+  examples:
+  - /auto-paper-improvement-loop papers/main
+  - 改论文 for submission
+  - iteratively polish the paper
 - name: auto-review-loop
   caller: leader
   description: Autonomous multi-round research review loop. Repeatedly reviews via
     Codex MCP, implements fixes, and re-reviews until positive assessment or max rounds
     reached. Use when user says "auto review loop", "review until it passes", or wants
     autonomous iterative improvement.
+  examples:
+  - /auto-review-loop my paper draft
+  - review until it passes
+  - iterate on the method section
 - name: auto-review-loop-llm
   caller: leader
   description: Autonomous research review loop using any OpenAI-compatible LLM API.
     Configure via llm-chat MCP server or environment variables. Trigger with "auto
     review loop llm" or "llm review".
+  examples:
+  - /auto-review-loop-llm my paper draft
+  - llm review the method section
+  - auto review with custom LLM
 - name: auto-review-loop-minimax
   caller: leader
   description: Autonomous multi-round research review loop using MiniMax API. Use
     when you want to use MiniMax instead of Codex MCP for external review. Trigger
     with "auto review loop minimax" or "minimax review".
+  examples:
+  - /auto-review-loop-minimax my paper
+  - minimax review the draft
+  - auto review with MiniMax backend
 - name: caveman
   caller: any
   description: 'Ultra-compressed communication mode. Cuts token usage ~75% by dropping
@@ -70,6 +102,10 @@ nodes:
     "be brief", or invokes /caveman.
 
     '
+  examples:
+  - /caveman
+  - caveman mode
+  - talk like caveman
 - name: citation-audit
   caller: reviewer
   description: Zero-context verification that every bibliographic entry in the paper
@@ -79,16 +115,28 @@ nodes:
     wrong-context citations (cite present but the cited paper does not establish the
     claim). Use when user says "审查引用", "check citations", "citation audit", "verify
     references", "引用核对", or before submission to ensure bibliography integrity.
+  examples:
+  - /citation-audit papers/main
+  - 审查引用
+  - verify all citations are real
 - name: claims-drafting
   caller: executor
   description: Draft patent claims for an invention. Use when user says "撰写权利要求",
     "draft claims", "写权利要求书", "claim drafting", or wants to create patent claims.
     The core skill of the patent pipeline.
+  examples:
+  - /claims-drafting invention.md
+  - 撰写权利要求 for the new method
+  - draft patent claims for this invention
 - name: coder
   caller: executor
   description: 代码实现角色 - 只写代码、测试、重构，不做部署、SSH、论文写作
   invokes:
   - tdd
+  examples:
+  - /coder implement the model architecture
+  - 写代码实现 FreqProtoNet
+  - refactor the training loop
 - name: comm-lit-review
   caller: any
   description: Communications-domain literature review with Claude-style knowledge-base-first
@@ -98,22 +146,38 @@ nodes:
     research and the user wants papers, related work, a survey, or a landscape summary.
     Search Zotero, Obsidian, and local paper folders first when available, then search
     IEEE Xplore, ScienceDirect, ACM Digital Library, and broader web in that order.
+  examples:
+  - /comm-lit-review massive MIMO beamforming
+  - find papers on channel estimation
+  - wireless communications survey
 - name: deepxiv
   caller: any
   description: Search and progressively read open-access academic papers through DeepXiv.
     Use when the user wants layered paper access, section-level reading, trending
     papers, or DeepXiv-backed literature retrieval.
+  examples:
+  - /deepxiv transformer architecture
+  - find trending papers on RL
+  - progressive read of this paper
 - name: deployer
   caller: executor
   description: 部署角色 - 只做 SSH 同步、启动训练、监控实验、收集结果，不写代码
   invokes:
   - monitor-experiment
+  examples:
+  - /deployer sync to 3090x2 and start training
+  - 部署实验到远程服务器
+  - monitor the running job
 - name: diagnose
   caller: executor
   description: Disciplined diagnosis loop for hard bugs and performance regressions.
     Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when
     user says "diagnose this" / "debug this", reports a bug, says something is broken/throwing/failing,
     or describes a performance regression.
+  examples:
+  - /diagnose training loss is NaN
+  - debug this error
+  - why is the model not converging
 - name: dse-loop
   caller: leader
   description: Autonomous design space exploration loop for computer architecture
@@ -121,11 +185,19 @@ nodes:
     objective is met or timeout. Use when user says "DSE", "design space exploration",
     "sweep parameters", "optimize", "find best config", or wants iterative parameter
     tuning.
+  examples:
+  - /dse-loop optimize cache parameters
+  - design space exploration for latency
+  - sweep parameters for best throughput
 - name: embodiment-description
   caller: executor
   description: Write detailed embodiment descriptions for patent specifications. Use
     when user says "撰写实施例", "write embodiment", "实施例描述", "detailed description", or
     wants to describe how to practice an invention.
+  examples:
+  - /embodiment-description patents/claims.md
+  - 撰写实施例 for the invention
+  - write detailed description
 - name: exa-search
   caller: any
   description: AI-powered web search via Exa with content extraction. Use when user
@@ -133,6 +205,10 @@ nodes:
     web results beyond academic databases (arXiv, Semantic Scholar).
   invokes:
   - arxiv
+  examples:
+  - /exa-search latest AI breakthroughs
+  - find similar pages to this URL
+  - web search for implementation guides
 - name: experiment-audit
   caller: reviewer
   description: Audit experiment integrity before claiming results. Uses cross-model
@@ -146,6 +222,10 @@ nodes:
   - paper-write
   - research-pipeline
   - result-to-claim
+  examples:
+  - /experiment-audit results/exp01
+  - 审计实验 integrity
+  - check if results are legitimate
 - name: experiment-bridge
   caller: executor
   description: 'Workflow 1.5: Bridge between idea discovery and auto review. Reads
@@ -159,6 +239,10 @@ nodes:
   - paper-writing
   - research-pipeline
   - run-experiment
+  examples:
+  - /experiment-bridge plans/exp01.md
+  - 实现实验 from the plan
+  - deploy the experiment plan
 - name: experiment-plan
   caller: leader
   description: Turn a refined research proposal or method idea into a detailed, claim-driven
@@ -171,23 +255,39 @@ nodes:
   - research-refine
   - research-refine-pipeline
   - run-experiment
+  examples:
+  - /experiment-plan from the refined method
+  - create experiment roadmap
+  - plan ablation studies
 - name: experiment-queue
   caller: executor
   description: SSH job queue for multi-seed/multi-config ML experiments with OOM-aware
     retry, stale-screen cleanup, and wave-transition race prevention. Use when user
     says "batch experiments", "队列实验", "run grid", "multi-seed sweep", "auto-chain
     experiments", or when /run-experiment is insufficient for 10+ jobs that need orchestration.
+  examples:
+  - /experiment-queue seeds=5 configs=base,large
+  - batch experiments for sweep
+  - 队列实验 run all seeds
 - name: feishu-notify
   caller: any
   description: Send notifications to Feishu/Lark. Internal utility used by other skills,
     or manually via /feishu-notify. Supports push-only (webhook) and interactive (bidirectional)
     modes. Use when user says "发飞书", "notify feishu", or other skills need to send
     status updates.
+  examples:
+  - /feishu-notify training completed
+  - 发飞书 experiment finished
+  - notify team about results
 - name: figure-description
   caller: executor
   description: Process user-provided patent figures and generate formal drawing descriptions.
     Use when user says "附图处理", "figure description", "附图说明", "drawings description",
     or wants to describe patent figures with reference numerals.
+  examples:
+  - /figure-description patents/figs/
+  - 附图处理 for patent figures
+  - describe the patent drawings
 - name: figure-spec
   caller: executor
   description: Generate deterministic publication-quality architecture, workflow,
@@ -195,6 +295,10 @@ nodes:
     when user says "架构图", "workflow 图", "pipeline 图", "确定性矢量图", "figure spec", "draw
     architecture", or needs precise, editable, publication-ready vector diagrams.
     Preferred over AI illustration for formal architecture/workflow figures.
+  examples:
+  - /figure-spec system architecture diagram
+  - 架构图 for the model pipeline
+  - generate workflow figure from spec
 - name: formula-derivation
   caller: executor
   description: Structures and derives research formulas when the user wants to 推导公式,
@@ -203,9 +307,17 @@ nodes:
     the derivation target is not yet fully fixed, the main object still needs to be
     chosen, or the user needs a coherent derivation package rather than a finished
     theorem proof.
+  examples:
+  - /formula-derivation derive the loss function
+  - 推导公式 for convergence bound
+  - organize equations into derivation
 - name: framework-update
   caller: leader
   description: 一键更新 ARIS 框架：git pull + 重建 symlinks。用户不需要懂 git。
+  examples:
+  - /framework-update
+  - 更新框架
+  - update ARIS to latest
 - name: gemini-search
   caller: any
   description: Search research papers via Gemini for broad literature discovery. Use
@@ -216,12 +328,20 @@ nodes:
   - novelty-check
   - research-lit
   - semantic-scholar
+  examples:
+  - /gemini-search multimodal learning
+  - search papers with gemini
+  - find related work on transformers
 - name: git-guardrails
   caller: any
   description: Set up Claude Code hooks to block dangerous git commands (push, reset
     --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent
     destructive git operations, add git safety hooks, or block git push/reset in Claude
     Code.
+  examples:
+  - /git-guardrails
+  - add git safety hooks
+  - block dangerous git commands
 - name: grant-proposal
   caller: executor
   description: Draft a structured grant proposal from research ideas and literature.
@@ -240,21 +360,37 @@ nodes:
   - research-lit
   - research-refine
   - research-review
+  examples:
+  - /grant-proposal prototype learning --type NSFC
+  - 写基金 面上项目
+  - draft NSF proposal for detection research
 - name: grill-me
   caller: any
   description: Interview the user relentlessly about a plan or design until reaching
     shared understanding, resolving each branch of the decision tree. Use when user
     wants to stress-test a plan, get grilled on their design, or mentions "grill me".
+  examples:
+  - /grill-me about my research plan
+  - stress-test this design
+  - grill me on the implementation
 - name: grill-with-docs
   caller: any
   description: Grilling session that challenges your plan against the existing domain
     model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline
     as decisions crystallise. Use when user wants to stress-test a plan against their
     project's language and documented decisions.
+  examples:
+  - /grill-with-docs my implementation plan
+  - stress-test against project docs
+  - challenge this design with ADRs
 - name: handoff
   caller: any
   description: Compact the current conversation into a handoff document for another
     agent to pick up.
+  examples:
+  - /handoff continue the paper writing
+  - create handoff for next session
+  - summarize progress for handoff
 - name: idea-creator
   caller: any
   description: Generate and rank research ideas given a broad direction. Use when
@@ -266,6 +402,10 @@ nodes:
   - research-review
   - research-wiki
   - run-experiment
+  examples:
+  - /idea-creator incremental object detection
+  - 找idea for few-shot learning
+  - brainstorm research ideas for robotics
 - name: idea-discovery
   caller: leader
   description: 'Workflow 1: Full idea discovery pipeline. Orchestrates research-lit
@@ -284,6 +424,10 @@ nodes:
   - research-refine-pipeline
   - research-review
   - run-experiment
+  examples:
+  - /idea-discovery incremental object detection
+  - 找idea全流程 for few-shot learning
+  - discover research ideas in robotics
 - name: idea-discovery-robot
   caller: leader
   description: Workflow 1 adaptation for robotics and embodied AI. Orchestrates robotics-aware
@@ -299,22 +443,38 @@ nodes:
   - research-lit
   - research-review
   - run-experiment
+  examples:
+  - /idea-discovery-robot manipulation grasping
+  - 机器人找idea for navigation
+  - embodied AI idea discovery
 - name: init-research
   caller: leader
   description: '一键创建新科研项目。自动: mkdir → git init → install skills → CLAUDE.md → project.yaml
     → push to git remote。'
   invokes:
   - leader
+  examples:
+  - /init-research exp0604 --direction few-shot detection
+  - 创建新项目 freq-proto
+  - init research project for robotics
 - name: invention-structuring
   caller: executor
   description: Structure a raw invention idea into a formal invention disclosure.
     Use when user says "构建发明", "structure invention", "发明构建", "invention disclosure",
     or wants to formalize a rough idea into a patent-ready structure.
+  examples:
+  - /invention-structuring my new method idea
+  - 构建发明 for patent
+  - structure the invention disclosure
 - name: jurisdiction-format
   caller: executor
   description: Compile patent application into jurisdiction-specific filing format.
     Use when user says "格式转换", "jurisdiction format", "国家格式", "compile patent", or
     wants formatted patent documents for CN/US/EP filing.
+  examples:
+  - /jurisdiction-format patents/main --CN
+  - 格式转换 for US filing
+  - compile patent for EP
 - name: kill-argument
   caller: leader
   description: 'Two-thread adversarial review: a fresh reviewer constructs the strongest
@@ -324,6 +484,10 @@ nodes:
     or before submitting a theory paper that has already passed standard review rounds.'
   invokes:
   - auto-paper-improvement-loop
+  examples:
+  - /kill-argument papers/main
+  - adversarial review this paper
+  - simulate hostile reviewer
 - name: leader
   caller: leader
   description: 三边架构总编排：自动用 Agent 工具派生 Executor、Codex MCP 调 Reviewer。一个窗口全流程。
@@ -336,11 +500,19 @@ nodes:
   - sync
   - tdd
   - training-check
+  examples:
+  - /leader 频域特征+原型学习做小样本增量目标检测
+  - run full research pipeline for this idea
+  - orchestrate paper writing and review
 - name: mermaid-diagram
   caller: executor
   description: Generate Mermaid diagrams from user requirements. Saves .mmd and .md
     files to figures/ directory with syntax verification. Supports flowcharts, sequence
     diagrams, class diagrams, ER diagrams, Gantt charts, and 18 more diagram types.
+  examples:
+  - /mermaid-diagram system architecture flowchart
+  - generate sequence diagram for API
+  - create ER diagram for database
 - name: meta-optimize
   caller: leader
   description: Analyze ARIS usage logs and propose optimizations to SKILL.md files,
@@ -351,15 +523,27 @@ nodes:
   invokes:
   - arxiv
   - auto-review-loop
+  examples:
+  - /meta-optimize all
+  - 优化技能 based on usage
+  - analyze and improve skill performance
 - name: monitor-experiment
   caller: executor
   description: Monitor running experiments, check progress, collect results. Use when
     user says "check results", "is it done", "monitor", or wants experiment output.
+  examples:
+  - /monitor-experiment 3090x2
+  - check if training is done
+  - monitor the GPU job
 - name: novelty-check
   caller: reviewer
   description: Verify research idea novelty against recent literature. Use when user
     says "查新", "novelty check", "有没有人做过", "check novelty", or wants to verify a research
     idea is novel before implementing.
+  examples:
+  - /novelty-check frequency domain prototype learning
+  - 查新 this method
+  - has anyone done incremental detection with prototypes
 - name: openalex
   caller: any
   description: Search academic papers via OpenAlex API for open citation data, institutional
@@ -371,6 +555,10 @@ nodes:
   - novelty-check
   - research-lit
   - semantic-scholar
+  examples:
+  - /openalex transformer architecture
+  - search openalex for citations
+  - find papers with funding info
 - name: overleaf-sync
   caller: executor
   description: Two-way sync between a local paper directory and an Overleaf project
@@ -380,6 +568,10 @@ nodes:
     says "同步 overleaf", "overleaf sync", "推送到 overleaf", "connect overleaf", "Overleaf
     桥接", "pull overleaf", "push overleaf", or wants to bridge their ARIS paper directory
     with an Overleaf project.
+  examples:
+  - /overleaf-sync push
+  - 同步 overleaf with local
+  - pull changes from Overleaf
 - name: paper-claim-audit
   caller: reviewer
   description: Zero-context verification that every number, comparison, and scope
@@ -387,16 +579,28 @@ nodes:
     with NO prior context to prevent confirmation bias. Use when user says "审查论文数据",
     "check paper claims", "verify numbers", "论文数字核对", or before submission to ensure
     paper-to-evidence fidelity.
+  examples:
+  - /paper-claim-audit papers/main
+  - 审查论文数据
+  - verify all numbers in the paper
 - name: paper-compile
   caller: executor
   description: Compile LaTeX paper to PDF, fix errors, and verify output. Use when
     user says "编译论文", "compile paper", "build PDF", "生成PDF", or wants to compile LaTeX
     into a submission-ready PDF.
+  examples:
+  - /paper-compile papers/main
+  - 编译论文
+  - build the PDF for submission
 - name: paper-figure
   caller: executor
   description: Generate publication-quality figures and tables from experiment results.
     Use when user says "画图", "作图", "generate figures", "paper figures", or needs plots
     for a paper.
+  examples:
+  - /paper-figure results/*.json
+  - 画图 for the method comparison
+  - generate all paper figures
 - name: paper-illustration
   caller: executor
   description: Generate publication-quality AI illustrations for academic papers using
@@ -404,12 +608,20 @@ nodes:
     Claude-supervised iterative refinement loop. Use when user says "生成图表", "画架构图",
     "AI绘图", "paper illustration", "generate diagram", or needs visual figures for
     papers.
+  examples:
+  - /paper-illustration model architecture diagram
+  - 生成图表 for method overview
+  - AI绘图 for the pipeline
 - name: paper-illustration-image2
   caller: executor
   description: Generate publication-quality academic illustrations through a local
     Codex app-server bridge that uses Codex native image generation. This is a separate
     experimental alternative to `paper-illustration`, intended for Claude Code users
     who want a GPT-image-style renderer without modifying the original skill.
+  examples:
+  - /paper-illustration-image2 model architecture
+  - generate figure via Codex image
+  - alternative illustration pipeline
 - name: paper-plan
   caller: executor
   description: Generate a structured paper outline from review conclusions and experiment
@@ -419,12 +631,20 @@ nodes:
   - paper-compile
   - paper-figure
   - paper-write
+  examples:
+  - /paper-plan from experiment results
+  - 写大纲 for ICLR submission
+  - plan the paper structure
 - name: paper-poster
   caller: executor
   description: Generate a conference poster (article + tcbposter LaTeX → A0/A1 PDF
     + editable PPTX + SVG) from a compiled paper. Use when user says "做海报", "制作海报",
     "conference poster", "make poster", "生成poster", "poster session", or wants to
     create a poster for a conference presentation.
+  examples:
+  - /paper-poster papers/main
+  - 做海报 for conference
+  - generate A0 poster from paper
 - name: paper-slides
   caller: executor
   description: Generate conference presentation slides (beamer LaTeX → PDF + editable
@@ -433,6 +653,10 @@ nodes:
     "生成slides", "写演讲稿", or wants beamer slides for a conference talk.
   invokes:
   - slides-polish
+  examples:
+  - /paper-slides papers/main --length 15min
+  - 做PPT for conference talk
+  - generate beamer slides from paper
 - name: paper-talk
   caller: leader
   description: 'End-to-end conference talk pipeline: paper → slide outline → Beamer
@@ -446,11 +670,19 @@ nodes:
   - paper-claim-audit
   - paper-slides
   - slides-polish
+  examples:
+  - /paper-talk papers/main --minutes 15
+  - 做 talk for ICLR
+  - end-to-end conference talk pipeline
 - name: paper-write
   caller: executor
   description: Draft LaTeX paper section by section from an outline. Use when user
     says "写论文", "write paper", "draft LaTeX", "开始写", or wants to generate LaTeX content
     from a paper plan.
+  examples:
+  - /paper-write ICLR
+  - 写论文 introduction section
+  - draft the method section in LaTeX
 - name: paper-writing
   caller: leader
   description: 'Workflow 3: Full paper writing pipeline. Orchestrates paper-plan →
@@ -479,11 +711,19 @@ nodes:
   - proof-checker
   - research-pipeline
   - run-experiment
+  examples:
+  - /paper-writing narrative.md
+  - 写论文全流程 for ICLR
+  - generate paper from experiment results
 - name: patent-novelty-check
   caller: reviewer
   description: Assess patent novelty and non-obviousness against prior art. Use when
     user says "专利查新", "patent novelty", "可专利性评估", "patentability check", or wants
     to evaluate if an invention is patentable.
+  examples:
+  - /patent-novelty-check invention.md
+  - 专利查新 for this idea
+  - is this invention patentable
 - name: patent-pipeline
   caller: leader
   description: Full patent drafting pipeline from invention description to jurisdiction-formatted
@@ -506,21 +746,37 @@ nodes:
   - prior-art-search
   - research-refine
   - specification-writing
+  examples:
+  - /patent-pipeline invention.md --jurisdiction CN
+  - 写专利 for this method
+  - draft US patent application
 - name: patent-review
   caller: reviewer
   description: Get an external patent examiner review of a patent application. Use
     when user says "专利审查", "patent review", "审查意见", "examiner review", or wants critical
     feedback on patent claims and specification.
+  examples:
+  - /patent-review patents/invention01
+  - 专利审查 for my application
+  - get examiner review of claims
 - name: pixel-art
   caller: any
   description: Generate pixel art SVG illustrations for READMEs, docs, or slides.
     Use when user says "画像素图", "pixel art", "make an SVG illustration", "README hero
     image", or wants a cute visual.
+  examples:
+  - /pixel-art a cute robot mascot
+  - 画像素图 for README
+  - pixel art logo for the project
 - name: prior-art-search
   caller: reviewer
   description: Search patent databases and academic literature for prior art relevant
     to an invention. Use when user says "现有技术检索", "prior art search", "专利检索", "check
     patents", or wants to find relevant prior art.
+  examples:
+  - /prior-art-search frequency domain feature extraction
+  - 现有技术检索 for this method
+  - find prior art for the invention
 - name: proof-checker
   caller: reviewer
   description: Rigorous mathematical proof verification and fixing workflow. Reads
@@ -528,18 +784,30 @@ nodes:
     each gap with full derivations, re-reviews, and generates an audit report. Use
     when user says "检查证明", "verify proof", "proof check", "审证明", "check this proof",
     or wants rigorous mathematical verification of a theory paper.
+  examples:
+  - /proof-checker proofs/main.tex
+  - 检查证明 for theorem 3.2
+  - verify this mathematical proof
 - name: proof-writer
   caller: executor
   description: Writes rigorous mathematical proofs for ML/AI theory. Use when asked
     to prove a theorem, lemma, proposition, or corollary, fill in missing proof steps,
     formalize a proof sketch, 补全证明, 写证明, 证明某个命题, or determine whether a claimed proof
     can actually be completed under the stated assumptions.
+  examples:
+  - /proof-writer prove convergence of the algorithm
+  - 写证明 for lemma 3.1
+  - fill in missing proof steps
 - name: qzcli
   caller: any
   description: Manage GPU compute jobs on the Qizhi (启智) platform using qzcli — a
     kubectl-style CLI tool. Use when user says "qzcli", "启智平台", "submit job", "stop
     job", "查计算组", "avail", "list jobs", "batch submit", or needs to manage distributed
     training jobs on a Qizhi instance.
+  examples:
+  - /qzcli avail
+  - 启智平台 submit training job
+  - list my GPU jobs
 - name: rebuttal
   caller: leader
   description: 'Workflow 4: Submission rebuttal pipeline. Parses external reviews,
@@ -549,11 +817,19 @@ nodes:
     reviews safely.'
   invokes:
   - experiment-bridge
+  examples:
+  - /rebuttal papers/main --reviews reviews/
+  - reply to reviewers
+  - draft ICLR rebuttal letter
 - name: research-lit
   caller: any
   description: Search and analyze research papers, find related work, summarize key
     ideas. Use when user says "find papers", "related work", "literature review",
     "what does this paper say", or needs to understand academic papers.
+  examples:
+  - /research-lit few-shot learning
+  - find papers on prototype networks
+  - literature review for incremental detection
 - name: research-pipeline
   caller: leader
   description: 'Full research pipeline: Workflow 1 (idea discovery) → implementation
@@ -572,6 +848,10 @@ nodes:
   - paper-write
   - paper-writing
   - run-experiment
+  examples:
+  - /research-pipeline prototype-based incremental detection
+  - 全流程 for few-shot learning
+  - run full research pipeline
 - name: research-refine
   caller: leader
   description: Turn a vague research direction into a problem-anchored, elegant, frontier-aware,
@@ -585,6 +865,10 @@ nodes:
   - idea-creator
   - research-refine-pipeline
   - run-experiment
+  examples:
+  - /research-refine use frequency features for detection
+  - 帮我细化方案 for incremental learning
+  - refine the research plan
 - name: research-refine-pipeline
   caller: leader
   description: Run an end-to-end workflow that chains `research-refine` and `experiment-plan`.
@@ -595,11 +879,19 @@ nodes:
   - experiment-plan
   - research-refine
   - run-experiment
+  examples:
+  - /research-refine-pipeline prototype learning for detection
+  - 串起来 method and experiment plan
+  - end-to-end research planning
 - name: research-review
   caller: reviewer
   description: Get a deep critical review of research from GPT via Codex MCP. Use
     when user says "review my research", "help me review", "get external review",
     or wants critical feedback on research ideas, papers, or experimental results.
+  examples:
+  - /research-review my method section
+  - review my research idea
+  - get external review of the paper
 - name: research-wiki
   caller: any
   description: Persistent research knowledge base that accumulates papers, ideas,
@@ -609,6 +901,10 @@ nodes:
     map.
   invokes:
   - idea-creator
+  examples:
+  - /research-wiki query prototype learning
+  - 知识库 add this paper
+  - research-wiki ingest papers/
 - name: resubmit-pipeline
   caller: leader
   description: 'Workflow 5: orchestrate a text-only resubmit of a polished paper to
@@ -626,6 +922,10 @@ nodes:
   - paper-claim-audit
   - paper-compile
   - proof-checker
+  examples:
+  - /resubmit-pipeline papers/main --target-venue CVPR
+  - 重投流程 to NeurIPS
+  - port paper to ICLR
 - name: result-to-claim
   caller: leader
   description: Use when experiments complete to judge what claims the results support,
@@ -634,6 +934,10 @@ nodes:
     Use after experiments finish — before writing the paper or running ablations.
   invokes:
   - idea-creator
+  examples:
+  - /result-to-claim exp01 results
+  - what claims do these results support
+  - judge if experiments validate the method
 - name: review
   caller: reviewer
   description: Review the changes since a fixed point (commit, branch, tag, or merge-base)
@@ -642,11 +946,19 @@ nodes:
     for?). Runs both reviews in parallel sub-agents and reports them side by side.
     Use when the user wants to review a branch, a PR, work-in-progress changes, or
     asks to "review since X".
+  examples:
+  - /review main
+  - review since last commit
+  - check PR changes against spec
 - name: run-experiment
   caller: executor
   description: Deploy and run ML experiments on local, remote, Vast.ai, or Modal serverless
     GPU. Use when user says "run experiment", "deploy to server", "跑实验", or needs
     to launch training jobs.
+  examples:
+  - /run-experiment train baseline model
+  - 跑实验 on 3090x2 server
+  - deploy training to vast.ai
 - name: semantic-scholar
   caller: any
   description: Search published venue papers (IEEE, ACM, Springer, etc.) via Semantic
@@ -658,6 +970,10 @@ nodes:
   - arxiv
   - novelty-check
   - research-lit
+  examples:
+  - /semantic-scholar transformer architecture
+  - find IEEE papers on detection
+  - search for highly cited papers
 - name: serverless-modal
   caller: executor
   description: 'Run GPU workloads on Modal — training, fine-tuning, inference, batch
@@ -666,11 +982,19 @@ nodes:
     "need a GPU", "run on modal", "serverless GPU", or needs remote GPU compute.'
   invokes:
   - run-experiment
+  examples:
+  - /serverless-modal train the model
+  - run on modal for inference
+  - deploy training to serverless GPU
 - name: skill-dag-check
   caller: any
   description: Analyze skill dependency impact before modification. Shows upstream
     dependencies, downstream dependents, and artifact flow. Use when planning to modify,
     rename, or remove a skill, or when investigating skill relationships.
+  examples:
+  - /skill-dag-check paper-write
+  - analyze skill dependencies
+  - what skills depend on this one
 - name: slides-polish
   caller: executor
   description: 'Per-page Codex review + targeted python-pptx / Beamer fixes for academic
@@ -680,6 +1004,10 @@ nodes:
     italic style leaks, fixes text-frame overflow, and catches per-slide layout drift.
     Trigger phrases: "polish slides", "slides 排版不对", "PPTX 字体太小", "和 Beamer 比一下",
     "per-page review", "和 codex 一页一页过".'
+  examples:
+  - /slides-polish slides/ --reference ref.pdf
+  - polish slides for conference
+  - per-page review the PPTX
 - name: specification-writing
   caller: executor
   description: Write the full patent specification from claims and invention disclosure.
@@ -688,38 +1016,66 @@ nodes:
   invokes:
   - embodiment-description
   - figure-description
+  examples:
+  - /specification-writing patents/claims.md
+  - 撰写说明书 for the patent
+  - write full patent specification
 - name: sync
   caller: executor
   description: 一键同步科研项目：封装 git add/commit/push/pull + 远程部署。用户不需要懂 git。
   invokes:
   - init-research
+  examples:
+  - /sync push
+  - 同步代码到远程
+  - /sync deploy --server 3090x2
 - name: system-profile
   caller: executor
   description: Profile a target (script, process, GPU, memory, interconnect) using
     external tools and code instrumentation. Produces structured performance reports
     with actionable recommendations. Use when user says "profile", "benchmark", "bottleneck",
     or wants performance analysis.
+  examples:
+  - /system-profile train.py
+  - profile GPU utilization
+  - benchmark the inference pipeline
 - name: tdd
   caller: executor
   description: Test-driven development with red-green-refactor loop. Use when user
     wants to build features or fix bugs using TDD, mentions "red-green-refactor",
     wants integration tests, or asks for test-first development.
+  examples:
+  - /tdd implement user authentication
+  - use TDD to build the API endpoint
+  - red-green-refactor the payment module
 - name: to-issues
   caller: any
   description: Break a plan, spec, or PRD into independently-grabbable issues on the
     project issue tracker using tracer-bullet vertical slices. Use when user wants
     to convert a plan into issues, create implementation tickets, or break down work
     into issues.
+  examples:
+  - /to-issues from the PRD
+  - break plan into issues
+  - create implementation tickets
 - name: to-prd
   caller: any
   description: Turn the current conversation context into a PRD and publish it to
     the project issue tracker. Use when user wants to create a PRD from the current
     context.
+  examples:
+  - /to-prd
+  - create PRD from this discussion
+  - turn requirements into PRD
 - name: training-check
   caller: executor
   description: Periodically check WandB metrics during training to catch problems
     early (NaN, loss divergence, idle GPUs). Avoids wasting GPU hours on broken runs.
     Use when training is running and you want automated health checks.
+  examples:
+  - /training-check user/project/run123
+  - check training health
+  - monitor WandB for NaN
 - name: vast-gpu
   caller: executor
   description: Rent, manage, and destroy GPU instances on vast.ai. Use when user says
@@ -727,13 +1083,25 @@ nodes:
     owning hardware.
   invokes:
   - run-experiment
+  examples:
+  - /vast-gpu rent RTX 3090
+  - rent a GPU for training
+  - list my vast.ai instances
 - name: write-a-skill
   caller: any
   description: Create new agent skills with proper structure, progressive disclosure,
     and bundled resources. Use when user wants to create, write, or build a new skill.
+  examples:
+  - /write-a-skill
+  - create a new skill for data processing
+  - build a skill for my workflow
 - name: writer
   caller: executor
   description: 论文写作角色 - 只写论文、文档、Rebuttal，不写代码、不做部署
+  examples:
+  - /writer draft the method section
+  - 写论文 introduction
+  - write the rebuttal letter
 - name: writing-systems-papers
   caller: executor
   description: Paragraph-level structural blueprint for 10-12 page systems papers
@@ -743,8 +1111,16 @@ nodes:
     conference submission.
   invokes:
   - paper-write
+  examples:
+  - /writing-systems-papers OSDI
+  - 写系统论文 for SOSP
+  - systems paper structure for ASPLOS
 - name: zoom-out
   caller: any
   description: Tell the agent to zoom out and give broader context or a higher-level
     perspective. Use when you're unfamiliar with a section of code or need to understand
     how it fits into the bigger picture.
+  examples:
+  - /zoom-out
+  - give me broader context
+  - how does this fit into the system

@@ -4,6 +4,10 @@ description: "Analyze ARIS usage logs and propose optimizations to SKILL.md file
 argument-hint: [target-skill-or-all]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/meta-optimize all"
+  - "优化技能 based on usage"
+  - "analyze and improve skill performance"
 ---
 
 # Meta-Optimize: Outer-Loop Harness Optimization for ARIS

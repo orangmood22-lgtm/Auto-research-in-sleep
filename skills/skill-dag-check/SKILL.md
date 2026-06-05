@@ -4,6 +4,10 @@ description: Analyze skill dependency impact before modification. Shows upstream
 caller: any
 invokes:
   - write-a-skill
+examples:
+  - "/skill-dag-check paper-write"
+  - "analyze skill dependencies"
+  - "what skills depend on this one"
 ---
 
 # Skill DAG Check

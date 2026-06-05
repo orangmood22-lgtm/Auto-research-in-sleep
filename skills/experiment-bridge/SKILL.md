@@ -4,6 +4,10 @@ description: "Workflow 1.5: Bridge between idea discovery and auto review. Reads
 argument-hint: [experiment-plan-path-or-topic]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/experiment-bridge plans/exp01.md"
+  - "实现实验 from the plan"
+  - "deploy the experiment plan"
 ---
 
 # Workflow 1.5: Experiment Bridge

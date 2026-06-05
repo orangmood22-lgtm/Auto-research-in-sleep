@@ -4,6 +4,10 @@ description: Verify research idea novelty against recent literature. Use when us
 argument-hint: [method-or-idea-description]
 allowed-tools: WebSearch, WebFetch, Grep, Read, Glob, mcp__codex__codex
 caller: reviewer
+examples:
+  - "/novelty-check frequency domain prototype learning"
+  - "查新 this method"
+  - "has anyone done incremental detection with prototypes"
 ---
 
 # Novelty Check Skill

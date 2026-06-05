@@ -4,6 +4,10 @@ description: Structures and derives research formulas when the user wants to 推
 argument-hint: [problem-goal-current-formulas-or-notes]
 allowed-tools: Read, Write, Edit, Grep, Glob
 caller: executor
+examples:
+  - "/formula-derivation derive the loss function"
+  - "推导公式 for convergence bound"
+  - "organize equations into derivation"
 ---
 
 # Formula Derivation: Research Theory Line Construction

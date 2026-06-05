@@ -4,6 +4,10 @@ description: "Run GPU workloads on Modal — training, fine-tuning, inference, b
 argument-hint: [task-description]
 allowed-tools: Bash(*), Read, Grep, Glob, Edit, Write, Agent
 caller: executor
+examples:
+  - "/serverless-modal train the model"
+  - "run on modal for inference"
+  - "deploy training to serverless GPU"
 ---
 
 # Modal Cloud GPU — Training & Inference

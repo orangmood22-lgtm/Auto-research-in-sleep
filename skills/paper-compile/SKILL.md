@@ -4,6 +4,10 @@ description: "Compile LaTeX paper to PDF, fix errors, and verify output. Use whe
 argument-hint: [paper-directory]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 caller: executor
+examples:
+  - "/paper-compile papers/main"
+  - "编译论文"
+  - "build the PDF for submission"
 ---
 
 # Paper Compile: LaTeX to Submission-Ready PDF

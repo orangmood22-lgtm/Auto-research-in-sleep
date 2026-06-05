@@ -4,6 +4,10 @@ description: "Compile patent application into jurisdiction-specific filing forma
 argument-hint: [patent-directory-or-jurisdiction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 caller: executor
+examples:
+  - "/jurisdiction-format patents/main --CN"
+  - "格式转换 for US filing"
+  - "compile patent for EP"
 ---
 
 # Jurisdiction Format: Patent Filing Compilation

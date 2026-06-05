@@ -4,6 +4,10 @@ description: "Generate a structured paper outline from review conclusions and ex
 argument-hint: "[topic-or-narrative-doc] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/paper-plan from experiment results"
+  - "写大纲 for ICLR submission"
+  - "plan the paper structure"
 ---
 
 # Paper Plan: From Review Conclusions to Paper Outline

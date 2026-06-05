@@ -4,6 +4,10 @@ description: "Per-page Codex review + targeted python-pptx / Beamer fixes for ac
 argument-hint: "[slides-dir-or-pptx] — reference: <ref-pdf> [— style: generic | why-rf | neurips | icml | iclr | cvpr] [— effort: lite | balanced | max | beast] [— interactive]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex
 caller: executor
+examples:
+  - "/slides-polish slides/ --reference ref.pdf"
+  - "polish slides for conference"
+  - "per-page review the PPTX"
 ---
 
 # Slides Polish: Per-Page Codex Review + Targeted Layout Fixes

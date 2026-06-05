@@ -4,6 +4,10 @@ description: "Workflow 1 adaptation for robotics and embodied AI. Orchestrates r
 argument-hint: [robotics-direction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/idea-discovery-robot manipulation grasping"
+  - "机器人找idea for navigation"
+  - "embodied AI idea discovery"
 ---
 
 # Robotics Idea Discovery Pipeline

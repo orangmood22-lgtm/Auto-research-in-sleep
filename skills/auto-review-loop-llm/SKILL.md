@@ -4,6 +4,10 @@ description: Autonomous research review loop using any OpenAI-compatible LLM API
 argument-hint: [topic-or-scope]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, Skill
 caller: leader
+examples:
+  - "/auto-review-loop-llm my paper draft"
+  - "llm review the method section"
+  - "auto review with custom LLM"
 ---
 
 # Auto Review Loop (Generic LLM): Autonomous Research Improvement

@@ -4,6 +4,10 @@ description: "Generate conference presentation slides (beamer LaTeX → PDF + ed
 argument-hint: "[paper-directory-or-talk-length] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/paper-slides papers/main --length 15min"
+  - "做PPT for conference talk"
+  - "generate beamer slides from paper"
 ---
 
 # Paper Slides: From Paper to Conference Talk

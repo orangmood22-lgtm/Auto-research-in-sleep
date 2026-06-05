@@ -4,6 +4,10 @@ description: "Zero-context verification that every number, comparison, and scope
 argument-hint: [paper-directory]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex
 caller: reviewer
+examples:
+  - "/paper-claim-audit papers/main"
+  - "审查论文数据"
+  - "verify all numbers in the paper"
 ---
 
 # Paper Claim Audit: Zero-Context Evidence Verification

@@ -4,6 +4,10 @@ description: Search, download, and summarize academic papers from arXiv. Use whe
 argument-hint: [query-or-arxiv-id]
 allowed-tools: Bash(*), Read, Write
 caller: any
+examples:
+  - "/arxiv attention mechanism"
+  - "search arxiv for transformer"
+  - "/arxiv 2301.12345"
 ---
 
 # arXiv Paper Search & Download

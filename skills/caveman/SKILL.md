@@ -6,6 +6,10 @@ description: >
   Use when user says "caveman mode", "talk like caveman", "use caveman",
   "less tokens", "be brief", or invokes /caveman.
 caller: any
+examples:
+  - "/caveman"
+  - "caveman mode"
+  - "talk like caveman"
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.

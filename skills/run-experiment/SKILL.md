@@ -4,6 +4,10 @@ description: Deploy and run ML experiments on local, remote, Vast.ai, or Modal s
 argument-hint: [experiment-description]
 allowed-tools: Bash(*), Read, Grep, Glob, Edit, Write, Agent, Skill(serverless-modal)
 caller: executor
+examples:
+  - "/run-experiment train baseline model"
+  - "跑实验 on 3090x2 server"
+  - "deploy training to vast.ai"
 ---
 
 # Run Experiment

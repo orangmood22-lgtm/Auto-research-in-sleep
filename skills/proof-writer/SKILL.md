@@ -4,6 +4,10 @@ description: Writes rigorous mathematical proofs for ML/AI theory. Use when aske
 argument-hint: [theorem-statement-and-assumptions]
 allowed-tools: Read, Write, Edit, Grep, Glob
 caller: executor
+examples:
+  - "/proof-writer prove convergence of the algorithm"
+  - "写证明 for lemma 3.1"
+  - "fill in missing proof steps"
 ---
 
 # Proof Write: Rigorous Theorem / Lemma Drafting

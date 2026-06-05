@@ -4,6 +4,10 @@ description: Generate pixel art SVG illustrations for READMEs, docs, or slides. 
 argument-hint: [description of what to draw]
 allowed-tools: Write, Edit, Read, Bash(open *)
 caller: any
+examples:
+  - "/pixel-art a cute robot mascot"
+  - "画像素图 for README"
+  - "pixel art logo for the project"
 ---
 
 # Pixel Art SVG Generator

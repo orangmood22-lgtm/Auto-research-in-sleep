@@ -4,6 +4,10 @@ description: "Draft patent claims for an invention. Use when user says \"撰写�
 argument-hint: [invention-disclosure-path]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/claims-drafting invention.md"
+  - "撰写权利要求 for the new method"
+  - "draft patent claims for this invention"
 ---
 
 # Claims Drafting: The Core Patent Skill

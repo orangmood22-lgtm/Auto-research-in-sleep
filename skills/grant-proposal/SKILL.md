@@ -4,6 +4,10 @@ description: "Draft a structured grant proposal from research ideas and literatu
 argument-hint: "[research-direction — grant-type] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/grant-proposal prototype learning --type NSFC"
+  - "写基金 面上项目"
+  - "draft NSF proposal for detection research"
 ---
 
 # Grant Proposal: From Research Ideas to Fundable Application

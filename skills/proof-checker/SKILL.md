@@ -4,6 +4,10 @@ description: Rigorous mathematical proof verification and fixing workflow. Reads
 argument-hint: "[path-to-tex-file or proof-description] [--deep-fix] [--restatement-check]"
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: reviewer
+examples:
+  - "/proof-checker proofs/main.tex"
+  - "检查证明 for theorem 3.2"
+  - "verify this mathematical proof"
 ---
 
 # Proof Checker: Rigorous Mathematical Verification & Fixing

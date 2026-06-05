@@ -4,6 +4,10 @@ description: "Generate publication-quality academic illustrations through a loca
 argument-hint: [description-or-method-file]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, mcp__codex-image2__generate, mcp__codex-image2__generate_start, mcp__codex-image2__generate_status, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/paper-illustration-image2 model architecture"
+  - "generate figure via Codex image"
+  - "alternative illustration pipeline"
 ---
 
 # Paper Illustration Image2

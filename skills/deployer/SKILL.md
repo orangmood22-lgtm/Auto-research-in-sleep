@@ -10,6 +10,10 @@ allowed-tools:
   - Agent
   - Glob
   - Grep
+examples:
+  - "/deployer sync to 3090x2 and start training"
+  - "部署实验到远程服务器"
+  - "monitor the running job"
 ---
 
 # Deployer: 部署角色

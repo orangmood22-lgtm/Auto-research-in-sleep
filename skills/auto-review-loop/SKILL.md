@@ -4,6 +4,10 @@ description: Autonomous multi-round research review loop. Repeatedly reviews via
 argument-hint: [topic-or-scope]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/auto-review-loop my paper draft"
+  - "review until it passes"
+  - "iterate on the method section"
 ---
 
 # Auto Review Loop: Autonomous Research Improvement

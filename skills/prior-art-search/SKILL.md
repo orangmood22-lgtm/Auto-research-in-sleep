@@ -4,6 +4,10 @@ description: "Search patent databases and academic literature for prior art rele
 argument-hint: [invention-description-or-path]
 allowed-tools: Bash(*), Read, Glob, Grep, WebSearch, WebFetch, Write, Agent
 caller: reviewer
+examples:
+  - "/prior-art-search frequency domain feature extraction"
+  - "现有技术检索 for this method"
+  - "find prior art for the invention"
 ---
 
 # Prior Art Search

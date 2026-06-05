@@ -4,6 +4,10 @@ description: "Workflow 3: Full paper writing pipeline. Orchestrates paper-plan �
 argument-hint: "[narrative-report-path-or-topic] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/paper-writing narrative.md"
+  - "写论文全流程 for ICLR"
+  - "generate paper from experiment results"
 ---
 
 # Workflow 3: Paper Writing Pipeline

@@ -4,6 +4,10 @@ description: Periodically check WandB metrics during training to catch problems 
 argument-hint: [wandb-run-path]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/training-check user/project/run123"
+  - "check training health"
+  - "monitor WandB for NaN"
 ---
 
 # Training Check

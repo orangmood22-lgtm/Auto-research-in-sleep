@@ -4,6 +4,10 @@ description: "Autonomous design space exploration loop for computer architecture
 argument-hint: [task-description — include program, parameters, objective, and timeout]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent
 caller: leader
+examples:
+  - "/dse-loop optimize cache parameters"
+  - "design space exploration for latency"
+  - "sweep parameters for best throughput"
 ---
 
 # DSE Loop: Autonomous Design Space Exploration

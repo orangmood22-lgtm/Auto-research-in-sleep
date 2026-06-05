@@ -4,6 +4,10 @@ description: "Workflow 1: Full idea discovery pipeline. Orchestrates research-li
 argument-hint: [research-direction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/idea-discovery incremental object detection"
+  - "找idea全流程 for few-shot learning"
+  - "discover research ideas in robotics"
 ---
 
 # Workflow 1: Idea Discovery Pipeline

@@ -4,6 +4,10 @@ description: "Draft LaTeX paper section by section from an outline. Use when use
 argument-hint: "[venue-or-section] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/paper-write ICLR"
+  - "写论文 introduction section"
+  - "draft the method section in LaTeX"
 ---
 
 # Paper Write: Section-by-Section LaTeX Generation

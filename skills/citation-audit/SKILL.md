@@ -4,6 +4,10 @@ description: "Zero-context verification that every bibliographic entry in the pa
 argument-hint: "[paper-directory-or-bib-file] [--uncited] [— soft-only]"
 allowed-tools: Bash(*), Read, Grep, Glob, Edit, Write, Agent, mcp__codex__codex, WebSearch, WebFetch
 caller: reviewer
+examples:
+  - "/citation-audit papers/main"
+  - "审查引用"
+  - "verify all citations are real"
 ---
 
 # Citation Audit

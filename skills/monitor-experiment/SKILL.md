@@ -4,6 +4,10 @@ description: Monitor running experiments, check progress, collect results. Use w
 argument-hint: [server-alias or screen-name]
 allowed-tools: Bash(ssh *), Bash(echo *), Read, Write, Edit
 caller: executor
+examples:
+  - "/monitor-experiment 3090x2"
+  - "check if training is done"
+  - "monitor the GPU job"
 ---
 
 # Monitor Experiment Results

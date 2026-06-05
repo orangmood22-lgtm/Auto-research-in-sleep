@@ -4,6 +4,10 @@ description: "Workflow 5: orchestrate a text-only resubmit of a polished paper t
 argument-hint: "[paper-base-dir] [— target-venue: <name>] [— review-corpus: <path>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/resubmit-pipeline papers/main --target-venue CVPR"
+  - "重投流程 to NeurIPS"
+  - "port paper to ICLR"
 ---
 
 # Resubmit Pipeline: Text-Only Microedit Mode

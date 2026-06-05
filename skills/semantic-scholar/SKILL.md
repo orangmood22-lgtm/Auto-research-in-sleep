@@ -4,6 +4,10 @@ description: Search published venue papers (IEEE, ACM, Springer, etc.) via Seman
 argument-hint: query-or-paper-id
 allowed-tools: Bash(*), Read, Write
 caller: any
+examples:
+  - "/semantic-scholar transformer architecture"
+  - "find IEEE papers on detection"
+  - "search for highly cited papers"
 ---
 
 # Semantic Scholar Paper Search

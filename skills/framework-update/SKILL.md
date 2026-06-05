@@ -4,6 +4,10 @@ description: "一键更新 ARIS 框架：git pull + 重建 symlinks。用户不�
 argument-hint: "[--force] [--dry-run]"
 allowed-tools: Bash(*), Read
 caller: leader
+examples:
+  - "/framework-update"
+  - "更新框架"
+  - "update ARIS to latest"
 ---
 
 # /framework-update — 更新 ARIS 框架

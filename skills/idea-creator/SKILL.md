@@ -4,6 +4,10 @@ description: Generate and rank research ideas given a broad direction. Use when 
 argument-hint: [research-direction]
 allowed-tools: Bash(*), Read, Write, Grep, Glob, WebSearch, WebFetch, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: any
+examples:
+  - "/idea-creator incremental object detection"
+  - "找idea for few-shot learning"
+  - "brainstorm research ideas for robotics"
 ---
 
 # Research Idea Creator

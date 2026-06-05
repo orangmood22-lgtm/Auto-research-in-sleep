@@ -4,6 +4,10 @@ description: "Get an external patent examiner review of a patent application. Us
 argument-hint: [patent-directory-or-scope]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, mcp__codex__codex, mcp__codex__codex-reply
 caller: reviewer
+examples:
+  - "/patent-review patents/invention01"
+  - "专利审查 for my application"
+  - "get examiner review of claims"
 ---
 
 # Patent Examiner Review via Codex MCP (xhigh reasoning)

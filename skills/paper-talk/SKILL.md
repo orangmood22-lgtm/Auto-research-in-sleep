@@ -4,6 +4,10 @@ description: "End-to-end conference talk pipeline: paper → slide outline → B
 argument-hint: "[paper-dir] [— talk_type: oral | spotlight | poster-talk | invited] [— minutes: N] [— assurance: draft | polished | conference-ready] [— reference: <pdf>] [— style: generic | why-rf | <venue>] [— style-ref: <paper-source>] [— effort: lite | balanced | max | beast] [— anonymous]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, Skill, mcp__codex__codex
 caller: leader
+examples:
+  - "/paper-talk papers/main --minutes 15"
+  - "做 talk for ICLR"
+  - "end-to-end conference talk pipeline"
 ---
 
 # Paper Talk: End-to-End Conference Talk Pipeline

@@ -4,6 +4,10 @@ description: "Write detailed embodiment descriptions for patent specifications. 
 argument-hint: [claims-path-or-embodiment-details]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 caller: executor
+examples:
+  - "/embodiment-description patents/claims.md"
+  - "撰写实施例 for the invention"
+  - "write detailed description"
 ---
 
 # Embodiment Description

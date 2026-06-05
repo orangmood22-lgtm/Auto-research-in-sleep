@@ -4,6 +4,10 @@ description: "Generate publication-quality AI illustrations for academic papers 
 argument-hint: "[description-or-method-file] [— style-ref: <source>]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex, mcp__codex__codex-reply, WebSearch
 caller: executor
+examples:
+  - "/paper-illustration model architecture diagram"
+  - "生成图表 for method overview"
+  - "AI绘图 for the pipeline"
 ---
 
 # Paper Illustration: Multi-Stage Claude-Supervised Figure Generation

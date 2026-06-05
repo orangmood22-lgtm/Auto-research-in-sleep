@@ -4,6 +4,10 @@ description: "Generate deterministic publication-quality architecture, workflow,
 argument-hint: [description-of-diagram]
 allowed-tools: Bash(*), Read, Write, Edit
 caller: executor
+examples:
+  - "/figure-spec system architecture diagram"
+  - "架构图 for the model pipeline"
+  - "generate workflow figure from spec"
 ---
 
 # FigureSpec: Deterministic JSON → SVG Figure Generation

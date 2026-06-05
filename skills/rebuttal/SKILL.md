@@ -4,6 +4,10 @@ description: "Workflow 4: Submission rebuttal pipeline. Parses external reviews,
 argument-hint: [paper-path-or-review-bundle]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/rebuttal papers/main --reviews reviews/"
+  - "reply to reviewers"
+  - "draft ICLR rebuttal letter"
 ---
 
 # Workflow 4: Rebuttal

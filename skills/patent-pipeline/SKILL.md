@@ -4,6 +4,10 @@ description: "Full patent drafting pipeline from invention description to jurisd
 argument-hint: [invention-description — jurisdiction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Agent, Skill, mcp__codex__codex
 caller: leader
+examples:
+  - "/patent-pipeline invention.md --jurisdiction CN"
+  - "写专利 for this method"
+  - "draft US patent application"
 ---
 
 # Patent Pipeline: From Invention to Filing

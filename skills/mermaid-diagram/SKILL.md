@@ -4,6 +4,10 @@ description: Generate Mermaid diagrams from user requirements. Saves .mmd and .m
 argument-hint: [diagram description or requirements]
 allowed-tools: Bash(*), Read, Write, Edit, Glob, Grep
 caller: executor
+examples:
+  - "/mermaid-diagram system architecture flowchart"
+  - "generate sequence diagram for API"
+  - "create ER diagram for database"
 ---
 
 # Mermaid Diagram Generator

@@ -4,6 +4,10 @@ description: Search and analyze research papers, find related work, summarize ke
 argument-hint: [paper-topic-or-url]
 allowed-tools: Bash(*), Read, Glob, Grep, WebSearch, WebFetch, Write, Agent, mcp__zotero__*, mcp__obsidian-vault__*
 caller: any
+examples:
+  - "/research-lit few-shot learning"
+  - "find papers on prototype networks"
+  - "literature review for incremental detection"
 ---
 
 # Research Literature Review

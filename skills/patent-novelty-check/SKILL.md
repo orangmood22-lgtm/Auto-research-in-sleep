@@ -4,6 +4,10 @@ description: "Assess patent novelty and non-obviousness against prior art. Use w
 argument-hint: [invention-description-or-brief-path]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__codex__codex
 caller: reviewer
+examples:
+  - "/patent-novelty-check invention.md"
+  - "专利查新 for this idea"
+  - "is this invention patentable"
 ---
 
 # Patent Novelty and Non-Obviousness Check

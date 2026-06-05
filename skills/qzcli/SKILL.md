@@ -4,6 +4,10 @@ description: Manage GPU compute jobs on the Qizhi (启智) platform using qzcli 
 argument-hint: [login|avail|list|create|stop <job-id>|batch|status|watch]
 allowed-tools: Bash(*), Read, Write
 caller: any
+examples:
+  - "/qzcli avail"
+  - "启智平台 submit training job"
+  - "list my GPU jobs"
 ---
 
 # qzcli — 启智平台任务管理

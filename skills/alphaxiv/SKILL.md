@@ -4,6 +4,10 @@ description: Quick single-paper lookup via AlphaXiv LLM-optimized summaries with
 argument-hint: [arxiv-id-or-url]
 allowed-tools: Bash(*), Read, Write, WebFetch, Glob
 caller: any
+examples:
+  - "/alphaxiv 2301.12345"
+  - "explain this paper from arxiv"
+  - "summarize the attention paper"
 ---
 
 # AlphaXiv Paper Lookup

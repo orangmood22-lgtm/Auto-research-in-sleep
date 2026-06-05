@@ -4,6 +4,10 @@ description: "Send notifications to Feishu/Lark. Internal utility used by other 
 argument-hint: [message-text]
 allowed-tools: Bash(curl *), Bash(cat *), Read, Glob
 caller: any
+examples:
+  - "/feishu-notify training completed"
+  - "发飞书 experiment finished"
+  - "notify team about results"
 ---
 
 # Feishu/Lark Notification

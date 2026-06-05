@@ -4,6 +4,10 @@ description: "Structure a raw invention idea into a formal invention disclosure.
 argument-hint: [invention-description-or-brief-path]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, mcp__codex__codex
 caller: executor
+examples:
+  - "/invention-structuring my new method idea"
+  - "构建发明 for patent"
+  - "structure the invention disclosure"
 ---
 
 # Invention Structuring

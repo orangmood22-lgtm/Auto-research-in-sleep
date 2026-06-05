@@ -4,6 +4,10 @@ description: "Rent, manage, and destroy GPU instances on vast.ai. Use when user 
 argument-hint: [task-description or action]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent
 caller: executor
+examples:
+  - "/vast-gpu rent RTX 3090"
+  - "rent a GPU for training"
+  - "list my vast.ai instances"
 ---
 
 # Vast.ai GPU Management

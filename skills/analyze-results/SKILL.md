@@ -4,6 +4,10 @@ description: Analyze ML experiment results, compute statistics, generate compari
 argument-hint: [results-path-or-description]
 allowed-tools: Bash(*), Read, Grep, Glob, Write, Edit, Agent
 caller: reviewer
+examples:
+  - "/analyze-results figures/exp01/*.json"
+  - "analyze the experiment results"
+  - "compare baseline vs modified"
 ---
 
 # Analyze Experiment Results

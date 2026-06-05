@@ -4,6 +4,10 @@ description: "Two-way sync between a local paper directory and an Overleaf proje
 argument-hint: [setup <project-id> | pull | push | status]
 allowed-tools: Bash(*), Read, Grep, Glob, Edit, Write
 caller: executor
+examples:
+  - "/overleaf-sync push"
+  - "同步 overleaf with local"
+  - "pull changes from Overleaf"
 ---
 
 # Overleaf Sync

@@ -4,6 +4,10 @@ description: Search and progressively read open-access academic papers through D
 argument-hint: [query-or-paper-id]
 allowed-tools: Bash(*), Read, Write
 caller: any
+examples:
+  - "/deepxiv transformer architecture"
+  - "find trending papers on RL"
+  - "progressive read of this paper"
 ---
 
 # DeepXiv Paper Search & Progressive Reading

@@ -4,6 +4,10 @@ description: "Paragraph-level structural blueprint for 10-12 page systems papers
 argument-hint: [venue-or-section]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, WebSearch, WebFetch, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/writing-systems-papers OSDI"
+  - "写系统论文 for SOSP"
+  - "systems paper structure for ASPLOS"
 ---
 
 # Writing Systems Papers: Paragraph-Level Blueprint

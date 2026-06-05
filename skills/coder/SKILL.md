@@ -10,6 +10,10 @@ allowed-tools:
   - Glob
   - Grep
   - Bash
+examples:
+  - "/coder implement the model architecture"
+  - "写代码实现 FreqProtoNet"
+  - "refactor the training loop"
 ---
 
 # Coder: 代码实现角色

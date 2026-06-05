@@ -4,6 +4,10 @@ description: "Write the full patent specification from claims and invention disc
 argument-hint: [claims-path]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, Skill, WebSearch, WebFetch, mcp__codex__codex, mcp__codex__codex-reply
 caller: executor
+examples:
+  - "/specification-writing patents/claims.md"
+  - "撰写说明书 for the patent"
+  - "write full patent specification"
 ---
 
 # Specification Writing: Section-by-Section Patent Description

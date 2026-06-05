@@ -12,6 +12,10 @@ allowed-tools:
   - Bash
   - WebSearch
   - WebFetch
+examples:
+  - "/writer draft the method section"
+  - "写论文 introduction"
+  - "write the rebuttal letter"
 ---
 
 # Writer: 论文写作角色

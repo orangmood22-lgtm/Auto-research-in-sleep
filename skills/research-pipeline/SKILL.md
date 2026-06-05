@@ -4,6 +4,10 @@ description: "Full research pipeline: Workflow 1 (idea discovery) → implementa
 argument-hint: [research-direction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply
 caller: leader
+examples:
+  - "/research-pipeline prototype-based incremental detection"
+  - "全流程 for few-shot learning"
+  - "run full research pipeline"
 ---
 
 # Full Research Pipeline: Idea → Experiments → Submission
