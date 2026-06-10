@@ -1,5 +1,9 @@
 # ARIS Project: Few-Shot Class-Incremental Object Detection (FSCIOD)
 
+> **迁移通知**: 本项目已迁至 Codex CLI。Codex 用户请读 `AGENTS.md`。
+> CLADE.md 保留用于双轨过渡期。两个文件内容同步，但 AGENTS.md 是 Codex 的主入口。
+> 迁移详情见 `docs/codex-migration.md`。
+
 ## 默认模式
 
 - caveman 模式默认开启（精简回复，保留技术准确度）

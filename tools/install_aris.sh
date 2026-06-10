@@ -9,6 +9,8 @@
 #
 # Usage:
 #   bash tools/install_aris.sh [project_path] [options]
+#   --codex    Install for Codex CLI (.agents/skills/ + AGENTS.md)
+#              Default: Claude Code (.claude/skills/ + CLAUDE.md)
 #
 # Actions (mutually exclusive, default: auto):
 #   default          install if no manifest, else reconcile
@@ -61,6 +63,7 @@ ARIS_DIR_NAME=".aris"
 LOCK_DIR_NAME=".install.lock.d"
 SKILLS_REL=".claude/skills"
 DOC_FILE_NAME="CLAUDE.md"
+TARGET_PLATFORM="claude"
 BLOCK_BEGIN="<!-- ARIS:BEGIN -->"
 BLOCK_END="<!-- ARIS:END -->"
 SAFE_NAME_REGEX='^[A-Za-z0-9][A-Za-z0-9._-]*$'
@@ -95,9 +98,12 @@ while [[ $# -gt 0 ]]; do
         --clear-stale-lock)  CLEAR_STALE_LOCK=true; shift ;;
         --adopt-existing)    ADOPT_NAMES+=("${2:?--adopt-existing requires NAME}"); shift 2 ;;
         --replace-link)      REPLACE_LINK_NAMES+=("${2:?--replace-link requires NAME}"); shift 2 ;;
+        --codex)              TARGET_PLATFORM="codex"
+                               SKILLS_REL=".agents/skills"
+                               DOC_FILE_NAME="AGENTS.md"; shift ;;
         --platform)
-            echo "Error: --platform is removed. ARIS now only supports Claude Code (.claude/skills/)." >&2
-            echo "       Codex CLI users: see docs for the manual codex setup." >&2
+            echo "Error: --platform is removed. Use --codex for Codex CLI (.agents/skills/)." >&2
+            echo "       Default: Claude Code (.claude/skills/)." >&2
             exit 2 ;;
         --force)
             echo "Error: --force is removed. Use the granular flags:" >&2

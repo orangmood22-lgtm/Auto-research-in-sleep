@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "schema": "skills/shared-references/context-memory-contract.md",
+  "session": {
+    "id": "session-20260607-2310",
+    "started_at": "2026-06-07T23:10:00+08:00",
+    "focus": "ARIS 框架优化 + Codex 迁移验证"
+  },
+  "persistent_context": {
+    "active_project": {
+      "path": "/root/Projects/aris/Auto-research-in-sleep/aris-orangmood-edition",
+      "name": "aris-orangmood-edition",
+      "research_direction": "Few-Shot Class-Incremental Object Detection (频域特征+原型学习)"
+    },
+    "active_experiments": [
+      {
+        "id": "exp0603",
+        "server": "3090x2",
+        "status": "created",
+        "path": "/root/Projects/aris/Auto-research-in-sleep/aris-orangmood-edition/exp0603"
+      }
+    ],
+    "framework_state": {
+      "codex_migration": "complete",
+      "last_verified": "2026-06-07",
+      "profiles": ["leader", "executor", "reviewer"],
+      "skills_count": 94
+    }
+  },
+  "working_memory": {
+    "recent_decisions": [
+      {
+        "date": "2026-06-07",
+        "decision": "Codex profiles 拆分为独立文件",
+        "rationale": "Codex 0.134.0 不再支持 config.toml 内 [profiles.*] 段落"
+      },
+      {
+        "date": "2026-06-05",
+        "decision": "Executor 角色拆分为 Coder/Deployer/Writer",
+        "rationale": "减少职责混淆，Leader 派发更精准"
+      }
+    ],
+    "pending_questions": [],
+    "blocked_items": []
+  },
+  "retention_rules": {
+    "keep_across_sessions": [
+      "active_project",
+      "active_experiments",
+      "framework_state",
+      "recent_decisions (last 7 days)"
+    ],
+    "clear_on_task_complete": [
+      "working_memory.pending_questions",
+      "working_memory.blocked_items"
+    ],
+    "archive_after_days": {
+      "recent_decisions": 30,
+      "completed_experiments": 90
+    }
+  },
+  "last_updated": "2026-06-07T23:10:00+08:00"
+}

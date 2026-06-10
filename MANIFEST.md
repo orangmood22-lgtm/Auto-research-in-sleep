@@ -35,5 +35,9 @@
 | 2026-06-01 12:00 | /manual | discussions/20260601_session_summary.md | implementation | 3090x2 deployment + framework bug fix (symlink→real dirs) + exp0603 created |
 | 2026-06-01 12:00 | /manual | PIPELINE_STATE.json | implementation | Framework optimization pipeline state |
 | 2026-06-01 12:00 | /manual | /tmp/aris-handoff-20260601.md | implementation | Handoff document for next session |
+| 2026-06-07 23:10 | /manual | CONTEXT_MEMORY.json | implementation | 跨会话上下文记忆状态文件 |
+| 2026-06-07 23:10 | /manual | skills/shared-references/context-memory-contract.md | implementation | 上下文记忆协议：解决遗忘问题 |
+| 2026-06-07 23:15 | /manual | skills/shared-references/executor-blocked-protocol.md | implementation | 添加绕过策略表 + 累计阈值规则 |
+| 2026-06-08 10:35 | /manual | discussions/WEEKLY_REPORT_20260608.md | documentation | 周报：Codex迁移 + 框架优化汇总 |
 
 ## Git Commits (local, unpushed)
