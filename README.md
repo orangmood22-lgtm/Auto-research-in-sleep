@@ -10,7 +10,9 @@ ARIS 是一套基于 AI 编程助手（Claude Code / Codex CLI）的自动化科
 
 **82 个研究 Skill** — 文献检索、实验规划、代码实现、论文撰写、审稿回复、专利申请……一条命令触发完整 pipeline
 
-**项目分离** — 框架（skills/tools/templates）与科研项目（code/data/results）独立管理，一套框架支撑多个研究方向
+**项目分离** — 框架（skills/tools/templates）与科研项目（code/data/results）独立管理，一套框架支撑多个研究方向。详见 `docs/FRAMEWORK_STRUCTURE.md`
+
+**轻量安装** — 项目通过 symlink 接入框架，不复制源码，框架更新自动传播
 
 **多人部署** — Docker 容器化，每人独立环境，共享数据集和 GPU 资源
 

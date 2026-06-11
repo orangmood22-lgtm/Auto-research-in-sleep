@@ -19,6 +19,7 @@
 #
 # Options:
 #   --aris-repo PATH       override aris-repo discovery
+#   --dev                  Use aris-dev/ repo instead of stable (requires sibling aris-dev/)
 #   --dry-run              show plan, no writes
 #   --quiet                no prompts; abort on any condition that would prompt
 #   --no-doc               skip CLAUDE.md update
@@ -82,6 +83,7 @@ MIGRATE_COPY=""      # "" | keep-user | prefer-upstream
 CLEAR_STALE_LOCK=false
 ADOPT_NAMES=()
 REPLACE_LINK_NAMES=()
+USE_DEV=false
 
 usage() { sed -n '2,40p' "$0" | sed 's/^# \?//'; }
 
@@ -101,6 +103,7 @@ while [[ $# -gt 0 ]]; do
         --codex)              TARGET_PLATFORM="codex"
                                SKILLS_REL=".agents/skills"
                                DOC_FILE_NAME="AGENTS.md"; shift ;;
+        --dev)               USE_DEV=true; shift ;;
         --platform)
             echo "Error: --platform is removed. Use --codex for Codex CLI (.agents/skills/)." >&2
             echo "       Default: Claude Code (.claude/skills/)." >&2
@@ -163,6 +166,21 @@ resolve_aris_repo() {
         [[ -d "$p/skills" ]] || die "--aris-repo has no skills/ subdir: $p"
         echo "$p"; return
     fi
+    # --dev: try sibling aris-dev/ directory (check parent, then grandparent)
+    if $USE_DEV; then
+        local script_dir parent grandparent dev_path
+        script_dir="$(cd "$(dirname "$0")" && pwd)"
+        parent="$(cd "$script_dir/.." && pwd)"
+        grandparent="$(cd "$parent/.." && pwd)"
+        # Try parent/aris-dev first, then grandparent/aris-dev
+        for dev_path in "$parent/aris-dev" "$grandparent/aris-dev"; do
+            if [[ -d "$dev_path/skills" ]]; then
+                echo "$dev_path"; return
+            fi
+        done
+        die "--dev specified but aris-dev/ not found at $parent/aris-dev or $grandparent/aris-dev (use --aris-repo to override)"
+    fi
+    # Default: stable repo discovery
     local script_dir parent
     script_dir="$(cd "$(dirname "$0")" && pwd)"
     parent="$(cd "$script_dir/.." && pwd)"
@@ -703,6 +721,10 @@ do_uninstall() {
     # is exactly the managed symlink. Anything else (user-created dir, custom
     # symlink target) is left alone.
     remove_tools_symlink
+    # Best-effort cleanup of version files recorded by framework version tracking
+    if ! $DRY_RUN; then
+        rm -f "$PROJECT_ARIS_DIR/framework-version.txt" "$PROJECT_ARIS_DIR/framework-commit.txt"
+    fi
     if ! $DRY_RUN; then
         # Keep .prev for forensics, remove current manifest
         [[ -f "$MANIFEST_PATH" ]] && mv -f "$MANIFEST_PATH" "$MANIFEST_PREV"
@@ -834,3 +856,22 @@ fi
 
 # Cleanup
 rm -f "$UPSTREAM_FILE" "$MANIFEST_DATA" "$PLAN_FILE"
+
+# ─── Record framework version (best-effort) ───────────────────────────────────
+record_framework_version() {
+    local ver_file="$PROJECT_ARIS_DIR/framework-version.txt"
+    local commit_file="$PROJECT_ARIS_DIR/framework-commit.txt"
+    if [[ -d "$ARIS_REPO/.git" ]]; then
+        local commit tag
+        commit="$(cd "$ARIS_REPO" && git rev-parse HEAD 2>/dev/null || echo "unknown")"
+        tag="$(cd "$ARIS_REPO" && git describe --tags --always 2>/dev/null || echo "unknown")"
+        echo "$tag" > "$ver_file"
+        echo "$commit" > "$commit_file"
+        log "  ✓ recorded framework version: $tag ($commit)"
+    else
+        echo "unknown" > "$ver_file"
+        echo "unknown" > "$commit_file"
+        log "  (warn) ARIS repo has no .git; version recorded as unknown"
+    fi
+}
+record_framework_version

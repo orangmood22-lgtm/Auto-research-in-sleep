@@ -36,6 +36,10 @@ last_updated: ""     # YYYY-MM-DD HH:mm — auto-updated by skills on every outp
 - {constraint 1}
 - {constraint 2}
 
+## Project Overrides
+
+项目本地定制统一登记在 `overrides/` 目录，并通过 `project.yaml#overrides` 追踪生命周期。禁止未经登记的 override。详见框架文档 `docs/PROJECT_OVERRIDES.md`。
+
 ## Non-Goals
 
 - {non-goal 1}

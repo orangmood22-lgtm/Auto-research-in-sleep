@@ -37,7 +37,17 @@ vim CLAUDE.md
 
 填入：研究方向、服务器 SSH 别名/路径/GPU、项目约束等。这是 Agent 每次 session 的上下文来源。
 
-### 4. 启动 Claude Code
+### 4. 记录框架版本
+
+安装完成后，建议记录当前框架版本：
+
+```bash
+cd ~/aris-framework
+git log -1 --format="%H" > .aris/framework-commit.txt
+git describe --tags --always > .aris/framework-version.txt 2>/dev/null || echo "no-tag"
+```
+
+### 5. 启动 Claude Code
 
 ```bash
 cd ~/projects/my-research

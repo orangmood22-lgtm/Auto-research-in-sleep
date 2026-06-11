@@ -1,0 +1,112 @@
+# Changelog
+
+All notable changes to the ARIS framework.
+
+Format based on [Keep a Changelog](https://keepachangelog.com/).
+
+## [Unreleased]
+
+### Added
+- Framework version recording in `install_aris.sh` (`record_framework_version`)
+- `project.yaml` template fields: `framework.version`, `framework.commit`, `overrides` registry
+- `docs/FRAMEWORK_STRUCTURE.md` — framework/project/dev boundary contract
+- Four top-level buckets: `examples/`, `compat/`, `incubating/`, `legacy/`
+- Regression tests for framework version recording (`tests/test_install_aris_version_record.py`)
+- `--dev` flag in `install_aris.sh` to use aris-dev/ repo instead of stable
+- `--Codex` platform switching tests (`tests/test_install_aris_codex_flag.py`)
+- Manifest safety tests (`tests/test_install_aris_manifest_safety.py`)
+- `--reconcile` synchronization tests (`tests/test_install_aris_reconcile.py`)
+
+### Changed
+- `install_aris.sh`: refactored dead `$DRY_RUN` branch in uninstall cleanup
+- `templates/CLAUDE_MD_TEMPLATE.md` and `AGENTS_MD_TEMPLATE.md`: added Project Overrides section
+- `README.md`: referenced framework structure docs
+- `QUICK_START.md`: added framework version recording step
+
+---
+
+## [2026-06-10]
+
+### Added
+- `examples/`, `compat/`, `incubating/`, `legacy/` directories with READMEs
+- Version pin and overrides registry in project template
+
+---
+
+## [2026-06-08]
+
+### Added
+- Codex migration artifacts (`.agents/skills/`, `AGENTS.md`)
+- `test_install_aris_tools_symlink.py` regression tests (#174)
+
+### Fixed
+- Symlink handling edge cases in `install_aris.sh`
+
+---
+
+## [2026-06-07]
+
+### Added
+- `examples` field added to all 94 SKILL.md files
+- SKILL_DAG integration — HTML visualization + impact analysis + workflow
+- Cytoscape.js DAG visualization with Apple-style redesign
+- D3.js DAG as alternative renderer
+
+---
+
+## [2026-06-06]
+
+### Added
+- Executor role split — Coder/Deployer/Writer
+- Bilingual UI support
+
+---
+
+## [2026-06-05]
+
+### Fixed
+- Cytoscape DAG — add dagre dependency, fix init
+
+### Changed
+- Replaced external symlinks with real skill directories
+
+---
+
+## [2026-06-04]
+
+### Added
+- Skill layering: agent-guide, caller fields, DAG
+
+---
+
+## [2026-06-03]
+
+### Added
+- Agent constraints added to all docs
+- GPU deployment guide for 3090x2 server
+
+---
+
+## [2026-06-02]
+
+### Added
+- `executor-blocked-protocol.md`
+- GPU Dockerfile
+- Leader SKILL.md update
+
+### Changed
+- Generalized OPERATIONS_GUIDE — removed hardcoded server names and SSH config
+
+---
+
+## [2026-06-01]
+
+### Added
+- ARIS framework v1 — docs, deployment, skill catalog, mattpocock skills
+- `/paper-talk` + `/slides-polish` skills
+
+---
+
+## [Earlier]
+
+See `git log --oneline` for full history prior to 2026-06-01.
