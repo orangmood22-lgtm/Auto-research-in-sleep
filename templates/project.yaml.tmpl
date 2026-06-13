@@ -16,12 +16,14 @@ git:
   branch: "main"
 
 # 远程 GPU 服务器 — /sync deploy 和 /leader Phase 3 读这个
-servers: []
-  # - name: "4090x4"
-  #   host: "4090x4-ai-original-22"
-  #   path: "/data/{USER}/aris/{PROJECT_NAME}"
-  #   conda_env: "/data/orangmood/aris_conda_env"
-  #   gpus: [0, 2, 3]
+servers: []                  # no remote servers by default
+# Example:
+# servers:
+#   - name: "4090x4"
+#     host: "4090x4-ai-original-22"
+#     path: "/data/{USER}/aris/{PROJECT_NAME}"
+#     conda_env: "/path/to/conda/env"
+#     gpus: [0, 2, 3]
 
 # 框架路径 — /framework-update 读这个
 framework:

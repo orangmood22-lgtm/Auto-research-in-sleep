@@ -17,6 +17,7 @@ import re
 import sys
 from pathlib import Path
 from datetime import datetime
+from typing import Optional
 
 # ─── 分类映射表（集中管理） ───────────────────────────────────────────────────
 
@@ -110,6 +111,7 @@ CATEGORY_MAP = {
     "research-wiki": "工具/同步",
     "feishu-notify": "工具/同步",
     "qzcli": "工具/同步",
+    "skill-dag-check": "工具/同步",
 
     # Pipeline/编排
     "leader": "Pipeline/编排",
@@ -136,6 +138,9 @@ CATEGORY_MAP = {
     "to-prd": "开发工具",
     "review": "开发工具",
     "write-a-skill": "开发工具",
+    "coder": "开发工具",
+    "deployer": "开发工具",
+    "writer": "开发工具",
 }
 
 # 跨类引用（skill 主类之外也常被哪些方向使用）
@@ -210,10 +215,14 @@ EXAMPLES = {
     "to-prd": "/to-prd",
     "review": "/review main",
     "write-a-skill": "/write-a-skill",
+    "coder": "/coder",
+    "deployer": "/deployer",
+    "skill-dag-check": "/skill-dag-check",
+    "writer": "/writer",
 }
 
 
-def parse_frontmatter(filepath: Path) -> dict | None:
+def parse_frontmatter(filepath: Path) -> Optional[dict]:
     """Parse YAML frontmatter from SKILL.md (between --- delimiters)."""
     try:
         text = filepath.read_text(encoding="utf-8")

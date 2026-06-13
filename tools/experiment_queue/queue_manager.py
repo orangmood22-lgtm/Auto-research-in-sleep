@@ -56,13 +56,14 @@ import subprocess
 import sys
 import tempfile
 import time
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
 OOM_RE = re.compile(r"(CUDA out of memory|torch\.OutOfMemoryError)")
 DEFAULT_GPU_FREE_THRESHOLD_MIB = 500
 POLL_INTERVAL_SEC = 60
+UTC = timezone.utc
 
 
 def resolve_conda_hook(manifest_hook=None):

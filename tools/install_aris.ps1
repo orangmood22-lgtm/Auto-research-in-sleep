@@ -55,7 +55,7 @@
 .EXAMPLE
     .\tools\install_aris.ps1
     .\tools\install_aris.ps1 C:\projects\my-paper -Platform codex
-    .\tools\install_aris.ps1 -ArisRepo C:\Users\PC\.codex\Auto-claude-code-research-in-sleep -Force
+    .\tools\install_aris.ps1 -ArisRepo C:\Users\PC\.codex\Auto-research-in-sleep -Force
 #>
 
 [CmdletBinding()]
@@ -96,9 +96,9 @@ function Resolve-ArisRepo {
         (Join-Path $env:USERPROFILE 'aris_repo'),
         (Join-Path $env:USERPROFILE 'Desktop\aris_repo'),
         (Join-Path $env:USERPROFILE '.aris'),
-        (Join-Path $env:USERPROFILE 'Desktop\Auto-claude-code-research-in-sleep'),
-        (Join-Path $env:USERPROFILE '.codex\Auto-claude-code-research-in-sleep'),
-        (Join-Path $env:USERPROFILE '.claude\Auto-claude-code-research-in-sleep')
+        (Join-Path $env:USERPROFILE 'Desktop\Auto-research-in-sleep'),
+        (Join-Path $env:USERPROFILE '.codex\Auto-research-in-sleep'),
+        (Join-Path $env:USERPROFILE '.claude\Auto-research-in-sleep')
     )) {
         if (Test-Path (Join-Path $p 'skills')) { return $p }
     }

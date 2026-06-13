@@ -32,7 +32,7 @@ _ATOM_NS = "http://www.w3.org/2005/Atom"
 _API_BASE = "http://export.arxiv.org/api/query"
 _USER_AGENT = (
     "arxiv-skill/1.0 "
-    "(github.com/wanshuiyin/Auto-claude-code-research-in-sleep)"
+    "(github.com/orangmood22-lgtm/Auto-research-in-sleep)"
 )
 _MIN_PDF_BYTES = 10_240
 _NEW_STYLE_ID_RE = re.compile(r"^\d{4}\.\d{4,5}(v\d+)?$")

@@ -190,9 +190,9 @@ resolve_aris_repo() {
         "$HOME/Desktop/aris_repo" \
         "$HOME/aris_repo" \
         "$HOME/.aris" \
-        "$HOME/Desktop/Auto-claude-code-research-in-sleep" \
-        "$HOME/.codex/Auto-claude-code-research-in-sleep" \
-        "$HOME/.claude/Auto-claude-code-research-in-sleep" ; do
+        "$HOME/Desktop/Auto-research-in-sleep" \
+        "$HOME/.codex/Auto-research-in-sleep" \
+        "$HOME/.claude/Auto-research-in-sleep" ; do
         [[ -d "$guess/skills" ]] && { abs_path "$guess"; return; }
     done
     die "cannot find ARIS repo. Use --aris-repo PATH or set ARIS_REPO env var."

@@ -15,6 +15,8 @@ connection if it's not already running.
 import argparse
 import json
 import os
+from pathlib import Path
+import shlex
 import socket
 import subprocess
 import sys
@@ -24,7 +26,10 @@ import time
 SERVER_HOST = os.environ.get("CODEX_MCP_HOST", "127.0.0.1")
 SERVER_PORT = int(os.environ.get("CODEX_MCP_PORT", "9876"))
 WSL_DISTRO = os.environ.get("CODEX_WSL_DISTRO", "Ubuntu-20.04")
-SERVER_SCRIPT = "/root/Projects/aris/Auto-research-in-sleep/aris-orangmood-edition/mcp-servers/codex-review/server.py"
+SERVER_SCRIPT = os.environ.get(
+    "CODEX_MCP_SERVER_SCRIPT",
+    str(Path(__file__).resolve().with_name("server.py")),
+)
 
 
 def server_is_alive():
@@ -43,7 +48,7 @@ def start_wsl_server():
     cmd = [
         "wsl", "-d", WSL_DISTRO, "--",
         "bash", "-c",
-        f"nohup python3 {SERVER_SCRIPT} --tcp {SERVER_PORT} > /tmp/codex-mcp-tcp.log 2>&1 &"
+        f"nohup python3 {shlex.quote(SERVER_SCRIPT)} --tcp {SERVER_PORT} > /tmp/codex-mcp-tcp.log 2>&1 &"
     ]
     subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     # Wait for server to start

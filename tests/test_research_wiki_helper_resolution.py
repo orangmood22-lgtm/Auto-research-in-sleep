@@ -17,6 +17,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 HELPER = REPO_ROOT / "tools" / "research_wiki.py"
@@ -58,7 +59,7 @@ def _git_init(path: Path) -> None:
     )
 
 
-def _run_chain(cwd: Path, env_overrides: dict | None = None):
+def _run_chain(cwd: Path, env_overrides: Optional[dict] = None):
     env = os.environ.copy()
     env.pop("ARIS_REPO", None)
     if env_overrides:

@@ -135,10 +135,10 @@ resolve_aris_repo() {
             p="$(abs_path "$ARIS_REPO")"
         else
             for guess in \
-                "$HOME/Desktop/Auto-claude-code-research-in-sleep" \
-                "$HOME/Auto-claude-code-research-in-sleep" \
+                "$HOME/Desktop/Auto-research-in-sleep" \
+                "$HOME/Auto-research-in-sleep" \
                 "$HOME/aris_repo" \
-                "$HOME/.codex/Auto-claude-code-research-in-sleep"; do
+                "$HOME/.codex/Auto-research-in-sleep"; do
                 if [[ -d "$guess/skills/$BASE_PACKAGE" ]]; then
                     p="$(abs_path "$guess")"
                     break
