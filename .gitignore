@@ -44,3 +44,7 @@ patent/
 
 # OMC runtime state
 .omc/
+
+# Developer-local private notes
+to-developer/discussions/settings*.json
+to-developer/discussions/ssh.txt

@@ -1,0 +1,123 @@
+# ARIS Framework Governance
+
+Language for ARIS framework versioning, release, and branch governance.
+
+## Language
+
+**Version Management**:
+The release governance for ARIS framework versions: release tags, changelog entries, and project-level framework pins. Branches support this process, but branch naming alone is not version management.
+_Avoid_: using "version management" to mean only Git branch cleanup.
+
+**Feature Branch**:
+A short-lived branch for adding a new capability or changing behavior before it is ready for `dev` or `main`. A feature branch may include code, docs, tests, templates, or skill changes; it differs from a fix branch because the goal is new capability rather than restoring broken behavior.
+_Avoid_: experiment branch, random dev branch
+
+**Fix Branch**:
+A short-lived branch for correcting an existing broken behavior, documentation error, deployment issue, or compatibility regression.
+_Avoid_: hotfix unless the change must go directly to a released stable line.
+
+**Stable Line**:
+The `main` branch, containing released or release-ready ARIS framework state.
+_Avoid_: orangmood edition branch, production branch
+
+**Development Line**:
+The `dev` branch, containing integrated but not-yet-released ARIS framework changes.
+_Avoid_: scratch branch, personal branch
+
+**Semantic Version**:
+A framework release tag using `vMAJOR.MINOR.PATCH`. Before ARIS reaches `v1.0.0`, minor versions carry user-visible capability changes and patch versions carry fixes that do not change normal usage.
+_Avoid_: date-only version, branch name as version
+
+**Patch Release**:
+A release that increments only `PATCH`, such as `v0.1.0` to `v0.1.1`, for bug fixes, documentation corrections, deployment fixes, or compatibility repairs.
+_Avoid_: calling new features patch releases
+
+**Minor Release**:
+A release that increments `MINOR`, such as `v0.1.0` to `v0.2.0`, for new user-visible skills, tools, deployment support, client compatibility, or workflow capability.
+_Avoid_: bundling breaking installation changes without calling them out
+
+**Formal Release Tag**:
+A stable release tag on `main`, such as `v0.1.0` or `v0.1.1`, intended for users and research projects to pin in `project.yaml`.
+_Avoid_: tagging feature branches as releases
+
+**Prerelease Tag**:
+A temporary test tag, such as `v0.2.0-dev.1` or `v0.2.0-rc.1`, used only to pin a `dev` or release-candidate snapshot for server testing or multi-user validation.
+_Avoid_: treating prerelease tags as stable project defaults
+
+**Release Trigger**:
+A reason to publish a new framework version from `main`. User-visible capability changes trigger a minor release; user-relevant fixes that preserve normal usage trigger a patch release; internal notes and `to-developer/` materials do not trigger releases.
+_Avoid_: releasing every commit automatically
+
+**User Changelog**:
+The user-facing `CHANGELOG.md` release note. It records only changes users need to know when deciding whether to upgrade or pin a new framework version.
+_Avoid_: commit-by-commit logs, internal implementation diary
+
+**Development Log**:
+The maintainer-facing module log at `to-developer/DEVELOPMENT_LOG.md`. It groups changes by framework module so maintainers do not need to reconstruct development history from individual commits.
+_Avoid_: putting maintainer-only module notes in `CHANGELOG.md`
+
+**Developer Material**:
+Maintainer-facing files under `to-developer/`. `DEVELOPMENT_LOG.md`, `plans/*.md`, `deploy-QAs/*.md`, and non-private `discussions/*.md` are versioned; private settings and SSH notes are not versioned.
+_Avoid_: committing credentials, host secrets, API keys, or private SSH notes
+
+**Release Gate**:
+The checklist that must pass before tagging a framework release. Patch releases use a lightweight gate focused on the changed area; minor releases use a stricter gate covering changelog, development log, generated catalogs/DAGs, installer behavior, Codex mirror compatibility, and at least one install or dev-to-stable validation.
+_Avoid_: tagging first and checking later
+
+**Release Tag Automation**:
+The guarded scripts that check and create framework release tags. Tag automation defaults to dry-run, creates a local tag only with `--apply`, and pushes the tag only with the additional `--push-tag` flag.
+_Avoid_: scripts that create or push tags by default
+
+**Version Bump**:
+An explicit request to compute the next semantic version from the latest formal release tag, such as `--bump patch` or `--bump minor`. Maintainers may also provide an explicit `vMAJOR.MINOR.PATCH` when needed, but the release script must validate that it is newer than the latest formal release.
+_Avoid_: implicit version inference from arbitrary commit messages
+
+**Initial Stable Release**:
+The first formal ARIS framework release from the current `main` line, tagged `v0.1.0`. It establishes the baseline that research projects can pin before later patch and minor releases.
+_Avoid_: treating pre-`v0.1.0` branch names as framework versions
+
+## Example Dialogue
+
+Developer: "This is a new skill workflow, so I will open a feature branch from `dev`."
+
+Maintainer: "Good. When it is reviewed and tested, merge it back to `dev`. It becomes version-managed only when we include it in a release tag and changelog."
+
+Developer: "This installer bug breaks existing projects."
+
+Maintainer: "Use a fix branch. If it affects the current stable release, it may become a patch release."
+
+Developer: "This release adds Codex/Claude dual-client skill governance."
+
+Maintainer: "That is a minor release before v1.0.0. Tag it as something like `v0.1.0`, then use patch releases for follow-up fixes."
+
+Developer: "Can I tag the current dev branch?"
+
+Maintainer: "Only as a prerelease snapshot when you need reproducible testing, for example `v0.2.0-dev.1`. Formal release tags belong on `main`."
+
+Developer: "I only updated internal planning notes."
+
+Maintainer: "Do not release. Internal `to-developer/` changes are not framework version changes."
+
+Developer: "This change touched skills, tools, and docs. Where do I record the developer detail?"
+
+Maintainer: "Record it by module in `to-developer/DEVELOPMENT_LOG.md`, then distill only user-visible entries into `CHANGELOG.md` at release time."
+
+Developer: "Should developer notes be committed?"
+
+Maintainer: "Commit structured developer material, but never commit `to-developer/discussions/settings*.json` or `to-developer/discussions/ssh.txt`."
+
+Developer: "This is only a patch release for a deployment doc fix."
+
+Maintainer: "Use the patch release gate: clean worktree, changelog entry, development log entry, and the related test or manual check. Save the full minor gate for capability releases."
+
+Developer: "Can the release script create the tag for me?"
+
+Maintainer: "Yes, but it must be guarded. The default run is a dry-run; `--apply` creates the local tag; `--push-tag` is required to publish it."
+
+Developer: "Should I type the exact version?"
+
+Maintainer: "Either use `--bump patch` / `--bump minor` for normal releases, or provide an explicit `vX.Y.Z` for special cases. In both cases the script validates the result."
+
+Developer: "What is the first stable version?"
+
+Maintainer: "The current `main` line becomes `v0.1.0`; future fixes become `v0.1.1`, and future capability releases become `v0.2.0` or later."

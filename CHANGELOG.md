@@ -7,6 +7,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+---
+
+## [v0.1.0] - 2026-06-13
+
+### Added
+- Codex and Claude Code dual-client framework baseline with 94 user-facing skills.
+- Dev/stable branch structure with `main` as stable and `dev` as integration.
+- Skill DAG normalization with frontmatter `invokes` as formal edges and body mentions as inferred references.
+- Codex skill mirrors for newly added skills.
+- LangGraph evaluation document for future optional orchestration backend decisions.
+- Portable MCP server index and Codex review bridge path handling.
+- Development log and guarded release tooling plan for ARIS version management.
 - Framework version recording in `install_aris.sh` (`record_framework_version`)
 - `project.yaml` template fields: `framework.version`, `framework.commit`, `overrides` registry
 - `docs/FRAMEWORK_STRUCTURE.md` — framework/project/dev boundary contract
@@ -18,10 +35,21 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `--reconcile` synchronization tests (`tests/test_install_aris_reconcile.py`)
 
 ### Changed
+- README and documentation index now describe the current ARIS framework layout and dual-client usage.
+- Documentation paths were updated from the upstream Claude-only project to the current ARIS repository.
+- Templates and installer path discovery were generalized to avoid hard-coded user/server paths.
 - `install_aris.sh`: refactored dead `$DRY_RUN` branch in uninstall cleanup
 - `templates/CLAUDE_MD_TEMPLATE.md` and `AGENTS_MD_TEMPLATE.md`: added Project Overrides section
 - `README.md`: referenced framework structure docs
 - `QUICK_START.md`: added framework version recording step
+
+### Fixed
+- GPU server deployment hardening for the 3090x2 deployment path.
+- Python 3.8 compatibility in selected tools/tests.
+- Codex review bridge no longer hard-codes a developer-local server path.
+
+### Removed
+- Obsolete ARIS-Code README variants and old README image assets.
 
 ---
 
