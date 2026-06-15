@@ -4,6 +4,13 @@
 
 ## 依赖图
 
+机器可读 DAG 见：
+
+- `docs/DOC_DAG.yaml` — 源数据，边方向为“源文档/源资产 -> 受影响文档”
+- `docs/DOC_DAG.mmd` — Mermaid 图，由 `python3 tools/generate_doc_dag.py` 生成
+
+下面是人工速览，完整依赖以 `DOC_DAG.yaml` 为准。
+
 ```
 README.md（总入口）
   ├── 引用 → QUICK_START.md
@@ -42,6 +49,8 @@ deploy/DEPLOY_GUIDE.md（部署指南）
 | 改 API 配置方式 | 更新 `docs/OPERATIONS_GUIDE.md` API 章节 |
 | 改飞书 bridge / runner / `.env` 配置 | 更新 `docs/FEISHU_INTEGRATION.md` + `mcp-servers/README.md` + README 文档索引 |
 | 改 project.yaml 模板 | 更新 `QUICK_START.md` 配置示例 + `OPERATIONS_GUIDE.md` 概念段 |
+| 新增/删除/重命名文档 | 更新 `docs/DOC_DAG.yaml`，运行 `python3 tools/generate_doc_dag.py`，同步 `docs/README.md` |
+| 新增/删除工具 | 更新 `docs/TOOLS_INDEX.md` + `docs/DOC_DAG.yaml`，运行 `python3 tools/generate_doc_dag.py` |
 | 框架更新（git pull） | `/framework-update` 会自动重新生成 SKILL_CATALOG |
 
 ## 单一数据源原则

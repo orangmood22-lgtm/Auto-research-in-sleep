@@ -7,6 +7,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- 文档依赖 DAG：`docs/DOC_DAG.yaml`、`docs/DOC_DAG.mmd` 和 `tools/generate_doc_dag.py`，用于新增/修改文档时做影响分析。
 - 中文 `tools/` 全量索引文档 `docs/TOOLS_INDEX.md`，汇总安装、发布、Feishu、实验、检索、审计、生成器和维护脚本。
 - Stable-readable Chinese promote specification in `docs/PROMOTE_FLOW.md` and root `AGENTS.md` guidance for Codex/developers.
 - Feishu control bridge and managed Codex runner for opt-in remote session input, live tmux takeover, status-card updates, `/interrupt`, and side-channel `/btw` questions.

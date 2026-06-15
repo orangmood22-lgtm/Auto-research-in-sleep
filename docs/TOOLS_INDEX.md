@@ -122,6 +122,7 @@
 | `tools/generate_skill_catalog.py` | 生成 `docs/SKILL_CATALOG.md` | 新增/删除/改 skill 后 | 需要同步中文目录 |
 | `tools/translate_skill_catalog.py` | 生成 `docs/SKILL_CATALOG_CN.md` | catalog 更新后 | 维护中文描述映射 |
 | `tools/generate_skill_dag.py` | 生成 `docs/SKILL_DAG.yaml`、`.mmd`、`.html` | skill DAG 变化后 | formal edge 来自 frontmatter `invokes` |
+| `tools/generate_doc_dag.py` | 校验 `docs/DOC_DAG.yaml` 并生成 `docs/DOC_DAG.mmd` | 新增/删除/重命名文档后 | 无 PyYAML 时使用内置轻量解析器 |
 | `tools/generate_codex_claude_review_overrides.py` | 生成 Codex skill 的 Claude reviewer overlay | 维护 reviewer overlay 时 | 输出到 `skills/skills-codex-claude-review/` |
 | `tools/convert_skills_to_llm_chat.py` | 将 Codex-native skill 转换成 llm-chat MCP 版本 | 迁移/兼容实验 | 会替换 Codex MCP 调用文本 |
 
@@ -145,4 +146,3 @@
 - 新工具如果是维护/发布流程的一部分，应同步更新 [PROMOTE_FLOW.md](PROMOTE_FLOW.md)。
 - 新工具如果面向用户，应在 `README.md` 和本文件中出现。
 - 脚本应提供 `--help` 或文件头 usage；复杂工具应有独立 README。
-

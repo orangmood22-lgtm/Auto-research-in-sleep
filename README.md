@@ -73,6 +73,7 @@ aris-framework/
 | [docs/TRIPARTITE_ARCHITECTURE_GUIDE.md](docs/TRIPARTITE_ARCHITECTURE_GUIDE.md) | 三边架构 |
 | [docs/codex-migration.md](docs/codex-migration.md) | Codex 迁移说明 |
 | [docs/DOC_DEPENDENCIES.md](docs/DOC_DEPENDENCIES.md) | 文档依赖关系 |
+| [docs/DOC_DAG.yaml](docs/DOC_DAG.yaml) / [docs/DOC_DAG.mmd](docs/DOC_DAG.mmd) | 文档依赖 DAG |
 | [docs/LANGGRAPH_EVALUATION.md](docs/LANGGRAPH_EVALUATION.md) | LangGraph 是否适合引入 ARIS |
 | [docs/FEISHU_INTEGRATION.md](docs/FEISHU_INTEGRATION.md) | 飞书通知、双向消息、受控 Codex runner |
 | [deploy/DEPLOY_GUIDE.md](deploy/DEPLOY_GUIDE.md) | Docker / 服务器部署 |
