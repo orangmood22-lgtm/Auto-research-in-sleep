@@ -54,6 +54,7 @@
 - Made Codex review bridge portable across local paths.
 
 ### tests
+- 扩展 GPU 部署合约测试，覆盖 `.env` 示例、compose 环境变量、entrypoint proxy/git proxy 持久化。
 - 新增开发者文档 DAG 回归测试。
 - Added Feishu bridge/control/session tests covering card update semantics, queue ack behavior, live TUI status updates, `/interrupt`, and `/btw`.
 - Added Agent Status Stream CLI behavior tests and local GPU smoke validation.
