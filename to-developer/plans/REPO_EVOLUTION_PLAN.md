@@ -82,7 +82,7 @@ github.com/orangmood22-lgtm/aris-dev.git
 ### 当前状态
 
 - ✅ 有准入检查清单（`PROMOTE_FLOW.md`）
-- ❌ 无自动化检查脚本
+- ✅ 有开发者文档 DAG 自动更新脚本（`tools/update_developer_docs.py`）
 - ❌ 无跨仓库/跨目录的 promote 工具
 
 ### 策略：延后到第一次真正 promote 时
@@ -114,16 +114,19 @@ bash tools/check_promote_ready.sh skills/<new-skill>
 | 优先级 | 任务 | 触发条件 | 状态 |
 |--------|------|---------|------|
 | P1 | 保持同仓，继续开发 | 当前 | ✅ 执行中 |
-| P2 | dev 中产生第一个候选 skill | dev/skills/ 非空 | ⏳ 等待 |
-| P3 | 编写 `check_promote_ready.sh` | 第一次 promote 前 | ⏳ 等待 |
-| P4 | 评估分仓必要性 | 触发条件满足 | ⏳ 等待 |
-| P5 | 执行分仓（如需） | P4 评估通过 | ⏳ 等待 |
+| P2 | 维护 `to-developer/DOC_DAG.yaml` 并运行 `tools/update_developer_docs.py` | 新增/删除/重命名开发者文档 | ✅ 执行中 |
+| P3 | dev 中产生第一个候选 skill | dev/skills/ 非空 | ⏳ 等待 |
+| P4 | 编写 `check_promote_ready.sh` | 第一次 promote 前 | ⏳ 等待 |
+| P5 | 评估分仓必要性 | 触发条件满足 | ⏳ 等待 |
+| P6 | 执行分仓（如需） | P5 评估通过 | ⏳ 等待 |
 
 ---
 
 ## 相关文件
 
 - `aris-dev/to-developer/plans/PROMOTE_FLOW.md` — Promote 手动流程
+- `aris-dev/to-developer/DOC_DAG.yaml` — 开发者文档依赖源数据
+- `aris-dev/tools/update_developer_docs.py` — 生成/校验开发者文档 DAG
 - `aris-orangmood-edition/CHANGELOG.md` — 版本变更记录
 - `aris-orangmood-edition/docs/FRAMEWORK_STRUCTURE.md` — 三层架构说明
 - `aris-orangmood-edition/tools/install_aris.sh` — 安装器（已支持 `--dev`）

@@ -1,0 +1,64 @@
+graph LR
+    %% Generated from to-developer/DOC_DAG.yaml by tools/update_developer_docs.py
+    AGENTS_md["AGENTS.md<br/><small>Dev Agent 指南 · governance</small>"]
+    CHANGELOG_md["CHANGELOG.md<br/><small>用户可见变更 · stable</small>"]
+    CONTEXT_md["CONTEXT.md<br/><small>框架治理术语 · stable</small>"]
+    docs_DOC_DAG_yaml["docs/DOC_DAG.yaml<br/><small>Stable 文档 DAG · stable</small>"]
+    docs_PROMOTE_FLOW_md["docs/PROMOTE_FLOW.md<br/><small>Stable Promote 规范 · stable</small>"]
+    docs_TOOLS_INDEX_md["docs/TOOLS_INDEX.md<br/><small>Stable 工具索引 · stable</small>"]
+    to_developer_DEVELOPMENT_LOG_md["to-developer/DEVELOPMENT_LOG.md<br/><small>开发日志 · log</small>"]
+    to_developer_DOC_DAG_mmd["to-developer/DOC_DAG.mmd<br/><small>开发者文档 DAG Mermaid 图 · generated</small>"]
+    to_developer_DOC_DAG_yaml["to-developer/DOC_DAG.yaml<br/><small>开发者文档 DAG 源数据 · governance</small>"]
+    to_developer_HANDOFF_CLAUDE_TO_CODEX_md["to-developer/HANDOFF_CLAUDE_TO_CODEX.md<br/><small>Claude 到 Codex handoff · handoff</small>"]
+    to_developer_deploy_QAs_clash_with_servers_md["to-developer/deploy-QAs/clash_with_servers.md<br/><small>服务器代理 QA · deploy</small>"]
+    to_developer_discussions___md["to-developer/discussions/*.md<br/><small>开发讨论记录 · discussion</small>"]
+    to_developer_discussions___txt["to-developer/discussions/*.txt<br/><small>开发讨论文本 · discussion</small>"]
+    to_developer_handoff_2026_06_11_md["to-developer/handoff-2026-06-11.md<br/><small>历史 handoff · handoff</small>"]
+    to_developer_logs___md["to-developer/logs/*.md<br/><small>开发验证日志 · log</small>"]
+    to_developer_logs_AGENT_STATUS_STREAM_VALIDATION_20260613_md["to-developer/logs/AGENT_STATUS_STREAM_VALIDATION_20260613.md<br/><small>Agent Status Stream 验证日志 · log</small>"]
+    to_developer_logs_SKILL_USABILITY_AUDIT_20260614_md["to-developer/logs/SKILL_USABILITY_AUDIT_20260614.md<br/><small>Skill 可用性审计汇总 · log</small>"]
+    to_developer_logs_skill_usability_parts___md["to-developer/logs/skill-usability-parts/*.md<br/><small>Skill 可用性审计分片 · log</small>"]
+    to_developer_plans_AGENT_STATUS_STREAM_md["to-developer/plans/AGENT_STATUS_STREAM.md<br/><small>Agent Status Stream 计划 · architecture</small>"]
+    to_developer_plans_BRANCH_AND_PROMOTE_GUIDE_md["to-developer/plans/BRANCH_AND_PROMOTE_GUIDE.md<br/><small>分支和 Promote 指南 · promote</small>"]
+    to_developer_plans_PROMOTE_FLOW_md["to-developer/plans/PROMOTE_FLOW.md<br/><small>Dev Promote 流程草案 · promote</small>"]
+    to_developer_plans_REPO_EVOLUTION_PLAN_md["to-developer/plans/REPO_EVOLUTION_PLAN.md<br/><small>仓库演进计划 · architecture</small>"]
+    to_developer_plans_VERSION_MANAGEMENT_md["to-developer/plans/VERSION_MANAGEMENT.md<br/><small>版本管理方案 · release</small>"]
+
+    to_developer_DOC_DAG_yaml -- "generates" --> to_developer_DOC_DAG_mmd
+    to_developer_DOC_DAG_yaml -- "informs" --> to_developer_plans_REPO_EVOLUTION_PLAN_md
+    to_developer_plans_BRANCH_AND_PROMOTE_GUIDE_md -- "constrains" --> to_developer_plans_PROMOTE_FLOW_md
+    to_developer_plans_VERSION_MANAGEMENT_md -- "constrains" --> to_developer_plans_PROMOTE_FLOW_md
+    to_developer_plans_PROMOTE_FLOW_md -- "promotes_to" --> docs_PROMOTE_FLOW_md
+    to_developer_plans_VERSION_MANAGEMENT_md -- "promotes_to" --> CONTEXT_md
+    to_developer_plans_VERSION_MANAGEMENT_md -- "constrains" --> docs_PROMOTE_FLOW_md
+    to_developer_plans_AGENT_STATUS_STREAM_md -- "related_to" --> docs_DOC_DAG_yaml
+    to_developer_plans_AGENT_STATUS_STREAM_md -- "validated_by" --> to_developer_logs_AGENT_STATUS_STREAM_VALIDATION_20260613_md
+    to_developer_logs___md -- "summarized_by" --> to_developer_DEVELOPMENT_LOG_md
+    to_developer_logs_skill_usability_parts___md -- "summarized_by" --> to_developer_logs_SKILL_USABILITY_AUDIT_20260614_md
+    to_developer_DEVELOPMENT_LOG_md -- "distilled_to" --> CHANGELOG_md
+    to_developer_discussions___md -- "summarized_by" --> to_developer_DEVELOPMENT_LOG_md
+    to_developer_discussions___txt -- "summarized_by" --> to_developer_DEVELOPMENT_LOG_md
+    to_developer_deploy_QAs_clash_with_servers_md -- "related_to" --> docs_TOOLS_INDEX_md
+    AGENTS_md -- "constrains" --> to_developer_plans_PROMOTE_FLOW_md
+    docs_DOC_DAG_yaml -- "mirrors_boundary" --> to_developer_DOC_DAG_yaml
+
+    classDef governance fill:#ede9fe,stroke:#6d28d9
+    classDef generated fill:#f3f4f6,stroke:#4b5563
+    classDef log fill:#fef3c7,stroke:#b45309
+    classDef handoff fill:#dbeafe,stroke:#1d4ed8
+    classDef promote fill:#dcfce7,stroke:#15803d
+    classDef release fill:#fee2e2,stroke:#b91c1c
+    classDef architecture fill:#fce7f3,stroke:#be185d
+    classDef deploy fill:#e0f2fe,stroke:#0369a1
+    classDef discussion fill:#ffedd5,stroke:#c2410c
+    classDef stable fill:#ecfccb,stroke:#4d7c0f
+    class to_developer_plans_AGENT_STATUS_STREAM_md,to_developer_plans_REPO_EVOLUTION_PLAN_md architecture
+    class to_developer_deploy_QAs_clash_with_servers_md deploy
+    class to_developer_discussions___md,to_developer_discussions___txt discussion
+    class to_developer_DOC_DAG_mmd generated
+    class AGENTS_md,to_developer_DOC_DAG_yaml governance
+    class to_developer_HANDOFF_CLAUDE_TO_CODEX_md,to_developer_handoff_2026_06_11_md handoff
+    class to_developer_DEVELOPMENT_LOG_md,to_developer_logs_AGENT_STATUS_STREAM_VALIDATION_20260613_md,to_developer_logs_SKILL_USABILITY_AUDIT_20260614_md,to_developer_logs___md,to_developer_logs_skill_usability_parts___md log
+    class to_developer_plans_BRANCH_AND_PROMOTE_GUIDE_md,to_developer_plans_PROMOTE_FLOW_md promote
+    class to_developer_plans_VERSION_MANAGEMENT_md release
+    class CHANGELOG_md,CONTEXT_md,docs_DOC_DAG_yaml,docs_PROMOTE_FLOW_md,docs_TOOLS_INDEX_md stable
