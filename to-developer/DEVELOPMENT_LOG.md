@@ -31,12 +31,13 @@
 - Updated idea candidate template paths to the current project file layout.
 
 ### docs
+- 整理 `docs/` 用户侧入口，将开发者 ADR、迁移记录、LangGraph 评估和文档依赖维护规则迁入 `to-developer/`。
 - 新增 `to-developer/FRAMEWORK_MODULES.md`，明确开发者侧框架模块边界，并约束 `DEVELOPMENT_LOG.md` 的模块记录方式。
 - 新增 dev-only 开发者文档 DAG：`to-developer/DOC_DAG.yaml` / `to-developer/DOC_DAG.mmd`，用于统一维护开发计划、日志、讨论记录和 stable handoff 目标之间的更新关系。
 - Added Feishu integration docs and ADRs for opt-in remote control, live TUI takeover, and Feishu-priority control leases.
 - Added ADR-0002 and `to-developer/plans/AGENT_STATUS_STREAM.md` for the status-stream architecture and rollout plan.
 - Added local GPU validation report under `to-developer/logs/`.
-- Added `docs/LANGGRAPH_EVALUATION.md`.
+- 新增 `to-developer/plans/LANGGRAPH_EVALUATION.md`。
 - Added `docs/README.md` and `mcp-servers/README.md` indexes.
 - Updated repository paths and removed obsolete ARIS-Code/Matt Pocock/image assets.
 - Added `CONTEXT.md` language for framework version governance.

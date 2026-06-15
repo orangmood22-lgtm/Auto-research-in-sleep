@@ -65,13 +65,10 @@ aris-framework/
 
 | 路径 | 内容 |
 |------|------|
-| [docs/README.md](docs/README.md) | docs 全量索引 |
+| [docs/README.md](docs/README.md) | 用户文档索引 |
 | [docs/FRAMEWORK_STRUCTURE.md](docs/FRAMEWORK_STRUCTURE.md) | 框架/项目边界 |
 | [docs/OPERATIONS_GUIDE.md](docs/OPERATIONS_GUIDE.md) | 日常操作手册 |
 | [docs/TRIPARTITE_ARCHITECTURE_GUIDE.md](docs/TRIPARTITE_ARCHITECTURE_GUIDE.md) | 三边架构 |
-| [docs/codex-migration.md](docs/codex-migration.md) | Codex 迁移说明 |
-| [docs/DOC_DEPENDENCIES.md](docs/DOC_DEPENDENCIES.md) | 文档依赖关系 |
-| [docs/LANGGRAPH_EVALUATION.md](docs/LANGGRAPH_EVALUATION.md) | LangGraph 是否适合引入 ARIS |
 | [docs/FEISHU_INTEGRATION.md](docs/FEISHU_INTEGRATION.md) | 飞书通知、双向消息、受控 Codex runner |
 | [deploy/DEPLOY_GUIDE.md](deploy/DEPLOY_GUIDE.md) | Docker / 服务器部署 |
 | [AGENT_GUIDE.md](AGENT_GUIDE.md) | AI Agent 阅读指南 |
@@ -142,7 +139,7 @@ python3 tools/generate_skill_catalog.py
 python3 tools/translate_skill_catalog.py
 ```
 
-文档依赖见 [docs/DOC_DEPENDENCIES.md](docs/DOC_DEPENDENCIES.md)。
+开发者文档维护规则见 [to-developer/docs/DOC_DEPENDENCIES.md](to-developer/docs/DOC_DEPENDENCIES.md) 和 [to-developer/DOC_DAG.yaml](to-developer/DOC_DAG.yaml)。
 
 ## 致谢
 

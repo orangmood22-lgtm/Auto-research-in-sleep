@@ -9,7 +9,7 @@
 | `skills` | `skills/`, `.agents/skills/` | Agent 可调用能力、workflow、role skill、shared references、Codex/Claude 兼容镜像。 | `docs/SKILL_DAG.yaml`, `docs/SKILL_CATALOG*.md`, mirror 测试、相关 skill 文档。 |
 | `tools` | `tools/` | 本地 CLI/脚本工具，包括文档 DAG、release、状态流、飞书 session runner、安装/同步辅助。 | 对应测试、README/工具索引、开发日志。 |
 | `templates` | `templates/` | 新项目初始化模板、项目内 agent 配置模板、`project.yaml` 模板。 | 安装器测试、项目文件指南、模板 README。 |
-| `docs` | `docs/`, `docs/adr/`, `README.md`, `CONTEXT.md`, `AGENTS.md` | stable 面向用户和 agent 的正式说明、ADR、治理术语、入口索引。 | `docs/DOC_DAG.yaml`, `docs/DOC_DEPENDENCIES.md`, `docs/README.md`。 |
+| `docs` | `docs/`, `README.md`, `CONTEXT.md`, `AGENTS.md` | stable 面向用户和 agent 的正式说明、治理术语、入口索引。 | `docs/README.md`, 用户入口链接、相关 generated docs。 |
 | `to-developer` | `to-developer/` | dev-only 计划、讨论、handoff、验证日志、开发者文档 DAG。 | `to-developer/DOC_DAG.yaml`, `to-developer/DOC_DAG.mmd`, `tools/update_developer_docs.py --check-only`。 |
 | `mcp-servers` | `mcp-servers/` | 本地/远程 MCP bridge，包括 review、LLM chat、Feishu bridge、image bridge。 | `mcp-servers/README.md`, 集成文档、桥接测试。 |
 | `deploy` | `deploy/`, `Dockerfile*`, `docker-compose*.yml` | 部署、容器、服务器运行说明。 | `deploy/DEPLOY_GUIDE.md`, `docs/OPERATIONS_GUIDE.md`, 部署 QA。 |
@@ -37,7 +37,8 @@
 | 修改 Feishu session runner 或控制状态脚本 | `tools` |
 | 修改安装器、同步、release 脚本 | `tools` |
 | 修改项目模板或 agent 模板 | `templates` |
-| 新增 ADR、用户指南、stable 索引 | `docs` |
+| 新增用户指南、stable 索引 | `docs` |
+| 新增 ADR、迁移记录、技术评估、文档依赖维护规则 | `to-developer` |
 | 新增开发计划、审计日志、讨论归档 | `to-developer` |
 | 修改 Docker/compose/服务器说明 | `deploy` |
 | 新增兼容 shim 或迁移辅助 | `compat` |

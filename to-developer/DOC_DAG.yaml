@@ -47,6 +47,23 @@ nodes:
     title: "Agent Status Stream 计划"
     layer: architecture
     kind: plan
+  to-developer/plans/LANGGRAPH_EVALUATION.md:
+    title: "LangGraph 引入评估"
+    layer: architecture
+    kind: plan
+  to-developer/plans/codex-migration.md:
+    title: "Codex 迁移记录"
+    layer: architecture
+    kind: plan
+
+  to-developer/adr/*.md:
+    title: "开发者 ADR"
+    layer: architecture
+    kind: glob
+  to-developer/docs/*.md:
+    title: "开发者文档维护规则"
+    layer: governance
+    kind: glob
 
   to-developer/deploy-QAs/clash_with_servers.md:
     title: "服务器代理 QA"
@@ -90,6 +107,14 @@ nodes:
     title: "用户可见变更"
     layer: stable
     kind: changelog
+  docs/README.md:
+    title: "Stable 用户文档索引"
+    layer: stable
+    kind: guide
+  docs/FEISHU_INTEGRATION.md:
+    title: "飞书用户集成文档"
+    layer: stable
+    kind: guide
   docs/PROMOTE_FLOW.md:
     title: "Stable Promote 规范"
     layer: stable
@@ -124,6 +149,14 @@ edges:
     to: docs/FRAMEWORK_STRUCTURE.md
     type: related_to
     reason: "开发者侧模块边界需要和 stable 三层结构保持概念一致。"
+  - from: to-developer/FRAMEWORK_MODULES.md
+    to: docs/README.md
+    type: constrains
+    reason: "用户侧 docs 索引只保留用户安装、配置和使用文档。"
+  - from: to-developer/docs/*.md
+    to: to-developer/DOC_DAG.yaml
+    type: constrains
+    reason: "开发者文档维护规则影响开发者 DAG 覆盖策略。"
 
   - from: to-developer/plans/BRANCH_AND_PROMOTE_GUIDE.md
     to: to-developer/plans/PROMOTE_FLOW.md
@@ -154,6 +187,18 @@ edges:
     to: to-developer/logs/AGENT_STATUS_STREAM_VALIDATION_20260613.md
     type: validated_by
     reason: "计划由本地验证日志支撑。"
+  - from: to-developer/plans/LANGGRAPH_EVALUATION.md
+    to: to-developer/plans/REPO_EVOLUTION_PLAN.md
+    type: informs
+    reason: "LangGraph 是否引入影响仓库演进和运行时边界。"
+  - from: to-developer/plans/codex-migration.md
+    to: to-developer/FRAMEWORK_MODULES.md
+    type: informs
+    reason: "Codex 迁移记录影响开发者侧 runtime/module 边界理解。"
+  - from: to-developer/adr/*.md
+    to: docs/FEISHU_INTEGRATION.md
+    type: informs
+    reason: "用户侧飞书文档只暴露结论，详细决策保留在开发者 ADR。"
 
   - from: to-developer/logs/*.md
     to: to-developer/DEVELOPMENT_LOG.md

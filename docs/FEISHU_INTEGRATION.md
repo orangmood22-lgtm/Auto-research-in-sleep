@@ -21,10 +21,10 @@ The bridge does not execute shell commands, tools, or skills itself. It only rec
 - **Feishu-Controlled Session**: a registered session consumed by `tools/aris_feishu_session.py`.
 - **Control Lease**: input ownership marker. Feishu messages can take remote priority; `/release` returns control to local.
 
-See [CONTEXT.md](../CONTEXT.md) and ADRs:
+See [CONTEXT.md](../CONTEXT.md) and developer ADRs:
 
-- [ADR-0003: Feishu Control Uses Opt-In Codex Sessions](adr/0003-feishu-control-uses-opt-in-codex-sessions.md)
-- [ADR-0004: Feishu Control Lease Prioritizes Remote Input](adr/0004-feishu-control-lease-prioritizes-remote-input.md)
+- [ADR-0003: Feishu Control Uses Opt-In Codex Sessions](../to-developer/adr/0003-feishu-control-uses-opt-in-codex-sessions.md)
+- [ADR-0004: Feishu Control Lease Prioritizes Remote Input](../to-developer/adr/0004-feishu-control-lease-prioritizes-remote-input.md)
 
 ## Feishu App Setup
 
