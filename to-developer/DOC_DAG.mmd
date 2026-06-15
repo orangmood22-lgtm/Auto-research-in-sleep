@@ -4,11 +4,13 @@ graph LR
     CHANGELOG_md["CHANGELOG.md<br/><small>用户可见变更 · stable</small>"]
     CONTEXT_md["CONTEXT.md<br/><small>框架治理术语 · stable</small>"]
     docs_DOC_DAG_yaml["docs/DOC_DAG.yaml<br/><small>Stable 文档 DAG · stable</small>"]
+    docs_FRAMEWORK_STRUCTURE_md["docs/FRAMEWORK_STRUCTURE.md<br/><small>Stable 框架三层结构 · stable</small>"]
     docs_PROMOTE_FLOW_md["docs/PROMOTE_FLOW.md<br/><small>Stable Promote 规范 · stable</small>"]
     docs_TOOLS_INDEX_md["docs/TOOLS_INDEX.md<br/><small>Stable 工具索引 · stable</small>"]
     to_developer_DEVELOPMENT_LOG_md["to-developer/DEVELOPMENT_LOG.md<br/><small>开发日志 · log</small>"]
     to_developer_DOC_DAG_mmd["to-developer/DOC_DAG.mmd<br/><small>开发者文档 DAG Mermaid 图 · generated</small>"]
     to_developer_DOC_DAG_yaml["to-developer/DOC_DAG.yaml<br/><small>开发者文档 DAG 源数据 · governance</small>"]
+    to_developer_FRAMEWORK_MODULES_md["to-developer/FRAMEWORK_MODULES.md<br/><small>开发者侧框架模块说明 · architecture</small>"]
     to_developer_HANDOFF_CLAUDE_TO_CODEX_md["to-developer/HANDOFF_CLAUDE_TO_CODEX.md<br/><small>Claude 到 Codex handoff · handoff</small>"]
     to_developer_deploy_QAs_clash_with_servers_md["to-developer/deploy-QAs/clash_with_servers.md<br/><small>服务器代理 QA · deploy</small>"]
     to_developer_discussions___md["to-developer/discussions/*.md<br/><small>开发讨论记录 · discussion</small>"]
@@ -26,6 +28,8 @@ graph LR
 
     to_developer_DOC_DAG_yaml -- "generates" --> to_developer_DOC_DAG_mmd
     to_developer_DOC_DAG_yaml -- "informs" --> to_developer_plans_REPO_EVOLUTION_PLAN_md
+    to_developer_FRAMEWORK_MODULES_md -- "constrains" --> to_developer_DEVELOPMENT_LOG_md
+    to_developer_FRAMEWORK_MODULES_md -- "related_to" --> docs_FRAMEWORK_STRUCTURE_md
     to_developer_plans_BRANCH_AND_PROMOTE_GUIDE_md -- "constrains" --> to_developer_plans_PROMOTE_FLOW_md
     to_developer_plans_VERSION_MANAGEMENT_md -- "constrains" --> to_developer_plans_PROMOTE_FLOW_md
     to_developer_plans_PROMOTE_FLOW_md -- "promotes_to" --> docs_PROMOTE_FLOW_md
@@ -52,7 +56,7 @@ graph LR
     classDef deploy fill:#e0f2fe,stroke:#0369a1
     classDef discussion fill:#ffedd5,stroke:#c2410c
     classDef stable fill:#ecfccb,stroke:#4d7c0f
-    class to_developer_plans_AGENT_STATUS_STREAM_md,to_developer_plans_REPO_EVOLUTION_PLAN_md architecture
+    class to_developer_FRAMEWORK_MODULES_md,to_developer_plans_AGENT_STATUS_STREAM_md,to_developer_plans_REPO_EVOLUTION_PLAN_md architecture
     class to_developer_deploy_QAs_clash_with_servers_md deploy
     class to_developer_discussions___md,to_developer_discussions___txt discussion
     class to_developer_DOC_DAG_mmd generated
@@ -61,4 +65,4 @@ graph LR
     class to_developer_DEVELOPMENT_LOG_md,to_developer_logs_AGENT_STATUS_STREAM_VALIDATION_20260613_md,to_developer_logs_SKILL_USABILITY_AUDIT_20260614_md,to_developer_logs___md,to_developer_logs_skill_usability_parts___md log
     class to_developer_plans_BRANCH_AND_PROMOTE_GUIDE_md,to_developer_plans_PROMOTE_FLOW_md promote
     class to_developer_plans_VERSION_MANAGEMENT_md release
-    class CHANGELOG_md,CONTEXT_md,docs_DOC_DAG_yaml,docs_PROMOTE_FLOW_md,docs_TOOLS_INDEX_md stable
+    class CHANGELOG_md,CONTEXT_md,docs_DOC_DAG_yaml,docs_FRAMEWORK_STRUCTURE_md,docs_PROMOTE_FLOW_md,docs_TOOLS_INDEX_md stable

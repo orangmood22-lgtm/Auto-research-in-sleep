@@ -5,6 +5,7 @@
 ## 必读文档
 
 - `CONTEXT.md`：框架版本、分支、release 术语。
+- `to-developer/FRAMEWORK_MODULES.md`：开发者侧框架模块边界。
 - `to-developer/DOC_DAG.yaml`：开发者文档依赖 DAG 源数据。
 - `to-developer/DOC_DAG.mmd`：开发者文档依赖图。
 - `to-developer/plans/PROMOTE_FLOW.md`：dev 侧 promote 流程草案。

@@ -1,6 +1,6 @@
 # ARIS Development Log
 
-Maintainer-facing module log for ARIS framework development. This file is more detailed than `CHANGELOG.md` and is used to prepare user-facing release notes.
+开发者侧按模块记录的 ARIS 框架开发日志。模块边界见 `to-developer/FRAMEWORK_MODULES.md`；用户可见部分在发布前再蒸馏到 `CHANGELOG.md`。
 
 ## [Unreleased]
 
@@ -31,6 +31,7 @@ Maintainer-facing module log for ARIS framework development. This file is more d
 - Updated idea candidate template paths to the current project file layout.
 
 ### docs
+- 新增 `to-developer/FRAMEWORK_MODULES.md`，明确开发者侧框架模块边界，并约束 `DEVELOPMENT_LOG.md` 的模块记录方式。
 - 新增 dev-only 开发者文档 DAG：`to-developer/DOC_DAG.yaml` / `to-developer/DOC_DAG.mmd`，用于统一维护开发计划、日志、讨论记录和 stable handoff 目标之间的更新关系。
 - Added Feishu integration docs and ADRs for opt-in remote control, live TUI takeover, and Feishu-priority control leases.
 - Added ADR-0002 and `to-developer/plans/AGENT_STATUS_STREAM.md` for the status-stream architecture and rollout plan.

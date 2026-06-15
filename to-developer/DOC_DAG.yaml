@@ -14,6 +14,10 @@ nodes:
     title: "开发日志"
     layer: log
     kind: log
+  to-developer/FRAMEWORK_MODULES.md:
+    title: "开发者侧框架模块说明"
+    layer: architecture
+    kind: guide
   to-developer/HANDOFF_CLAUDE_TO_CODEX.md:
     title: "Claude 到 Codex handoff"
     layer: handoff
@@ -90,6 +94,10 @@ nodes:
     title: "Stable Promote 规范"
     layer: stable
     kind: stable_target
+  docs/FRAMEWORK_STRUCTURE.md:
+    title: "Stable 框架三层结构"
+    layer: stable
+    kind: stable_target
   docs/DOC_DAG.yaml:
     title: "Stable 文档 DAG"
     layer: stable
@@ -108,6 +116,14 @@ edges:
     to: to-developer/plans/REPO_EVOLUTION_PLAN.md
     type: informs
     reason: "仓库演进计划应知道 dev-only 文档结构。"
+  - from: to-developer/FRAMEWORK_MODULES.md
+    to: to-developer/DEVELOPMENT_LOG.md
+    type: constrains
+    reason: "开发日志按框架模块说明中的模块边界记录。"
+  - from: to-developer/FRAMEWORK_MODULES.md
+    to: docs/FRAMEWORK_STRUCTURE.md
+    type: related_to
+    reason: "开发者侧模块边界需要和 stable 三层结构保持概念一致。"
 
   - from: to-developer/plans/BRANCH_AND_PROMOTE_GUIDE.md
     to: to-developer/plans/PROMOTE_FLOW.md
