@@ -58,16 +58,22 @@ class GpuDeployContractTest(unittest.TestCase):
 
         self.assertIn("${USER1_FRAMEWORK_PATH:?set USER1_FRAMEWORK_PATH in .env}:/aris/framework", content)
         self.assertIn("${USER1_PROJECTS_PATH:?set USER1_PROJECTS_PATH in .env}:/aris/projects", content)
-        self.assertIn("${USER1_STATE_PATH:?set USER1_STATE_PATH in .env}:/aris/.aris", content)
+        self.assertIn("${USER1_STATE_PATH:?set USER1_STATE_PATH in .env}:/home/${USER1_NAME:-researcher1}/.aris", content)
         self.assertIn("${USER2_FRAMEWORK_PATH:?set USER2_FRAMEWORK_PATH in .env}:/aris/framework", content)
         self.assertIn("${USER2_PROJECTS_PATH:?set USER2_PROJECTS_PATH in .env}:/aris/projects", content)
-        self.assertIn("${USER2_STATE_PATH:?set USER2_STATE_PATH in .env}:/aris/.aris", content)
-        self.assertIn("ARIS_WORKSPACE=/aris", content)
+        self.assertIn("${USER2_STATE_PATH:?set USER2_STATE_PATH in .env}:/home/${USER2_NAME:-researcher2}/.aris", content)
+        self.assertNotIn("ARIS_WORKSPACE=/aris", content)
         self.assertIn("${DATASETS_PATH:?set DATASETS_PATH in .env}:/aris/shared/datasets:ro", content)
         self.assertIn("${PRETRAINED_PATH:?set PRETRAINED_PATH in .env}:/aris/shared/pretrained", content)
         self.assertIn("${DOWNLOADS_PATH:?set DOWNLOADS_PATH in .env}:/aris/shared/downloads", content)
         self.assertNotIn("aris-framework:/aris/framework", content)
         self.assertNotIn("user1-projects:/aris/projects", content)
+
+    def test_gpu_compose_persists_aris_state_under_user_home(self):
+        content = GPU_COMPOSE.read_text()
+
+        self.assertIn("aris-state:/home/${USERNAME:-researcher}/.aris", content)
+        self.assertIn("aris-state:", content)
 
     def test_multi_user_env_example_declares_workspace_paths(self):
         content = MULTI_ENV_EXAMPLE.read_text()

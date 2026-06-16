@@ -11,7 +11,7 @@
 #   4. docker exec -it aris-zhangsan bash
 #
 # Add more users: copy a researcher block and change name/UID/GID/SSH,
-# USERn_FRAMEWORK_PATH, and USERn_PROJECTS_PATH.
+# USERn_FRAMEWORK_PATH, USERn_PROJECTS_PATH, and USERn_STATE_PATH.
 
 services:
   # ─── Self-hosted Git (Gitea) ──────────────────────────────────────────────
@@ -64,7 +64,6 @@ services:
       - BRIDGE_PORT=${BRIDGE_PORT:-5000}
       - ARIS_PROJECT_ROOT=${ARIS_PROJECT_ROOT:-/aris/framework}
       - ARIS_FEISHU_CONTROL_ROOT=${ARIS_FEISHU_CONTROL_ROOT:-}
-      - ARIS_WORKSPACE=/aris
       - GITEA_URL=http://gitea:3000
     volumes:
       # Per-user framework checkout: user controls update/rollback.
@@ -72,7 +71,7 @@ services:
       # Per-user projects: do not share this path with another researcher.
       - ${USER1_PROJECTS_PATH:?set USER1_PROJECTS_PATH in .env}:/aris/projects
       # Per-user ARIS local state: project registry, framework rollback history.
-      - ${USER1_STATE_PATH:?set USER1_STATE_PATH in .env}:/aris/.aris
+      - ${USER1_STATE_PATH:?set USER1_STATE_PATH in .env}:/home/${USER1_NAME:-researcher1}/.aris
       # Shared datasets (read-only)
       - ${DATASETS_PATH:?set DATASETS_PATH in .env}:/aris/shared/datasets:ro
       # Shared download cache
@@ -120,14 +119,13 @@ services:
       - BRIDGE_PORT=${BRIDGE_PORT:-5000}
       - ARIS_PROJECT_ROOT=${ARIS_PROJECT_ROOT:-/aris/framework}
       - ARIS_FEISHU_CONTROL_ROOT=${ARIS_FEISHU_CONTROL_ROOT:-}
-      - ARIS_WORKSPACE=/aris
       - GITEA_URL=http://gitea:3000
     volumes:
       - ${USER2_FRAMEWORK_PATH:?set USER2_FRAMEWORK_PATH in .env}:/aris/framework
       # Per-user projects: do not share this path with another researcher.
       - ${USER2_PROJECTS_PATH:?set USER2_PROJECTS_PATH in .env}:/aris/projects
       # Per-user ARIS local state: project registry, framework rollback history.
-      - ${USER2_STATE_PATH:?set USER2_STATE_PATH in .env}:/aris/.aris
+      - ${USER2_STATE_PATH:?set USER2_STATE_PATH in .env}:/home/${USER2_NAME:-researcher2}/.aris
       - ${DATASETS_PATH:?set DATASETS_PATH in .env}:/aris/shared/datasets:ro
       - ${DOWNLOADS_PATH:?set DOWNLOADS_PATH in .env}:/aris/shared/downloads
       # Shared pretrained models/cache

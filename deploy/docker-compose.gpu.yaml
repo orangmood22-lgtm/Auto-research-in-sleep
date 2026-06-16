@@ -62,6 +62,7 @@ services:
       # Persist claude/codex config across rebuilds
       - claude-config:/home/${USERNAME:-researcher}/.claude
       - codex-config:/home/${USERNAME:-researcher}/.codex
+      - aris-state:/home/${USERNAME:-researcher}/.aris
     deploy:
       resources:
         reservations:
@@ -79,3 +80,4 @@ volumes:
   pretrained-cache:
   claude-config:
   codex-config:
+  aris-state:

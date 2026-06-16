@@ -79,7 +79,7 @@ my-research/
 ├── CLAUDE.md              # Claude Code 兼容上下文
 ├── .agents/skills/        # Codex skills
 ├── .claude/skills/        # Claude Code 兼容 skills
-├── .aris/
+├── .aris/                 # 项目运行态
 ├── code/
 ├── data/
 ├── outputs/
