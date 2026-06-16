@@ -1,33 +1,17 @@
-# ARIS Docs Index
+# ARIS 用户文档索引
 
-此目录存放框架文档。新用户优先读根目录 [README.md](../README.md)、[QUICK_START.md](../QUICK_START.md)，再按问题进入下面文档。
+`docs/` 只放用户安装、配置、运行和使用 ARIS 时需要看的文档。开发计划、ADR、迁移记录、评估材料和文档维护规则放在 `to-developer/`。
 
-## Core
+## 入门和日常使用
 
 | 文档 | 用途 |
 |------|------|
-| [FRAMEWORK_STRUCTURE.md](FRAMEWORK_STRUCTURE.md) | 框架目录和科研项目目录如何分离 |
-| [PROMOTE_FLOW.md](PROMOTE_FLOW.md) | dev 到 stable 的 promote 规范 |
-| [TOOLS_INDEX.md](TOOLS_INDEX.md) | `tools/` 脚本用途、入口和维护说明 |
-| [DOC_DAG.yaml](DOC_DAG.yaml) / [DOC_DAG.mmd](DOC_DAG.mmd) | 文档依赖 DAG 源数据和 Mermaid 图 |
-| [OPERATIONS_GUIDE.md](OPERATIONS_GUIDE.md) | 常规使用、API 配置、workflow 操作 |
+| [FRAMEWORK_STRUCTURE.md](FRAMEWORK_STRUCTURE.md) | 理解 framework / project / dev 边界 |
+| [OPERATIONS_GUIDE.md](OPERATIONS_GUIDE.md) | 日常操作、API 配置、workflow 使用 |
 | [TRIPARTITE_ARCHITECTURE_GUIDE.md](TRIPARTITE_ARCHITECTURE_GUIDE.md) | Leader / Executor / Reviewer 三边协作 |
-| [codex-migration.md](codex-migration.md) | Claude Code 到 Codex CLI 的迁移状态 |
-| [DOC_DEPENDENCIES.md](DOC_DEPENDENCIES.md) | 改文档时需要同步更新哪些文件 |
-| [LANGGRAPH_EVALUATION.md](LANGGRAPH_EVALUATION.md) | LangGraph 对 ARIS 的价值、边界和引入时机 |
 | [FEISHU_INTEGRATION.md](FEISHU_INTEGRATION.md) | 飞书通知、长连接收消息、受控 Codex runner 接入 |
 
-## Skill Catalog
-
-| 文档 | 用途 |
-|------|------|
-| [SKILL_CATALOG.md](SKILL_CATALOG.md) | 自动生成的 skill 目录 |
-| [SKILL_CATALOG_CN.md](SKILL_CATALOG_CN.md) | 自动生成的中文 skill 目录 |
-| [SKILL_DAG.yaml](SKILL_DAG.yaml) | skill 依赖图源数据 |
-| [SKILL_DAG.mmd](SKILL_DAG.mmd) | Mermaid 依赖图 |
-| [skill-dag.html](skill-dag.html) | 浏览器版依赖图 |
-
-## Project Files / Recovery
+## 项目文件和恢复
 
 | 文档 | 用途 |
 |------|------|
@@ -39,22 +23,31 @@
 | [WATCHDOG_GUIDE_CN.md](WATCHDOG_GUIDE_CN.md) | watchdog 中文版 |
 | [NARRATIVE_REPORT_EXAMPLE.md](NARRATIVE_REPORT_EXAMPLE.md) | 论文叙事报告示例 |
 
-## Reviewer / API Bridges
+## Skill 目录
+
+| 文档 | 用途 |
+|------|------|
+| [SKILL_CATALOG.md](SKILL_CATALOG.md) | 自动生成的 skill 目录 |
+| [SKILL_CATALOG_CN.md](SKILL_CATALOG_CN.md) | 自动生成的中文 skill 目录 |
+| [SKILL_DAG.yaml](SKILL_DAG.yaml) | 自动生成的 skill 依赖图源数据 |
+| [SKILL_DAG.mmd](SKILL_DAG.mmd) | Mermaid skill 依赖图 |
+| [skill-dag.html](skill-dag.html) | 浏览器版 skill 依赖图 |
+
+## Reviewer / API 桥接
 
 | 文档 | 用途 |
 |------|------|
 | [CODEX_CLAUDE_REVIEW_GUIDE.md](CODEX_CLAUDE_REVIEW_GUIDE.md) | Codex 调 Claude reviewer |
-| [CODEX_CLAUDE_REVIEW_GUIDE_CN.md](CODEX_CLAUDE_REVIEW_GUIDE_CN.md) | 中文版 |
+| [CODEX_CLAUDE_REVIEW_GUIDE_CN.md](CODEX_CLAUDE_REVIEW_GUIDE_CN.md) | Codex 调 Claude reviewer 中文版 |
 | [CODEX_GEMINI_REVIEW_GUIDE.md](CODEX_GEMINI_REVIEW_GUIDE.md) | Codex 调 Gemini reviewer |
-| [CODEX_GEMINI_REVIEW_GUIDE_CN.md](CODEX_GEMINI_REVIEW_GUIDE_CN.md) | 中文版 |
+| [CODEX_GEMINI_REVIEW_GUIDE_CN.md](CODEX_GEMINI_REVIEW_GUIDE_CN.md) | Codex 调 Gemini reviewer 中文版 |
 | [MINIMAX_MCP_GUIDE.md](MINIMAX_MCP_GUIDE.md) | MiniMax MCP 配置 |
 | [MiniMax-GLM-Configuration.md](MiniMax-GLM-Configuration.md) | MiniMax + GLM 配置 |
 | [LLM_API_MIX_MATCH_GUIDE.md](LLM_API_MIX_MATCH_GUIDE.md) | 多 provider 混用 |
 | [MODELSCOPE_GUIDE.md](MODELSCOPE_GUIDE.md) | ModelScope 方案 |
 | [ALI_CODING_PLAN_GUIDE.md](ALI_CODING_PLAN_GUIDE.md) | 阿里 Coding Plan 方案 |
-| [FEISHU_INTEGRATION.md](FEISHU_INTEGRATION.md) | Feishu/Lark 双向集成 |
 
-## Client Adapters
+## 客户端适配
 
 | 文档 | 用途 |
 |------|------|
@@ -65,16 +58,7 @@
 | [ANTIGRAVITY_ADAPTATION_CN.md](ANTIGRAVITY_ADAPTATION_CN.md) | Antigravity 中文适配 |
 | [OPENCLAW_ADAPTATION.md](OPENCLAW_ADAPTATION.md) | OpenClaw 适配 |
 
-## ADR
-
-| 文档 | 用途 |
-|------|------|
-| [adr/0001-model-tiering-strategy.md](adr/0001-model-tiering-strategy.md) | 模型分层策略 ADR |
-| [adr/0002-agent-status-stream.md](adr/0002-agent-status-stream.md) | Agent Status Stream ADR |
-| [adr/0003-feishu-control-uses-opt-in-codex-sessions.md](adr/0003-feishu-control-uses-opt-in-codex-sessions.md) | 飞书控制只接入 opt-in Codex Session |
-| [adr/0004-feishu-control-lease-prioritizes-remote-input.md](adr/0004-feishu-control-lease-prioritizes-remote-input.md) | 飞书 Control Lease 优先级 |
-
-## Assets
+## 资源
 
 | 文件 | 用途 |
 |------|------|
