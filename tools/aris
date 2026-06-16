@@ -98,6 +98,8 @@ def resolve_aris_repo(args: argparse.Namespace) -> Path:
         workspace = discover_workspace(required=False)
         if workspace and (workspace / "framework").exists():
             repo = workspace / "framework"
+        elif Path("/aris/framework").exists():
+            repo = Path("/aris/framework")
         else:
             repo = REPO_ROOT
     repo = Path(repo).expanduser().resolve()
@@ -111,22 +113,20 @@ def discover_workspace(required: bool = True) -> Path | None:
     if env:
         return Path(env).expanduser().resolve()
 
-    parts = REPO_ROOT.resolve().parts
-    if len(parts) >= 2 and parts[-1] == "framework":
-        return Path(*parts[:-1])
-
-    container_workspace = Path("/aris")
-    if (container_workspace / "framework").exists() or (container_workspace / "projects").exists():
-        return container_workspace
-
     if required:
-        raise SystemExit("cannot discover ARIS workspace; set ARIS_WORKSPACE")
+        return Path.home()
     return None
 
 
-def registry_path() -> Path:
+def state_root() -> Path:
     workspace = discover_workspace()
-    return workspace / ".aris" / "project-registry.json"
+    if os.environ.get("ARIS_WORKSPACE"):
+        return workspace / ".aris"
+    return workspace / ".aris"
+
+
+def registry_path() -> Path:
+    return state_root() / "project-registry.json"
 
 
 def load_registry() -> dict:
@@ -282,10 +282,13 @@ def cmd_project_version(args: argparse.Namespace) -> int:
 
 
 def history_dir() -> Path:
-    workspace = discover_workspace()
-    path = workspace / ".aris" / "framework-history"
+    path = history_path()
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def history_path() -> Path:
+    return state_root() / "framework-history"
 
 
 def record_previous_commit(framework: Path) -> str:
@@ -296,17 +299,14 @@ def record_previous_commit(framework: Path) -> str:
 
 
 def previous_commit() -> str:
-    path = history_dir() / "previous"
+    path = history_path() / "previous"
     if not path.exists():
         return ""
     return path.read_text(encoding="utf-8").strip()
 
 
 def framework_update_status_path(framework: Path) -> Path:
-    workspace = discover_workspace(required=False)
-    if workspace:
-        return workspace / ".aris" / "framework-update-status.json"
-    return framework / ".aris" / "framework-update-status.json"
+    return state_root() / "framework-update-status.json"
 
 
 def load_framework_update_status(framework: Path) -> dict:

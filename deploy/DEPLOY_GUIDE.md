@@ -78,11 +78,11 @@ Host Server
     │   ├── zhangsan/
     │   │   ├── framework/         # 挂到 aris-zhangsan:/aris/framework
     │   │   ├── projects/          # 挂到 aris-zhangsan:/aris/projects
-    │   │   └── .aris/             # 挂到 aris-zhangsan:/aris/.aris
+    │   │   └── .aris/             # 挂到 aris-zhangsan:~/.aris
     │   └── lisi/
     │       ├── framework/         # 挂到 aris-lisi:/aris/framework
     │       ├── projects/          # 挂到 aris-lisi:/aris/projects
-    │       └── .aris/             # 挂到 aris-lisi:/aris/.aris
+    │       └── .aris/             # 挂到 aris-lisi:~/.aris
     └── shared/
         ├── datasets/              # 挂到 /aris/shared/datasets，只读
         ├── pretrained/            # 挂到 /aris/shared/pretrained

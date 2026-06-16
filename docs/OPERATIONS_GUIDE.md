@@ -823,8 +823,8 @@ Gitea (http://gitea:3000)
 │  lisi/framework -> aris-lisi:/aris/framework         │
 │  user1-projects -> aris-zhangsan:/aris/projects     │
 │  user2-projects -> aris-lisi:/aris/projects         │
-│  zhangsan/.aris -> aris-zhangsan:/aris/.aris         │
-│  lisi/.aris -> aris-lisi:/aris/.aris                 │
+│  zhangsan/.aris -> aris-zhangsan:~/.aris             │
+│  lisi/.aris -> aris-lisi:~/.aris                     │
 └─────────────────────────────────────────┘
 ```
 

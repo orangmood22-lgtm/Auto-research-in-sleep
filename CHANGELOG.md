@@ -8,6 +8,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [v0.3.1] - 2026-06-16
+
+### Fixed
+- `aris framework --version` is now read-only and no longer tries to create framework rollback history.
+- Framework-level CLI state now defaults to the user's `~/.aris` directory unless `ARIS_WORKSPACE` is explicitly set.
+- Docker deployments now persist ARIS state under each container user's home directory instead of requiring `/aris/.aris`.
+
+---
+
 ## [v0.3.0] - 2026-06-16
 
 ### Added

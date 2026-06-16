@@ -244,6 +244,42 @@ class ArisCliTest(unittest.TestCase):
         self.assertEqual(rollback.returncode, 0, msg=rollback.stderr)
         self.assertEqual(self._git(["rev-parse", "HEAD"]), self.initial_commit)
 
+    def test_framework_version_is_read_only_when_history_directory_is_missing(self):
+        workspace = self.tmp / "readonly-workspace"
+        workspace.mkdir()
+        env = os.environ.copy()
+        env["ARIS_WORKSPACE"] = str(workspace)
+
+        result = subprocess.run(
+            [str(ARIS_CLI), "framework", "--version", "--aris-repo", str(self.framework), "--quiet"],
+            cwd=str(self.tmp),
+            capture_output=True,
+            text=True,
+            env=env,
+        )
+
+        self.assertEqual(result.returncode, 0, msg=result.stderr)
+        self.assertIn("framework:", result.stdout)
+        self.assertFalse((workspace / ".aris" / "framework-history").exists())
+
+    def test_framework_state_defaults_to_home_aris_without_workspace_env(self):
+        home = self.tmp / "home"
+        home.mkdir()
+        env = os.environ.copy()
+        env.pop("ARIS_WORKSPACE", None)
+        env["HOME"] = str(home)
+
+        result = subprocess.run(
+            [str(ARIS_CLI), "framework", "check-update", "--no-fetch", "--aris-repo", str(self.framework), "--quiet"],
+            cwd=str(self.tmp),
+            capture_output=True,
+            text=True,
+            env=env,
+        )
+
+        self.assertEqual(result.returncode, 0, msg=result.stderr)
+        self.assertTrue((home / ".aris" / "framework-update-status.json").exists())
+
     def test_framework_check_update_notify_reminds_at_most_once_per_day(self):
         project = self.tmp / "project"
         project.mkdir()
