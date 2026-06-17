@@ -2,7 +2,7 @@
 
 ## Default (NEVER changes without explicit user request)
 
-All review calls use **Codex MCP** (`mcp__codex__codex`) with `reasoning_effort: xhigh`.
+All review calls use **GPT-5.4** through the configured independent review transport, with `reasoning_effort: xhigh` when the transport supports it.
 
 This is the default for ALL skills. No parameter, no config, no effort level changes this.
 
@@ -16,7 +16,7 @@ When the user explicitly passes `— reviewer: oracle-pro`, route the review thr
 Parse $ARGUMENTS for `— reviewer:` directive.
 
 If not specified OR `— reviewer: codex`:
-    → Use mcp__codex__codex with reasoning_effort: xhigh
+    → Use the default independent Codex reviewer with model gpt-5.4 and reasoning_effort: xhigh
     → This is the DEFAULT. No change from current behavior.
 
 If `— reviewer: oracle-pro`:

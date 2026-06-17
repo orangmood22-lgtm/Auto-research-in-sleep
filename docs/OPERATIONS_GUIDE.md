@@ -265,13 +265,16 @@ Agent 遇到权限/网络/资源阻塞时：
 
 #### 模型分层
 
-| 角色 | 形态 | 原因 |
-|------|------|------|
-| Leader | Codex 主会话 | 决策质量优先，读/判/派 |
-| Coder | 本地派生 agent / `$coder` | 代码实现与测试 |
-| Deployer | 本地派生 agent / `$deployer` | 部署、运行、监控、收集结果 |
-| Writer | 本地派生 agent / `$writer` | 论文、文档、rebuttal |
-| Reviewer | 本地独立 reviewer agent | 原始文件审查，不自审 |
+| 角色 | 形态 | 默认模型 | 原因 |
+|------|------|----------|------|
+| Leader | Codex 主会话 | `gpt-5.5` | 决策质量优先，读/判/派 |
+| Planner | 本地派生 agent / planning skill | `gpt-5.4` | 计划草案、依赖拆解 |
+| Coder | 本地派生 agent / `$coder` | `gpt-5.4-mini` | 代码实现与测试 |
+| Deployer | 本地派生 agent / `$deployer` | `gpt-5.4-mini` | 部署、运行、监控、收集结果 |
+| Writer | 本地派生 agent / `$writer` | `gpt-5.4` | 论文、文档、rebuttal |
+| Reviewer | 本地独立 reviewer agent | `gpt-5.4` | 原始文件审查，不自审 |
+
+这些是默认 Runtime Binding，不改变 Role Contract。需要更高质量或更低成本时，可以按部署策略覆盖模型，但不能改变 Leader / Planner / Coder / Deployer / Writer / Reviewer 的职责边界。
 - 输出审查报告（pass/fail + 具体问题）
 
 #### 文件协作
@@ -619,13 +622,16 @@ cc-switch provider switch 2 --app codex     # 只改 Codex
 
 三边架构使用不同模型，平衡成本与质量：
 
-| 角色 | 主力 | 说明 |
-|------|------|------|
+| 角色 | 默认模型 | 说明 |
+|------|----------|------|
 | Leader | GPT-5.5 / Codex profile | 决策质量优先 |
-| Executor Agent | GPT-5.5 / Codex profile | 实现、部署、论文撰写 |
-| Reviewer | GPT-5.5 / independent Codex profile | 本地独立审查，不依赖 MCP |
+| Planner | GPT-5.4 / Codex profile | 自动计划草案、任务拆解 |
+| Coder | GPT-5.4-mini / Codex profile | 代码实现、测试、修 bug |
+| Deployer | GPT-5.4-mini / Codex profile | 部署、运行、监控、收集结果 |
+| Writer | GPT-5.4 / Codex profile | 论文、文档、rebuttal |
+| Reviewer | GPT-5.4 / independent Codex profile | 本地独立审查，不依赖 MCP |
 
-三边角色通过本地 Codex profile 区分职责；Claude Code provider 只影响兼容模式。
+三边角色通过本地 Codex profile 和项目文件区分职责；Claude Code provider 只影响兼容模式。
 
 #### 预配 Provider（cc-switch）
 

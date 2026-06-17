@@ -6,6 +6,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- Documented the default user-side runtime binding: Leader uses `gpt-5.5`; Planner, Reviewer, and Writer use `gpt-5.4`; Coder and Deployer use `gpt-5.4-mini`. Added role contract references so model/provider overrides do not change role responsibilities.
+
 ---
 
 ## [v0.3.3] - 2026-06-16

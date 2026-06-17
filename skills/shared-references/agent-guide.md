@@ -44,6 +44,8 @@
 
 ### 5. 角色边界
 
+详见 `role-contracts.md`（同目录）。
+
 - **Leader** 只读/判/派。不写代码、不跑命令、不画图
 - **Executor** → 三种专用角色：Coder / Deployer / Writer
 - **Reviewer** 只看原始文件，不看 Executor 转述
@@ -60,11 +62,16 @@ Leader 派发任务时使用专用角色：
 
 ### 7. 模型分层
 
-| 角色 | 模型 | Agent 参数 |
-|------|------|-----------|
-| Leader | Opus | 用户当前模型 |
-| Coder / Deployer / Writer | Sonnet | `model: "sonnet"` |
-| Reviewer | GPT-5.5 | `mcp__codex__codex` |
+默认模型只描述 Runtime Binding，不改变角色职责。
+
+| 角色 | 默认模型 | Agent 参数 |
+|------|----------|-----------|
+| Leader | `gpt-5.5` | 用户当前 Codex 主会话 |
+| Planner | `gpt-5.4` | `model: "gpt-5.4"` |
+| Coder | `gpt-5.4-mini` | `model: "gpt-5.4-mini"` |
+| Deployer | `gpt-5.4-mini` | `model: "gpt-5.4-mini"` |
+| Writer | `gpt-5.4` | `model: "gpt-5.4"` |
+| Reviewer | `gpt-5.4` | 独立 reviewer agent / review transport |
 
 ---
 

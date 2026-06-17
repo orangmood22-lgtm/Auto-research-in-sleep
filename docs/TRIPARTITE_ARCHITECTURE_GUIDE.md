@@ -38,6 +38,19 @@
 
 Reviewer 的独立性来自独立 agent 上下文和原始文件审查。当前默认不依赖 Codex MCP；MCP reviewer bridge 只是高级扩展。
 
+项目内完整职责矩阵见 `.agents/skills/shared-references/role-contracts.md`。模型/provider 覆盖不能改变职责边界。
+
+默认 Runtime Binding 只描述推荐模型，不改变职责边界：
+
+| 角色 | 默认模型 |
+|------|----------|
+| Leader | `gpt-5.5` |
+| Planner | `gpt-5.4` |
+| Coder | `gpt-5.4-mini` |
+| Deployer | `gpt-5.4-mini` |
+| Writer | `gpt-5.4` |
+| Reviewer | `gpt-5.4` |
+
 ---
 
 ## 二、准备工作
