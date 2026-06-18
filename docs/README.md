@@ -9,7 +9,7 @@
 | [FRAMEWORK_STRUCTURE.md](FRAMEWORK_STRUCTURE.md) | 理解 framework / project / dev 边界 |
 | [OPERATIONS_GUIDE.md](OPERATIONS_GUIDE.md) | 日常操作、API 配置、workflow 使用 |
 | [TRIPARTITE_ARCHITECTURE_GUIDE.md](TRIPARTITE_ARCHITECTURE_GUIDE.md) | Leader / Executor / Reviewer 三边协作 |
-| [FEISHU_INTEGRATION.md](FEISHU_INTEGRATION.md) | 飞书通知、长连接收消息、受控 Codex runner 接入 |
+| [FEISHU_INTEGRATION.md](FEISHU_INTEGRATION.md) | 飞书/Lark 远控：默认 `lark-channel-bridge`，旧版 ARIS runner fallback |
 
 ## 项目文件和恢复
 
@@ -17,6 +17,7 @@
 |------|------|
 | [PROJECT_FILES_GUIDE.md](PROJECT_FILES_GUIDE.md) | 项目文件布局 |
 | [PROJECT_FILES_GUIDE_CN.md](PROJECT_FILES_GUIDE_CN.md) | 项目文件布局中文版 |
+| [EXPERIMENT_TRANSPARENCY_LEDGER.md](EXPERIMENT_TRANSPARENCY_LEDGER.md) | 实验透明度 ledger 契约：数据、split、metric、run、artifact、claim、checkpoint 追踪 |
 | [SESSION_RECOVERY_GUIDE.md](SESSION_RECOVERY_GUIDE.md) | 会话恢复协议 |
 | [SESSION_RECOVERY_GUIDE_CN.md](SESSION_RECOVERY_GUIDE_CN.md) | 会话恢复协议中文版 |
 | [WATCHDOG_GUIDE.md](WATCHDOG_GUIDE.md) | watchdog 使用 |

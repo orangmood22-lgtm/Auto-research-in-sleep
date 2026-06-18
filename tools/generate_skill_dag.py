@@ -13,7 +13,7 @@ Only frontmatter `invokes` creates formal graph edges. Body mentions such as
 Outputs docs/SKILL_DAG.yaml and validates the formal graph is acyclic.
 
 Usage:
-    python3 tools/generate_skill_dag.py [--check-only] [--mermaid] [--html]
+    python3 tools/generate_skill_dag.py [--check-only] [--fail-on-inferred] [--mermaid] [--html]
 """
 
 import argparse
@@ -244,6 +244,28 @@ def compute_impact(nodes: dict, skill_name: str) -> dict:
         "transitive_upstream_count": len(visited_up),
         "transitive_downstream_count": len(visited_down),
     }
+
+
+def collect_inferred_mentions(nodes: dict):
+    """Return skills that contain inferred mentions, sorted by skill name."""
+    offenders = []
+    for name, node in sorted(nodes.items()):
+        inferred = sorted(set(node.get("inferred_mentions", [])))
+        if inferred:
+            offenders.append((name, inferred))
+    return offenders
+
+
+def assert_no_inferred_mentions(nodes: dict) -> None:
+    """Raise ValueError if any skill contains inferred mentions."""
+    offenders = collect_inferred_mentions(nodes)
+    if not offenders:
+        return
+
+    lines = ["Inferred mentions detected:"]
+    for name, inferred in offenders:
+        lines.append(f"  {name}: {', '.join(inferred)}")
+    raise ValueError("\n".join(lines))
 
 
 def generate_html(nodes: dict, dag_data: dict) -> str:
@@ -687,6 +709,11 @@ simulation.on('end', () => {{
 def main():
     parser = argparse.ArgumentParser(description="Generate SKILL_DAG.yaml")
     parser.add_argument("--check-only", action="store_true", help="Only validate, don't write")
+    parser.add_argument(
+        "--fail-on-inferred",
+        action="store_true",
+        help="Exit nonzero if any skill has inferred mentions",
+    )
     parser.add_argument("--mermaid", action="store_true", help="Also generate Mermaid diagram")
     parser.add_argument("--html", action="store_true", help="Also generate HTML visualization")
     args = parser.parse_args()
@@ -713,6 +740,13 @@ def main():
     inferred_mentions = sum(len(n.get("inferred_mentions", [])) for n in nodes.values())
     print(f"Total invocation edges: {edges}")
     print(f"Total inferred mentions: {inferred_mentions}")
+
+    if args.fail_on_inferred:
+        try:
+            assert_no_inferred_mentions(nodes)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            sys.exit(1)
 
     if args.check_only:
         sys.exit(1 if cycles else 0)
