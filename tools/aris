@@ -6,16 +6,31 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+LARK_CHANNEL_BRIDGE_BIN = "lark-channel-bridge"
+DEFAULT_FEISHU_PROFILE = "aris-codex"
+DEFAULT_FEISHU_AGENT = "codex"
+DEFAULT_FEISHU_NODE_PREFIX_REL = "node"
 
 
 def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=str(cwd) if cwd else None, check=check, capture_output=True, text=True)
+
+
+def run_relay(cmd: list[str], cwd: Path | None = None, env: dict[str, str] | None = None) -> int:
+    result = subprocess.run(cmd, cwd=str(cwd) if cwd else None, env=env, capture_output=True, text=True)
+    if result.stdout:
+        print(result.stdout, end="")
+    if result.stderr:
+        print(result.stderr, end="", file=sys.stderr)
+    return result.returncode
 
 
 def copy_text(src: Path, dst: Path, replacements: dict[str, str]) -> None:
@@ -538,6 +553,231 @@ def cmd_framework_rollback(args: argparse.Namespace) -> int:
     return 0
 
 
+def shlex_quote(value: str) -> str:
+    if not value:
+        return "''"
+    safe = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@%+=:,./-"
+    if all(ch in safe for ch in value):
+        return value
+    return "'" + value.replace("'", "'\"'\"'") + "'"
+
+
+def print_shell_command(cmd: list[str]) -> None:
+    print("command: " + " ".join(shlex_quote(part) for part in cmd))
+
+
+def feishu_home(args: argparse.Namespace) -> Path:
+    home = getattr(args, "home", None)
+    if home:
+        return Path(home).expanduser().resolve()
+    env_home = os.environ.get("LARK_CHANNEL_HOME")
+    if env_home:
+        return Path(env_home).expanduser().resolve()
+    return Path.home() / ".lark-channel"
+
+
+def feishu_node_prefix(args: argparse.Namespace) -> Path:
+    prefix = getattr(args, "prefix", None)
+    if prefix:
+        return Path(prefix).expanduser().resolve()
+    return state_root() / DEFAULT_FEISHU_NODE_PREFIX_REL
+
+
+def feishu_env(args: argparse.Namespace) -> dict[str, str]:
+    env = os.environ.copy()
+    if getattr(args, "no_proxy", False):
+        for key in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "all_proxy", "ALL_PROXY"]:
+            env.pop(key, None)
+    home = getattr(args, "home", None)
+    if home:
+        env["LARK_CHANNEL_HOME"] = str(Path(home).expanduser().resolve())
+    prefix = feishu_node_prefix(args)
+    prefix_bin = prefix / "bin"
+    env["PATH"] = str(prefix_bin) + os.pathsep + env.get("PATH", "")
+    # lark-channel-bridge may auto-install @larksuite/cli during first-run setup.
+    # Keep that child npm install user-local on shared servers.
+    env.setdefault("NPM_CONFIG_PREFIX", str(prefix))
+    env.setdefault("npm_config_prefix", str(prefix))
+    return env
+
+
+def feishu_bridge_bin(args: argparse.Namespace) -> str:
+    override = os.environ.get("ARIS_LARK_CHANNEL_BRIDGE_BIN")
+    if override:
+        return override
+    prefix_bin = feishu_node_prefix(args) / "bin" / LARK_CHANNEL_BRIDGE_BIN
+    if prefix_bin.exists():
+        return str(prefix_bin)
+    found = shutil.which(LARK_CHANNEL_BRIDGE_BIN, path=feishu_env(args).get("PATH"))
+    return found or LARK_CHANNEL_BRIDGE_BIN
+
+
+def feishu_command(args: argparse.Namespace, action: str) -> list[str]:
+    cmd = [feishu_bridge_bin(args), action]
+    profile = getattr(args, "profile", None)
+    if profile:
+        cmd.extend(["--profile", profile])
+    agent = getattr(args, "agent", None)
+    if agent:
+        cmd.extend(["--agent", agent])
+    workspace = getattr(args, "workspace", None)
+    if not getattr(args, "no_workspace", False):
+        workspace_path = Path(workspace).expanduser().resolve() if workspace else Path.cwd().resolve()
+        cmd.extend(["--workspace", str(workspace_path)])
+    app_id = getattr(args, "app_id", None)
+    if app_id:
+        cmd.extend(["--app-id", app_id])
+    tenant = getattr(args, "tenant", None)
+    if tenant:
+        cmd.extend(["--tenant", tenant])
+    config = getattr(args, "config", None)
+    if config:
+        cmd.extend(["-c", config])
+    extra_args = getattr(args, "extra_args", None) or []
+    if extra_args and extra_args[0] == "--":
+        extra_args = extra_args[1:]
+    cmd.extend(extra_args)
+    return cmd
+
+
+def cmd_feishu_install(args: argparse.Namespace) -> int:
+    prefix = feishu_node_prefix(args)
+    if args.scope == "system":
+        cmd = ["pnpm", "add", "-g", "lark-channel-bridge"] if args.manager == "pnpm" else ["npm", "i", "-g", "lark-channel-bridge"]
+    elif args.manager == "pnpm":
+        cmd = ["pnpm", "add", "-g", "--global-bin-dir", str(prefix / "bin"), "lark-channel-bridge"]
+    else:
+        cmd = ["npm", "i", "-g", "--prefix", str(prefix), "lark-channel-bridge"]
+    if args.dry_run:
+        print_shell_command(cmd)
+        if args.scope == "user":
+            print(f"bin_dir: {prefix / 'bin'}")
+        return 0
+    rc = run_relay(cmd)
+    if rc == 0 and args.scope == "user":
+        print(f"installed_bin_dir: {prefix / 'bin'}")
+        print("ARIS will add this directory to PATH when running `aris feishu ...`.")
+    return rc
+
+
+def parse_node_version(raw: str) -> tuple[int, int, int] | None:
+    text = raw.strip().lstrip("v")
+    parts = text.split(".")
+    if len(parts) < 2:
+        return None
+    try:
+        major = int(parts[0])
+        minor = int(parts[1])
+        patch = int(parts[2]) if len(parts) > 2 else 0
+    except ValueError:
+        return None
+    return major, minor, patch
+
+
+def version_at_least(value: tuple[int, int, int] | None, minimum: tuple[int, int, int]) -> bool:
+    return value is not None and value >= minimum
+
+
+def command_version(cmd: list[str]) -> tuple[int, str]:
+    try:
+        result = run(cmd, check=False)
+    except FileNotFoundError:
+        return 127, ""
+    output = (result.stdout or result.stderr).strip()
+    return result.returncode, output
+
+
+def redact_proxy_url(value: str) -> str:
+    if "@" not in value or "://" not in value:
+        return value
+    scheme, rest = value.split("://", 1)
+    if "@" not in rest:
+        return value
+    return f"{scheme}://<redacted>@{rest.split('@', 1)[1]}"
+
+
+def proxy_diagnostics() -> list[str]:
+    lines = []
+    for key in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"]:
+        value = os.environ.get(key, "")
+        if value:
+            lines.append(f"proxy.{key}: {redact_proxy_url(value)}")
+    lower_http = os.environ.get("http_proxy", "")
+    upper_http = os.environ.get("HTTP_PROXY", "")
+    lower_https = os.environ.get("https_proxy", "")
+    upper_https = os.environ.get("HTTPS_PROXY", "")
+    if lower_http and upper_http and lower_http != upper_http:
+        lines.append("proxy.warning: http_proxy and HTTP_PROXY differ; curl/npm child installers may prefer lowercase")
+    if lower_https and upper_https and lower_https != upper_https:
+        lines.append("proxy.warning: https_proxy and HTTPS_PROXY differ; curl/npm child installers may prefer lowercase")
+    return lines
+
+
+def cmd_feishu_doctor(args: argparse.Namespace) -> int:
+    node_path = shutil.which("node")
+    bridge_path = feishu_bridge_bin(args)
+    bridge_exists = Path(bridge_path).exists() if "/" in bridge_path else shutil.which(bridge_path, path=feishu_env(args).get("PATH")) is not None
+    agent_path = shutil.which(args.agent)
+    node_status = "missing"
+    if node_path:
+        _, node_raw = command_version(["node", "--version"])
+        node_version = parse_node_version(node_raw)
+        node_status = "ok" if version_at_least(node_version, (20, 12, 0)) else f"too_old ({node_raw or 'unknown'})"
+    bridge_status = "missing"
+    if bridge_exists:
+        code, version = command_version([bridge_path, "--version"])
+        bridge_status = f"ok ({version})" if code == 0 and version else "ok"
+    agent_status = "ok" if agent_path else "missing"
+
+    home = feishu_home(args)
+    print(f"node: {node_status}")
+    print(f"lark-channel-bridge: {bridge_status}")
+    print(f"lark-channel-bridge_bin: {bridge_path}")
+    print(f"agent.{args.agent}: {agent_status}")
+    print(f"profile: {args.profile}")
+    print(f"home: {home}")
+    print(f"config: {home / 'config.json'}")
+    print(f"logs: {home / 'profiles' / args.profile / 'logs'}")
+    for line in proxy_diagnostics():
+        print(line)
+    return 0 if node_status == "ok" and bridge_exists and agent_path else 1
+
+
+def cmd_feishu_bridge(args: argparse.Namespace) -> int:
+    cmd = feishu_command(args, args.feishu_bridge_command)
+    if args.dry_run:
+        print_shell_command(cmd)
+        if getattr(args, "no_proxy", False):
+            print("proxy: disabled")
+        return 0
+    result = subprocess.run(cmd, env=feishu_env(args))
+    return result.returncode
+
+
+def cmd_feishu_logs(args: argparse.Namespace) -> int:
+    logs = feishu_home(args) / "profiles" / args.profile / "logs"
+    print(f"logs: {logs}")
+    if not args.tail:
+        return 0 if logs.exists() else 1
+    if not logs.exists():
+        print("log status: missing")
+        return 1
+    candidates = sorted(
+        [p for p in logs.rglob("*") if p.is_file() and p.suffix in {".log", ".jsonl", ".txt"}],
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    if not candidates:
+        print("log status: empty")
+        return 1
+    latest = candidates[0]
+    print(f"tailing: {latest}")
+    lines = latest.read_text(encoding="utf-8", errors="replace").splitlines()
+    for line in lines[-args.tail :]:
+        print(line)
+    return 0
+
+
 def add_common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--aris-repo", type=Path)
     p.add_argument("--quiet", action="store_true")
@@ -581,6 +821,59 @@ def build_parser() -> argparse.ArgumentParser:
     add_common(framework)
     framework.add_argument("--version", action="store_true")
     framework_sub = framework.add_subparsers(dest="framework_command")
+
+    feishu = sub.add_parser("feishu")
+    add_common(feishu)
+    feishu_sub = feishu.add_subparsers(dest="feishu_command", required=True)
+
+    feishu_install = feishu_sub.add_parser("install")
+    add_common(feishu_install)
+    feishu_install.add_argument("--manager", choices=["npm", "pnpm"], default="npm")
+    feishu_install.add_argument("--scope", choices=["user", "system"], default="user")
+    feishu_install.add_argument("--prefix", type=Path)
+    feishu_install.add_argument("--dry-run", action="store_true")
+    feishu_install.set_defaults(func=cmd_feishu_install)
+
+    feishu_doctor = feishu_sub.add_parser("doctor")
+    add_common(feishu_doctor)
+    feishu_doctor.add_argument("--profile", default=DEFAULT_FEISHU_PROFILE)
+    feishu_doctor.add_argument("--agent", choices=["codex", "claude"], default=DEFAULT_FEISHU_AGENT)
+    feishu_doctor.add_argument("--home", type=Path)
+    feishu_doctor.add_argument("--prefix", type=Path)
+    feishu_doctor.set_defaults(func=cmd_feishu_doctor)
+
+    def add_feishu_bridge_common(parser: argparse.ArgumentParser, include_runtime: bool) -> None:
+        add_common(parser)
+        parser.add_argument("--profile", default=DEFAULT_FEISHU_PROFILE)
+        parser.add_argument("--home", type=Path)
+        parser.add_argument("--prefix", type=Path)
+        parser.add_argument("--no-proxy", action="store_true")
+        parser.add_argument("--dry-run", action="store_true")
+        if include_runtime:
+            parser.add_argument("--agent", choices=["codex", "claude"], default=DEFAULT_FEISHU_AGENT)
+            parser.add_argument("--workspace", type=Path)
+            parser.add_argument("--no-workspace", action="store_true")
+            parser.add_argument("--app-id")
+            parser.add_argument("--tenant", choices=["feishu", "lark"])
+            parser.add_argument("-c", "--config")
+        parser.add_argument("extra_args", nargs=argparse.REMAINDER)
+
+    for action in ["run", "start"]:
+        bridge = feishu_sub.add_parser(action)
+        add_feishu_bridge_common(bridge, include_runtime=True)
+        bridge.set_defaults(func=cmd_feishu_bridge, feishu_bridge_command=action)
+
+    for action in ["status", "stop", "restart"]:
+        bridge = feishu_sub.add_parser(action)
+        add_feishu_bridge_common(bridge, include_runtime=False)
+        bridge.set_defaults(func=cmd_feishu_bridge, feishu_bridge_command=action)
+
+    feishu_logs = feishu_sub.add_parser("logs")
+    add_common(feishu_logs)
+    feishu_logs.add_argument("--profile", default=DEFAULT_FEISHU_PROFILE)
+    feishu_logs.add_argument("--home", type=Path)
+    feishu_logs.add_argument("--tail", type=int, default=0)
+    feishu_logs.set_defaults(func=cmd_feishu_logs)
 
     fw_update = framework_sub.add_parser("update")
     add_common(fw_update)

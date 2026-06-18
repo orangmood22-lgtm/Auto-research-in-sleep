@@ -28,38 +28,46 @@ Do not claim hidden model context moved between sessions. Phone control is a for
 
 ## Default transport: lark-channel-bridge
 
-Install the external bridge:
+Use the ARIS wrapper for the external bridge:
 
 ```bash
-npm i -g lark-channel-bridge
+aris feishu install
+aris feishu doctor
 ```
+
+Default install is user-local under `~/.aris/node`, so shared servers do not need sudo. Use `aris feishu install --scope system` only for an intentional admin-managed system install.
 
 Start a Codex profile in the target workspace:
 
 ```bash
-lark-channel-bridge run \
-  --profile codex \
-  --agent codex \
-  --workspace "[你的project位置]"
+cd "[你的project位置]"
+aris feishu run
 ```
 
 Or run it as a background service:
 
 ```bash
-lark-channel-bridge start \
-  --profile codex \
-  --agent codex \
-  --workspace "[你的project位置]"
+cd "[你的project位置]"
+aris feishu start
+aris feishu status
 ```
 
 For Claude Code, use a separate profile:
 
 ```bash
-lark-channel-bridge run \
-  --profile claude \
-  --agent claude \
-  --workspace "[你的project位置]"
+cd "[你的project位置]"
+aris feishu run --profile aris-claude --agent claude
 ```
+
+Local management:
+
+```bash
+aris feishu restart
+aris feishu stop
+aris feishu logs --tail 50
+```
+
+If startup fails with `could not resolve bot identity` and a 502 from Feishu OpenAPI, retry with `aris feishu run --no-proxy`.
 
 Common Feishu/Lark-side controls:
 

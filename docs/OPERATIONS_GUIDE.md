@@ -717,6 +717,63 @@ git config --global https.proxy "$HTTPS_PROXY"
 
 ---
 
+### 飞书 / Lark 远程入口
+
+ARIS 默认通过外部 `lark-channel-bridge` 连接飞书/Lark 和本地 Codex/Claude Code。ARIS 的稳定入口是短命令 `aris feishu ...`。
+
+首次安装和检查：
+
+```bash
+aris feishu install
+aris feishu doctor
+```
+
+默认安装到当前用户的 `~/.aris/node`，普通用户不需要 sudo。管理员确实要装到系统 npm 目录时再用：
+
+```bash
+aris feishu install --scope system
+```
+
+在项目目录前台启动 Codex 远程会话：
+
+```bash
+cd [你的project位置]
+aris feishu run
+```
+
+确认扫码和收发消息正常后，改为后台服务：
+
+```bash
+cd [你的project位置]
+aris feishu start
+aris feishu status
+aris feishu logs --tail 50
+```
+
+如果启动时报 `could not resolve bot identity` 或飞书开放平台 502，先试直连禁用代理：
+
+```bash
+aris feishu run --no-proxy
+```
+
+Claude Code 用独立 profile：
+
+```bash
+cd [你的project位置]
+aris feishu run --profile aris-claude --agent claude
+```
+
+飞书入口只是 transport adapter，不是远程 shell，也不替代 Leader。实际代码修改、工具执行和权限判断仍发生在本地 Codex/Claude Code session 中。详细配置见 `docs/FEISHU_INTEGRATION.md`。
+
+多人共用同一台服务器、同一 Linux 账户时，至少用不同 `--home`、`--profile` 和 `--workspace` 隔离：
+
+```bash
+aris feishu start --home /root/.lark-channel-user-a --profile user-a-codex --workspace /aris/projects/user-a-project
+aris feishu start --home /root/.lark-channel-user-b --profile user-b-codex --workspace /aris/projects/user-b-project
+```
+
+---
+
 ### 框架管理
 
 #### 更新框架

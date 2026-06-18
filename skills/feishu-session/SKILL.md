@@ -1,6 +1,6 @@
 ---
 name: feishu-session
-description: Manage Feishu-controlled Codex sessions, phone runners, and auditable phone-session merge reports. Use when user mentions Feishu control, phone control, mobile takeover, session merge, or wants to start/stop/report a Feishu Codex runner.
+description: Manage Feishu/Lark remote Codex or Claude Code access, with lark-channel-bridge as the default transport and ARIS phone-session reports as legacy/fallback audit support. Use when user mentions Feishu/Lark control, phone control, mobile takeover, session merge, or wants to start/stop/report a Feishu-controlled coding session.
 argument-hint: "[start|mark-seen|report|merge]"
 allowed-tools: Bash(*), Read
 caller: any
@@ -18,13 +18,62 @@ examples:
 
 # Feishu Session
 
-Use this skill to operate the Feishu bridge and the opt-in Codex runner. The bridge records messages; the runner either injects into a live tmux Codex TUI or runs Codex in a separate exec session.
+Use this skill to control an auditable Feishu/Lark-facing Codex or Claude Code session. Prefer `lark-channel-bridge` as the transport adapter for normal Feishu/Lark remote control. Use the in-repo ARIS Feishu runner only as a legacy/fallback path when you need ARIS-managed inbox/outbox files, phone-session merge reports, or tmux live-TUI injection.
+
+The bridge is transport, not workflow runtime: it forwards messages/status between Feishu/Lark and a local agent process. It does not become the ARIS Leader, own workflow decisions, or execute research work outside the active Codex/Claude Code session's normal permissions.
 
 ## Core rule
 
 Do not claim hidden model context moved between sessions. Phone control is a fork. Merge only auditable state: user messages, Codex replies, files, commands, decisions, and open questions.
 
-## Health check
+## Default transport: lark-channel-bridge
+
+Use the ARIS wrapper for the external bridge:
+
+```bash
+aris feishu install
+aris feishu doctor
+```
+
+Default install is user-local under `~/.aris/node`, so shared servers do not need sudo. Use `aris feishu install --scope system` only for an intentional admin-managed system install.
+
+Start a Codex profile in the target workspace:
+
+```bash
+cd "[你的project位置]"
+aris feishu run
+```
+
+Or run it as a background service:
+
+```bash
+cd "[你的project位置]"
+aris feishu start
+aris feishu status
+```
+
+For Claude Code, use a separate profile:
+
+```bash
+cd "[你的project位置]"
+aris feishu run --profile aris-claude --agent claude
+```
+
+If startup fails with `could not resolve bot identity` and a 502 from Feishu OpenAPI, retry with `aris feishu run --no-proxy`.
+
+Common Feishu/Lark-side controls:
+
+- `/cd <path>`: switch the current workspace.
+- `/ws`: manage saved workspaces.
+- `/status`: inspect profile, agent, workspace, session, identity, and run state.
+
+Keep merge discipline even with the default bridge: before resuming locally from a phone-controlled thread, inspect the visible transcript, `git status --short`, and `git diff`; summarize files changed, commands run, decisions made, and open questions.
+
+## Legacy/fallback ARIS runner
+
+Use this path only when the default transport cannot provide the audit surface you need, especially `.aris/feishu-control/` reports or tmux live-TUI injection.
+
+### Health check
 
 ```bash
 curl -sS http://127.0.0.1:5000/health

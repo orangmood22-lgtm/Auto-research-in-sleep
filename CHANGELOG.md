@@ -6,7 +6,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-- Pending.
+### Added
+- Added `aris feishu ...` as the stable wrapper for `lark-channel-bridge`, including user-local install, doctor, run/start/status/stop/restart, log tailing, profile/home selection, and `--no-proxy` startup for proxy-incompatible Feishu OpenAPI requests.
+
+### Changed
+- Updated Feishu/Lark docs and `feishu-session` skills to use the ARIS wrapper by default while keeping the legacy ARIS-managed runner documented as a fallback.
 
 ---
 

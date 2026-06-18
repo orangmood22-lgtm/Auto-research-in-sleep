@@ -1,6 +1,93 @@
-# Feishu Integration
+# Feishu / Lark Integration
 
-ARIS Feishu integration lets you receive notifications, send messages from Feishu into an opt-in Codex Session, and receive Codex responses back in Feishu.
+For Codex + Claude Code remote control from Feishu/Lark, ARIS recommends
+[`lark-channel-bridge`](https://github.com/zarazhangrui/lark-coding-agent-bridge) as the default bridge. It is an external transport adapter for local Codex CLI or Claude Code sessions, with streaming cards, per-chat sessions, workspace switching, and first-run QR setup.
+
+The older in-repo path, `mcp-servers/feishu-bridge` plus `tools/aris_feishu_session.py`, remains documented below as a legacy/fallback ARIS-managed runner. Use it when you specifically need ARIS inbox/outbox files, report generation, or tmux injection behavior.
+
+## Recommended Path: `lark-channel-bridge`
+
+`lark-channel-bridge` forwards Feishu/Lark messages to a local `codex` or `claude` process. It does not make Feishu a remote shell, does not become the ARIS Leader, and does not own workflow decisions. Execution still happens in the local Codex/Claude Code session, under that agent's normal permissions and the selected workspace.
+
+ARIS wraps the external bridge with `aris feishu ...` so users do not need to remember the long bridge command. The wrapper does not vendor or reimplement `lark-channel-bridge`; it installs, launches, checks, and locates logs for the external CLI.
+
+Prerequisites:
+
+- Node.js >= 20.12
+- Codex CLI or Claude Code installed and logged in locally
+- A Feishu/Lark PersonalAgent app; the first-run QR wizard can create and bind one
+
+Install:
+
+```bash
+aris feishu install
+aris feishu doctor
+```
+
+`aris feishu install` defaults to a user-local npm prefix under `~/.aris/node`, so it works for non-root users on shared servers. ARIS automatically adds that prefix's `bin` directory when running `aris feishu ...`. Administrators who intentionally want a system-wide install can use `aris feishu install --scope system`.
+
+First-run foreground setup for the current project directory:
+
+```bash
+cd [你的project位置]
+aris feishu run
+```
+
+This starts `lark-channel-bridge run --profile aris-codex --agent codex --workspace [当前目录]`. The first run opens the bridge QR wizard if the PersonalAgent app is not configured yet.
+
+After the QR setup works, run the Codex profile as a background service:
+
+```bash
+cd [你的project位置]
+aris feishu start
+aris feishu status
+```
+
+For Claude Code, use a separate profile:
+
+```bash
+cd [你的project位置]
+aris feishu run --profile aris-claude --agent claude
+```
+
+Useful local commands:
+
+```bash
+aris feishu stop
+aris feishu restart
+aris feishu logs --tail 50
+```
+
+If startup fails with `could not resolve bot identity` and the log shows `Request failed with status code 502`, retry without proxy. Some local HTTP proxies do not handle the Node SDK's Feishu API requests correctly, while direct access still works:
+
+```bash
+aris feishu run --no-proxy
+aris feishu start --no-proxy
+```
+
+Common Feishu/Lark commands:
+
+| Command | Effect |
+|---------|--------|
+| `/cd <path>` | Switch the current project/workspace directory |
+| `/ws` | Manage saved workspaces, such as list/save/use |
+| `/status` | Show profile, agent, working directory, session, identity, and run state |
+
+Use `/cd [你的project位置]` after startup if you did not pass `--workspace`, or when moving a chat thread to another ARIS project.
+
+## ARIS Boundary
+
+Feishu/Lark integration is a Transport Adapter Skill boundary in ARIS terms. The bridge transports messages, status, approvals, files, or reports between chat and a local agent process. It is not a Leader, not a workflow runtime, and not a remote shell. Research orchestration remains in the active Codex/Claude Code session and the ARIS skills it invokes.
+
+## Legacy / Fallback: ARIS-Managed Runner
+
+The sections below describe the older ARIS-managed path:
+
+```text
+mcp-servers/feishu-bridge/server.py + tools/aris_feishu_session.py
+```
+
+Keep using this path only when you need ARIS-managed runtime files, explicit inbox/outbox inspection, phone-session merge reports, or the tmux live-TUI injection flow.
 
 ## What Works
 
@@ -8,22 +95,23 @@ ARIS Feishu integration lets you receive notifications, send messages from Feish
 |-----------|--------|------|
 | Local to Feishu | Supported | `POST /send`, `POST /update` for card updates |
 | Feishu to local | Supported | Feishu long connection -> `/control/message` |
-| Feishu message to Codex | Supported | `tools/aris_feishu_session.py` consumes inbox and runs `codex exec` |
-| Codex response to Feishu | Supported | runner writes outbox and calls `/send` |
-| Already-open Codex TUI takeover | Supported when TUI is in tmux | `--tmux-pane <target>` injects Feishu text into the live pane |
+| Feishu message to Codex | Legacy/fallback | `tools/aris_feishu_session.py` consumes inbox and runs `codex exec` |
+| Codex response to Feishu | Legacy/fallback | runner writes outbox and calls `/send` |
+| Already-open Codex TUI takeover | Legacy/fallback | `--tmux-pane <target>` injects Feishu text into the live pane |
 
 The bridge does not execute shell commands, tools, or skills itself. It only records messages and approvals. Codex execution happens inside the opt-in session runner.
 
 ## Terms
 
-- **Feishu Bridge**: `mcp-servers/feishu-bridge/server.py`, local HTTP + Feishu long-connection process.
+- **Recommended Bridge**: `lark-channel-bridge`, external Feishu/Lark transport adapter for local Codex CLI or Claude Code.
+- **Legacy Feishu Bridge**: `mcp-servers/feishu-bridge/server.py`, local HTTP + Feishu long-connection process.
 - **Remote Session Inbox**: `.aris/feishu-control/inbox/<session_id>.jsonl`.
-- **Feishu-Controlled Session**: a registered session consumed by `tools/aris_feishu_session.py`.
+- **Feishu-Controlled Session**: a legacy registered session consumed by `tools/aris_feishu_session.py`.
 - **Control Lease**: input ownership marker. Feishu messages can take remote priority; `/release` returns control to local.
 
 See [CONTEXT.md](../CONTEXT.md) for stable terminology. Detailed ADRs are kept in the dev checkout and are not part of stable releases.
 
-## Feishu App Setup
+## Legacy Feishu App Setup
 
 Create an internal app at <https://open.feishu.cn/app>.
 
