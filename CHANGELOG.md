@@ -6,6 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+- Pending.
+
+---
+
+## [v0.4.0] - 2026-06-18
+
 ### Changed
 - Documented the default user-side runtime binding: Leader uses `gpt-5.5`; Planner, Reviewer, and Writer use `gpt-5.4`; Coder and Deployer use `gpt-5.4-mini`. Added role contract references so model/provider overrides do not change role responsibilities.
 - Added the Experiment Transparency Ledger contract and linked it from the user docs and experiment integrity shared references.
